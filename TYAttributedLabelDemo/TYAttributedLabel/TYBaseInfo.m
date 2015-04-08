@@ -1,15 +1,13 @@
 //
-//  ViewController.h
+//  TYBaseInfo.m
 //  TYAttributedLabelDemo
 //
 //  Created by SunYong on 15/4/7.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "TYBaseInfo.h"
 
-@interface ViewController : UIViewController
-
+@implementation TYBaseInfo
 
 @end
-
