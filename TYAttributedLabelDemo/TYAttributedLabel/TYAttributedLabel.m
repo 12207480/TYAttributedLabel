@@ -59,7 +59,7 @@
     self.userInteractionEnabled = NO;
     _font = [UIFont systemFontOfSize:16];
     _characterSpacing = 1;
-    _linesSpacing = 5;
+    _linesSpacing = 4;
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;

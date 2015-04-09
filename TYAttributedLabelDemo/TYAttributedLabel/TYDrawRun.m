@@ -13,8 +13,9 @@
 
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
 {
+    // 判断是不是追加
     NSRange range = self.range;
-    if (NSEqualRanges(self.range, NSMakeRange(0, 0))) {
+    if (NSEqualRanges(range, NSMakeRange(0, 0))) {
         range = NSMakeRange(0, 1);
     }else {
         // 用空白替换
@@ -24,6 +25,13 @@
         // 修正range
         range = NSMakeRange(range.location, 1);
     }
+    
+    // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
+    if (_size.height <= _fontAscent + _fontDescent) {
+        _drawAlignment = TYDrawAlignmentCenter;
+    }
+    
+    // 添加文本属性和runDelegate
     [attributedString addAttribute:kTYTextRunAttributedName value:self range:range];
     
     //为图片设置CTRunDelegate,delegate决定留给显示内容的空间大小
@@ -52,8 +60,8 @@
         {
             CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
             ascent = height / 2 + baseLine;
-        }
             break;
+        }
         case TYDrawAlignmentButtom:
             ascent = _fontAscent;
             break;
@@ -61,9 +69,6 @@
             break;
     }
     return ascent;
-    //return self.size.height;
-    //CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
-    //return self.size.height / 2 + baseLine;
 }
 
 - (CGFloat)getDrawRunWidth
@@ -78,29 +83,22 @@
     switch (_drawAlignment)
     {
         case TYDrawAlignmentTop:
-        {
             descent = _fontDescent;
             break;
-        }
         case TYDrawAlignmentCenter:
         {
             CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
             descent = height / 2 - baseLine;
-        }
             break;
+        }
         case TYDrawAlignmentButtom:
-        {
             descent = height - _fontAscent;
             break;
-        }
         default:
             break;
     }
     
     return descent;
-    //CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
-    //return self.size.height / 2 - baseLine;
-    //return 0;
 }
 
 - (void)DrawRunDealloc

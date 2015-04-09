@@ -35,11 +35,12 @@
             [label appendTextRun:imageRun];
         }
     }
-//    TYDrawImageRun *imageRun1 = [[TYDrawImageRun alloc]init];
-//    imageRun1.imageContent = @"avatar";
-//    imageRun1.size = CGSizeMake(60, 60);
-//    imageRun1.range = NSMakeRange(0, 1);
-//    [label addTextRun:imageRun1];
+    TYDrawImageRun *imageRun1 = [[TYDrawImageRun alloc]init];
+    imageRun1.imageContent = @"avatar";
+    imageRun1.drawAlignment = TYDrawAlignmentButtom;
+    imageRun1.size = CGSizeMake(60, 60);
+    imageRun1.range = NSMakeRange(120, 1);
+    [label addTextRun:imageRun1];
     
     TYDrawImageRun *imageRun2 = [[TYDrawImageRun alloc]init];
     imageRun2.imageContent = @"haha";
@@ -47,11 +48,11 @@
     imageRun2.range = NSMakeRange(68, 1);
     [label addTextRun:imageRun2];
     
-    [label addImageWithContent:@"haha" range:NSMakeRange(120, 2)];
+    //[label addImageWithContent:@"avatar" range:NSMakeRange(120, 2) size:CGSizeMake(60, 60)];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setTitle:@"点我啊" forState:UIControlStateNormal];
-    button.frame = CGRectMake(0, 0, 60, 16);
+    button.frame = CGRectMake(0, 0, 60, 15);
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"avatar"]];
     imageView.frame = CGRectMake(0, 0, 60, 60);
     [label addView:button range:NSMakeRange(146, 1)];
