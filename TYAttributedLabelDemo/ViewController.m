@@ -29,16 +29,25 @@
         if (i != count - 1)
         {
             TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
-            imageRun.imageName = @"haha";
+            imageRun.imageContent = @"haha";
             imageRun.size = CGSizeMake(15, 15);
             [label appendTextRun:imageRun];
         }
     }
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
-    imageRun.imageName = @"avatar";
-    imageRun.size = CGSizeMake(60, 60);
-    imageRun.range = NSMakeRange(0, 1);
-    [label addTextRun:imageRun];
+    TYDrawImageRun *imageRun1 = [[TYDrawImageRun alloc]init];
+    imageRun1.imageContent = @"avatar";
+    imageRun1.size = CGSizeMake(60, 60);
+    imageRun1.range = NSMakeRange(0, 1);
+    [label addTextRun:imageRun1];
+    
+    TYDrawImageRun *imageRun2 = [[TYDrawImageRun alloc]init];
+    imageRun2.imageContent = @"haha";
+    imageRun2.size = CGSizeMake(15, 15);
+    imageRun2.range = NSMakeRange(68, 1);
+    [label addTextRun:imageRun2];
+    
+    [label addImageContent:@"haha" range:NSMakeRange(120, 1) size:CGSizeMake(15, 15)];
+    
     [label setFrameWithOrign:CGPointMake(0, 64) Width:CGRectGetWidth(self.view.frame)];
     [self.view addSubview:label];
 }

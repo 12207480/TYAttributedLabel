@@ -8,8 +8,7 @@
 
 #import "TYAttributedLabel.h"
 #import <CoreText/CoreText.h>
-#import "NSMutableAttributedString+TY.h"
-#import "TYTextRunProtocol.h"
+#import "TYDrawImageRun.h"
 
 // 文本颜色
 #define kTextColor [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
@@ -134,17 +133,38 @@
 {
     if (textRun) {
         [self.textRunArray addObject:textRun];
+        [self resetFramesetter];
     }
-    [self resetFramesetter];
 }
 
 - (void)addTextRunArray:(NSArray *)textRunArray
 {
     if (textRunArray) {
         [self.textRunArray addObjectsFromArray:textRunArray];
+        [self resetFramesetter];
     }
-    [self resetFramesetter];
 }
+
+- (void)addImageContent:(id)imageContent range:(NSRange)range size:(CGSize)size
+{
+    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    imageRun.imageContent = imageContent;
+    imageRun.range = range;
+    imageRun.size = size;
+    
+    [self addTextRun:imageRun];
+}
+
+- (void)addImageContent:(id)imageContent range:(NSRange)range
+{
+    
+    if ([imageContent isKindOfClass:[UIImage class]]) {
+        [self addImageContent:imageContent range:range size:((UIImage *)imageContent).size];
+    } else {
+        [self addImageContent:imageContent range:range size:CGSizeMake(_font.ascender, _font.ascender)];
+    }
+}
+
 
 #pragma mark - append text textRun
 
@@ -180,7 +200,7 @@
 {
     _runRectDictionary = nil;
     _textRunArray = nil;
-    _singleTap = nil;
+    [self removeSingleTapGesture];
     [self setupProperty];
 }
 
@@ -263,7 +283,7 @@
     if (_textRunArray.count > 0) {
         for (id<TYTextRunProtocol> textRun in _textRunArray) {
             // 验证范围
-            if ([textRun range].location + [textRun range].length < attString.length) {
+            if (NSMaxRange([textRun range]) < attString.length) {
                 [textRun addTextRunWithAttributedString:attString];
             }
         }
@@ -359,6 +379,14 @@
         _singleTap.numberOfTapsRequired = 1;
         //增加事件者响应者，
         [self addGestureRecognizer:_singleTap];
+    }
+}
+
+- (void)removeSingleTapGesture
+{
+    if (_singleTap) {
+        [self removeGestureRecognizer:_singleTap];
+        _singleTap = nil;
     }
 }
 

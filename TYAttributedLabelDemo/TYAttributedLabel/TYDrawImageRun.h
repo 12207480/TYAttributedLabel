@@ -10,8 +10,9 @@
 
 @interface TYDrawImageRun : TYDrawRun
 
-@property (nonatomic, strong) NSString *urlStr;
-
-@property (nonatomic, strong) NSString *imageName;
+/**
+ *  支持格式:NSString - 本地image名， NSURL - image图片网址，UIImage - image数据
+ */
+@property (nonatomic, strong) id    imageContent;
 
 @end

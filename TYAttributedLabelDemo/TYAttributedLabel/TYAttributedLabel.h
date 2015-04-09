@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NSMutableAttributedString+TY.h"
+#import "TYTextRunProtocol.h"
 
 @class TYAttributedLabel;
-@protocol TYTextRunProtocol;
-
 @protocol TYAttributedLabelDelegate <NSObject>
 
 @optional
@@ -19,6 +19,9 @@
 
 @end
 
+/**
+ *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和view（UI控件）
+ */
 @interface TYAttributedLabel : UIView
 
 @property (nonatomic, assign) id<TYAttributedLabelDelegate> delegate;
@@ -56,6 +59,16 @@
 - (void)addTextRunArray:(NSArray *)textRunArray;
 
 /**
+ *  添加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *
+ *  @param imageContent 格式（NSURL，NSString，UIImage）
+ *  @param range        范围
+ *  @param size         图片大小
+ */
+- (void)addImageContent:(id)imageContent range:(NSRange)range size:(CGSize)size;
+
+- (void)addImageContent:(id)imageContent range:(NSRange)range;
+/**
  *  获取文本真正的高度
  */
 - (int)getHeightWithWidth:(CGFloat)width;
@@ -67,6 +80,7 @@
 
 @end
 
+#pragma mark - 追加内容 (AppendAttributedString)
 // 追加内容 （添加在AttributedString最后）
 @interface TYAttributedLabel (AppendAttributedString)
 /**
