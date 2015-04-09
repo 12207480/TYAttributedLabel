@@ -162,7 +162,7 @@
     if ([imageContent isKindOfClass:[UIImage class]]) {
         [self addImageWithContent:imageContent range:range size:((UIImage *)imageContent).size];
     } else {
-        [self addImageWithContent:imageContent range:range size:CGSizeMake(_font.pointSize, _font.pointSize)];
+        [self addImageWithContent:imageContent range:range size:CGSizeMake(_font.pointSize, _font.ascender)];
     }
 }
 

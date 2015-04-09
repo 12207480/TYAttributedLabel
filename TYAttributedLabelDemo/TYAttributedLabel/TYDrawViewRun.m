@@ -22,4 +22,11 @@
     [_view setFrame:CGRectMake(rect.origin.x, _superView.bounds.size.height - rect.origin.y - rect.size.height, rect.size.width, rect.size.height)];
 }
 
+- (void)dealloc{
+    // 需要去掉supview 的 强引用 否则内存泄露
+    if (_view.superview) {
+        [_view removeFromSuperview];
+    }
+}
+
 @end
