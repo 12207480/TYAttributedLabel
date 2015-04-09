@@ -63,20 +63,39 @@
  *
  *  @param imageContent 格式（NSURL，NSString，UIImage）
  *  @param range        所在文本位置
- *  @param size         图片大小
+ *  @param size         图片大小 
+ *  @param alignment    图片对齐方式
  */
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size;
+- (void)addImageWithContent:(id)imageContent
+                      range:(NSRange)range
+                       size:(CGSize)size
+                  alignment: (TYDrawAlignment)alignment;
 
 /**
- *  添加 imageRun (默认size: UIImage 按照image.size, 其他按照font大小)
+ *  添加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ */
+- (void)addImageWithContent:(id)imageContent
+                      range:(NSRange)range
+                       size:(CGSize)size;
+
+/**
+ *  添加 imageRun (默认size大小: UIImage 按照image.size, 其他按照font大小)
  */
 - (void)addImageWithContent:(id)imageContent range:(NSRange)range;
 
 /**
  *  添加 viewRun (添加 UI控件 需要设置frame)
  *
- *  @param view  UIView (UI控件)
- *  @param range 所在文本位置
+ *  @param view         UIView (UI控件)
+ *  @param range        所在文本位置
+ *  @param alignment    view对齐方式
+ */
+- (void)addView:(UIView *)view
+          range:(NSRange)range
+      alignment:(TYDrawAlignment)alignment;
+
+/**
+ *  添加 viewRun (添加 UI控件 需要设置frame)
  */
 - (void)addView:(UIView *)view range:(NSRange)range;
 
@@ -121,13 +140,19 @@
  *
  *  @param imageContent 格式（NSURL，NSString，UIImage）
  *  @param size         图片大小
+ *  @param alignment    图片对齐
  */
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size;
+- (void)appendImageWithContent:(id)imageContent
+                          size:(CGSize)size
+                     alignment:(TYDrawAlignment)alignment;
 
 /**
- *  追加 imageRun
- *
- *  @param imageContent （NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ */
+- (void)appendImageWithContent:(id)imageContent size:(CGSize)size ;
+
+/**
+ *  追加 imageRun （imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  */
 - (void)appendImageWithContent:(id)imageContent;
 
@@ -135,6 +160,12 @@
  *  追加 viewRun (添加 UI控件 需要设置frame)
  *
  *  @param view  UIView (UI控件)
+ *  @param alignment view对齐
+ */
+- (void)appendView:(UIView *)view alignment:(TYDrawAlignment)alignment;
+
+/**
+ *  追加 viewRun (添加 UI控件 需要设置frame)
  */
 - (void)appendView:(UIView *)view;
 

@@ -37,7 +37,7 @@
     }
     TYDrawImageRun *imageRun1 = [[TYDrawImageRun alloc]init];
     imageRun1.imageContent = @"avatar";
-    imageRun1.drawAlignment = TYDrawAlignmentButtom;
+    imageRun1.drawAlignment = TYDrawAlignmentCenter;
     imageRun1.size = CGSizeMake(60, 60);
     imageRun1.range = NSMakeRange(120, 1);
     [label addTextRun:imageRun1];
@@ -56,7 +56,7 @@
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"avatar"]];
     imageView.frame = CGRectMake(0, 0, 60, 60);
     [label addView:button range:NSMakeRange(146, 1)];
-    [label appendView:imageView];
+    [label appendView:imageView alignment:TYDrawAlignmentButtom];
     [label appendImageWithContent:@"haha"];
     [label setFrameWithOrign:CGPointMake(0, 64) Width:CGRectGetWidth(self.view.frame)];
     [self.view addSubview:label];

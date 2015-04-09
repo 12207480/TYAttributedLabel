@@ -8,12 +8,6 @@
 
 #import "TYTextRunProtocol.h"
 
-typedef enum : NSUInteger {
-    TYDrawAlignmentTop,     // 底部齐平 向上伸展
-    TYDrawAlignmentCenter,  // 中心齐平
-    TYDrawAlignmentButtom,  // 顶部齐平 向下伸展
-} TYDrawAlignment;
-
 @interface TYDrawRun : NSObject<TYTextRunProtocol>
 @property (nonatomic, assign)   NSRange         range;          // 文本范围
 @property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距

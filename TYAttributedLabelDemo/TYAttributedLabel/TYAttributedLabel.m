@@ -151,16 +151,22 @@
     }
 }
 
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
+- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
     TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
     imageRun.fontAscent = _font.ascender;
     imageRun.fontDescent = -_font.descender;
     imageRun.imageContent = imageContent;
+    imageRun.drawAlignment = alignment;
     imageRun.range = range;
     imageRun.size = size;
     
     [self addTextRun:imageRun];
+}
+
+- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
+{
+    [self addImageWithContent:imageContent range:range size:size alignment:TYDrawAlignmentTop];
 }
 
 - (void)addImageWithContent:(id)imageContent range:(NSRange)range
@@ -173,17 +179,23 @@
     }
 }
 
-- (void)addView:(UIView *)view range:(NSRange)range
+- (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
 {
     TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
     viewRun.fontAscent = _font.ascender;
     viewRun.fontDescent = -_font.descender;
+    viewRun.drawAlignment = alignment;
     viewRun.view = view;
     viewRun.superView = self;
     viewRun.size = view.frame.size;
     viewRun.range = range;
     
     [self addTextRun:viewRun];
+}
+
+- (void)addView:(UIView *)view range:(NSRange)range
+{
+    [self addView:view range:range alignment:TYDrawAlignmentTop];
 }
 
 
@@ -221,15 +233,21 @@
     }
 }
 
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size
+- (void)appendImageWithContent:(id)imageContent size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
     TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
     imageRun.fontAscent = _font.ascender;
     imageRun.fontDescent = -_font.descender;
+    imageRun.drawAlignment = alignment;
     imageRun.imageContent = imageContent;
     imageRun.size = size;
     
     [self appendTextRun:imageRun];
+}
+
+- (void)appendImageWithContent:(id)imageContent size:(CGSize)size
+{
+    [self appendImageWithContent:imageContent size:size alignment:TYDrawAlignmentTop];
 }
 
 - (void)appendImageWithContent:(id)imageContent
@@ -242,16 +260,22 @@
 
 }
 
-- (void)appendView:(UIView *)view
+- (void)appendView:(UIView *)view alignment:(TYDrawAlignment)alignment
 {
     TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
     viewRun.fontAscent = _font.ascender;
     viewRun.fontDescent = -_font.descender;
+    viewRun.drawAlignment = alignment;
     viewRun.view = view;
     viewRun.superView = self;
     viewRun.size = view.frame.size;
     
     [self appendTextRun:viewRun];
+}
+
+- (void)appendView:(UIView *)view
+{
+    [self appendView:view alignment:TYDrawAlignmentTop];
 }
 
 - (void)resetAllAttributed
