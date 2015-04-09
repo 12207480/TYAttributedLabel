@@ -41,9 +41,29 @@
 
 - (CGFloat)getDrawRunAscentHeight
 {
+    CGFloat ascent = 0;
+    CGFloat height = self.size.height;
+    switch (_drawAlignment)
+    {
+        case TYDrawAlignmentTop:
+            ascent = height - _fontDescent;
+            break;
+        case TYDrawAlignmentCenter:
+        {
+            CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
+            ascent = height / 2 + baseLine;
+        }
+            break;
+        case TYDrawAlignmentButtom:
+            ascent = _fontAscent;
+            break;
+        default:
+            break;
+    }
+    return ascent;
     //return self.size.height;
-    CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
-    return self.size.height / 2 + baseLine;
+    //CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
+    //return self.size.height / 2 + baseLine;
 }
 
 - (CGFloat)getDrawRunWidth
@@ -53,8 +73,33 @@
 
 - (CGFloat)getDrawRunDescentHeight
 {
-    CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
-    return self.size.height / 2 - baseLine;
+    CGFloat descent = 0;
+    CGFloat height = self.size.height;
+    switch (_drawAlignment)
+    {
+        case TYDrawAlignmentTop:
+        {
+            descent = _fontDescent;
+            break;
+        }
+        case TYDrawAlignmentCenter:
+        {
+            CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
+            descent = height / 2 - baseLine;
+        }
+            break;
+        case TYDrawAlignmentButtom:
+        {
+            descent = height - _fontAscent;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    return descent;
+    //CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
+    //return self.size.height / 2 - baseLine;
     //return 0;
 }
 

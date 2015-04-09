@@ -8,11 +8,17 @@
 
 #import "TYTextRunProtocol.h"
 
-@interface TYDrawRun : NSObject<TYTextRunProtocol>
-@property (nonatomic, assign)   NSRange         range;  // 文本范围
-@property (nonatomic, assign)   UIEdgeInsets    margin; // 图片四周间距
-@property (nonatomic, assign)   CGSize          size;   // 绘画物大小
+typedef enum : NSUInteger {
+    TYDrawAlignmentTop,     // 底部齐平 向上伸展
+    TYDrawAlignmentCenter,  // 中心齐平
+    TYDrawAlignmentButtom,  // 顶部齐平 向下伸展
+} TYDrawAlignment;
 
+@interface TYDrawRun : NSObject<TYTextRunProtocol>
+@property (nonatomic, assign)   NSRange         range;          // 文本范围
+@property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距
+@property (nonatomic, assign)   CGSize          size;           // 绘画物大小
+@property (nonatomic, assign)   TYDrawAlignment drawAlignment;  // 对齐方式
 @property (nonatomic, assign)   CGFloat         fontAscent;
 @property (nonatomic, assign)   CGFloat         fontDescent;
 
