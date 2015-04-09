@@ -25,6 +25,9 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString;
 
 @optional
+
+
+
 /**
  *  添加View 或 绘画 到该区域
  *

@@ -116,4 +116,26 @@
  */
 - (void)appendTextRun:(id<TYTextRunProtocol>)textRun;
 
+/**
+ *  追加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *
+ *  @param imageContent 格式（NSURL，NSString，UIImage）
+ *  @param size         图片大小
+ */
+- (void)appendImageWithContent:(id)imageContent size:(CGSize)size;
+
+/**
+ *  追加 imageRun
+ *
+ *  @param imageContent （NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ */
+- (void)appendImageWithContent:(id)imageContent;
+
+/**
+ *  追加 viewRun (添加 UI控件 需要设置frame)
+ *
+ *  @param view  UIView (UI控件)
+ */
+- (void)appendView:(UIView *)view;
+
 @end

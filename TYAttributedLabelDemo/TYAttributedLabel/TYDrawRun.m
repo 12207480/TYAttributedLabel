@@ -41,18 +41,21 @@
 
 - (CGFloat)getDrawRunAscentHeight
 {
-    return self.size.height;
+    //return self.size.height;
+    CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
+    return self.size.height / 2 + baseLine;
 }
 
 - (CGFloat)getDrawRunWidth
 {
     return self.size.width;
-    //self.range.length >1 ? self.size.width/self.range.length:self.size.width;
 }
 
-- (CGFloat)getDrawRunDscentHeight
+- (CGFloat)getDrawRunDescentHeight
 {
-    return 0;
+    CGFloat baseLine = (_fontAscent + _fontDescent) / 2 - _fontDescent;
+    return self.size.height / 2 - baseLine;
+    //return 0;
 }
 
 - (void)DrawRunDealloc
@@ -75,7 +78,7 @@ CGFloat TYTextRunDelegateGetAscentCallback( void *refCon ){
 
 CGFloat TYTextRunDelegateGetDescentCallback(void *refCon){
     TYDrawRun *textRun = (__bridge TYDrawRun *)refCon;
-    return [textRun getDrawRunDscentHeight];
+    return [textRun getDrawRunDescentHeight];
 }
 
 //CTRun的回调，获取宽度

@@ -133,15 +133,20 @@
 - (void)addTextRun:(id<TYTextRunProtocol>)textRun
 {
     if (textRun) {
+        if ([textRun isKindOfClass:[TYDrawRun class]]) {
+            ((TYDrawRun *)textRun).fontAscent = _font.ascender;
+            ((TYDrawRun *)textRun).fontDescent = -_font.descender;
+        }
         [self.textRunArray addObject:textRun];
-        [self resetFramesetter];
     }
 }
 
 - (void)addTextRunArray:(NSArray *)textRunArray
 {
     if (textRunArray) {
-        [self.textRunArray addObjectsFromArray:textRunArray];
+        for (id<TYTextRunProtocol> textRun in textRunArray) {
+            [self addTextRun:textRun];
+        }
         [self resetFramesetter];
     }
 }
@@ -149,6 +154,8 @@
 - (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
 {
     TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    imageRun.fontAscent = _font.ascender;
+    imageRun.fontDescent = -_font.descender;
     imageRun.imageContent = imageContent;
     imageRun.range = range;
     imageRun.size = size;
@@ -169,6 +176,8 @@
 - (void)addView:(UIView *)view range:(NSRange)range
 {
     TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
+    viewRun.fontAscent = _font.ascender;
+    viewRun.fontDescent = -_font.descender;
     viewRun.view = view;
     viewRun.superView = self;
     viewRun.size = view.frame.size;
@@ -198,6 +207,10 @@
 - (void)appendTextRun:(id<TYTextRunProtocol>)textRun
 {
     if (textRun) {
+        if ([textRun isKindOfClass:[TYDrawRun class]]) {
+            ((TYDrawRun *)textRun).fontAscent = _font.ascender;
+            ((TYDrawRun *)textRun).fontDescent = -_font.descender;
+        }
         // 替换字符
         unichar objectReplacementChar           = 0xFFFC;
         NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
@@ -206,6 +219,39 @@
 
         [self appendAttributedText:attachText];
     }
+}
+
+- (void)appendImageWithContent:(id)imageContent size:(CGSize)size
+{
+    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    imageRun.fontAscent = _font.ascender;
+    imageRun.fontDescent = -_font.descender;
+    imageRun.imageContent = imageContent;
+    imageRun.size = size;
+    
+    [self appendTextRun:imageRun];
+}
+
+- (void)appendImageWithContent:(id)imageContent
+{
+    if ([imageContent isKindOfClass:[UIImage class]]) {
+        [self appendImageWithContent:imageContent size:((UIImage *)imageContent).size];
+    } else {
+        [self appendImageWithContent:imageContent size:CGSizeMake(_font.pointSize, _font.ascender)];
+    }
+
+}
+
+- (void)appendView:(UIView *)view
+{
+    TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
+    viewRun.fontAscent = _font.ascender;
+    viewRun.fontDescent = -_font.descender;
+    viewRun.view = view;
+    viewRun.superView = self;
+    viewRun.size = view.frame.size;
+    
+    [self appendTextRun:viewRun];
 }
 
 - (void)resetAllAttributed
