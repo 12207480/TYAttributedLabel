@@ -46,8 +46,14 @@
     imageRun2.range = NSMakeRange(68, 1);
     [label addTextRun:imageRun2];
     
-    [label addImageContent:@"haha" range:NSMakeRange(120, 1) size:CGSizeMake(15, 15)];
+    [label addImageWithContent:@"haha" range:NSMakeRange(120, 2)];
     
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button setTitle:@"点我啊" forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0, 60, 16);
+//    UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"haha"]];
+//    imageView.frame = CGRectMake(0, 0, 30, 15);
+    [label addView:button range:NSMakeRange(146, 1)];
     [label setFrameWithOrign:CGPointMake(0, 64) Width:CGRectGetWidth(self.view.frame)];
     [self.view addSubview:label];
 }

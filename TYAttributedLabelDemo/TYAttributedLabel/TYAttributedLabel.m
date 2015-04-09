@@ -9,6 +9,7 @@
 #import "TYAttributedLabel.h"
 #import <CoreText/CoreText.h>
 #import "TYDrawImageRun.h"
+#import "TYDrawViewRun.h"
 
 // 文本颜色
 #define kTextColor [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
@@ -145,7 +146,7 @@
     }
 }
 
-- (void)addImageContent:(id)imageContent range:(NSRange)range size:(CGSize)size
+- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
 {
     TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
     imageRun.imageContent = imageContent;
@@ -155,14 +156,25 @@
     [self addTextRun:imageRun];
 }
 
-- (void)addImageContent:(id)imageContent range:(NSRange)range
+- (void)addImageWithContent:(id)imageContent range:(NSRange)range
 {
     
     if ([imageContent isKindOfClass:[UIImage class]]) {
-        [self addImageContent:imageContent range:range size:((UIImage *)imageContent).size];
+        [self addImageWithContent:imageContent range:range size:((UIImage *)imageContent).size];
     } else {
-        [self addImageContent:imageContent range:range size:CGSizeMake(_font.ascender, _font.ascender)];
+        [self addImageWithContent:imageContent range:range size:CGSizeMake(_font.pointSize, _font.pointSize)];
     }
+}
+
+- (void)addView:(UIView *)view range:(NSRange)range
+{
+    TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
+    viewRun.view = view;
+    viewRun.superView = self;
+    viewRun.size = view.frame.size;
+    viewRun.range = range;
+    
+    [self addTextRun:viewRun];
 }
 
 

@@ -62,12 +62,24 @@
  *  添加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  *
  *  @param imageContent 格式（NSURL，NSString，UIImage）
- *  @param range        范围
+ *  @param range        所在文本位置
  *  @param size         图片大小
  */
-- (void)addImageContent:(id)imageContent range:(NSRange)range size:(CGSize)size;
+- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size;
 
-- (void)addImageContent:(id)imageContent range:(NSRange)range;
+/**
+ *  添加 imageRun (默认size: UIImage 按照image.size, 其他按照font大小)
+ */
+- (void)addImageWithContent:(id)imageContent range:(NSRange)range;
+
+/**
+ *  添加 viewRun (添加 UI控件 需要设置frame)
+ *
+ *  @param view  UIView (UI控件)
+ *  @param range 所在文本位置
+ */
+- (void)addView:(UIView *)view range:(NSRange)range;
+
 /**
  *  获取文本真正的高度
  */
