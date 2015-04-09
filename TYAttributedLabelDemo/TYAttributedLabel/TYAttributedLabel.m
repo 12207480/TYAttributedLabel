@@ -53,7 +53,9 @@
 #pragma mark - 设置属性
 - (void)setupProperty
 {
-    self.backgroundColor = [UIColor lightGrayColor];
+    if (self.backgroundColor == nil) {
+        self.backgroundColor = [UIColor whiteColor];
+    }
     self.userInteractionEnabled = NO;
     _font = [UIFont systemFontOfSize:16];
     _characterSpacing = 1;
@@ -127,13 +129,6 @@
     }
 }
 
-- (void)resetAllAttributed
-{
-    _runRectDictionary = nil;
-    _textRunArray = nil;
-    [self setupProperty];
-}
-
 #pragma mark - add textRun
 - (void)addTextRun:(id<TYTextRunProtocol>)textRun
 {
@@ -151,7 +146,7 @@
     [self resetFramesetter];
 }
 
-#pragma mark - append textRun
+#pragma mark - append text textRun
 
 - (void)appendText:(NSString *)text
 {
@@ -179,6 +174,14 @@
 
         [self appendAttributedText:attachText];
     }
+}
+
+- (void)resetAllAttributed
+{
+    _runRectDictionary = nil;
+    _textRunArray = nil;
+    _singleTap = nil;
+    [self setupProperty];
 }
 
 #pragma mark 重置framesetter
@@ -257,13 +260,15 @@
 // 添加文本run属性
 - (void)addTextRunsWithAtrributedString:(NSMutableAttributedString *)attString
 {
-    for (id<TYTextRunProtocol> textRun in _textRunArray) {
-        // 验证范围
-        if ([textRun range].location + [textRun range].length < attString.length) {
-            [textRun addTextRunWithAttributedString:attString];
+    if (_textRunArray.count > 0) {
+        for (id<TYTextRunProtocol> textRun in _textRunArray) {
+            // 验证范围
+            if ([textRun range].location + [textRun range].length < attString.length) {
+                [textRun addTextRunWithAttributedString:attString];
+            }
         }
+        [_textRunArray removeAllObjects];
     }
-    [_textRunArray removeAllObjects];
 }
 
 
@@ -344,18 +349,16 @@
 #pragma mark 添加点击手势
 - (void)addSingleTapGesture
 {
-    if (self.singleTap == nil) {
+    if (_singleTap == nil) {
         self.userInteractionEnabled = YES;
         //单指单击
-        self.singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+        _singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         //手指数
-        self.singleTap.numberOfTouchesRequired = 1;
+        _singleTap.numberOfTouchesRequired = 1;
         //点击次数
-        self.singleTap.numberOfTapsRequired = 1;
-        //设置代理方法
-        //self.singleTap.delegate= self;
+        _singleTap.numberOfTapsRequired = 1;
         //增加事件者响应者，
-        [self addGestureRecognizer:self.singleTap];
+        [self addGestureRecognizer:_singleTap];
     }
 }
 
@@ -376,6 +379,7 @@
         
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
+            NSLog(@"点击了 run ");
             // 调用代理
             if ([_delegate respondsToSelector:@selector(attributedLabel:textRunClicked:)]) {
                 [_delegate attributedLabel:weakSelf textRunClicked:obj];
