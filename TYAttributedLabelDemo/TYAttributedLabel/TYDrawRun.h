@@ -8,13 +8,11 @@
 
 #import "TYTextRunProtocol.h"
 
-@interface TYDrawRun : NSObject<TYTextRunProtocol>
+@interface TYDrawRun : NSObject<TYAppendTextRunProtocol>
 @property (nonatomic, assign)   NSRange         range;          // 文本范围
 @property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距
 @property (nonatomic, assign)   CGSize          size;           // 绘画物大小
 @property (nonatomic, assign)   TYDrawAlignment drawAlignment;  // 对齐方式
-@property (nonatomic, assign)   CGFloat         fontAscent;
-@property (nonatomic, assign)   CGFloat         fontDescent;
 
 /**
  *  获取绘画区域高度(上行高度 一般只要改写这个即可)

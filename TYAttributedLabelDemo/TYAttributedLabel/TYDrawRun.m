@@ -9,19 +9,31 @@
 #import "TYDrawRun.h"
 #import <CoreText/CoreText.h>
 
+@interface TYDrawRun (){
+    CGFloat         _fontAscent;
+    CGFloat         _fontDescent;
+}
+@end
+
 @implementation TYDrawRun
+
+- (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent
+{
+    _fontAscent = ascent;
+    _fontDescent = -descent;
+}
 
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     // 判断是不是追加
     NSRange range = self.range;
+    
     if (NSEqualRanges(range, NSMakeRange(0, 0))) {
+        [attributedString appendAttributedString:[[NSAttributedString alloc]initWithString:[self spaceReplaceString]]];
         range = NSMakeRange(0, 1);
     }else {
         // 用空白替换
-        unichar objectReplacementChar           = 0xFFFC;
-        NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
-        [attributedString replaceCharactersInRange:range withString:objectReplacementString];
+        [attributedString replaceCharactersInRange:range withString:[self spaceReplaceString]];
         // 修正range
         range = NSMakeRange(range.location, 1);
     }
@@ -31,6 +43,29 @@
         _drawAlignment = TYDrawAlignmentCenter;
     }
     
+    // 添加文本属性和runDelegate
+    [self addRunDelegateWithAttributedString:attributedString range:range];
+}
+
+- (NSAttributedString *)appendTextRunAttributedString
+{
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]init];
+    self.range = NSMakeRange(0, 0);
+    [self addTextRunWithAttributedString:attributedString];
+    return [attributedString copy];
+}
+
+- (NSString *)spaceReplaceString
+{
+    // 替换字符
+    unichar objectReplacementChar           = 0xFFFC;
+    NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
+    return objectReplacementString;
+}
+
+// 添加文本属性和runDelegate
+- (void)addRunDelegateWithAttributedString:(NSMutableAttributedString *)attributedString range:(NSRange)range
+{
     // 添加文本属性和runDelegate
     [attributedString addAttribute:kTYTextRunAttributedName value:self range:range];
     

@@ -15,8 +15,8 @@ typedef enum : NSUInteger {
 } TYDrawAlignment;
 
 static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
-@protocol TYTextRunProtocol <NSObject>
 
+@protocol TYTextRunProtocol <NSObject>
 @required
 
 /**
@@ -25,7 +25,7 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (NSRange)range;
 
 /**
- *  添加属性到 attributedString
+ *  添加属性到全文attributedString addTextRun调用
  *
  *  @param attributedString 属性字符串
  */
@@ -34,10 +34,30 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @optional
 
 /**
+ *  设置文本字符 上行高度 和下行高度
+ *
+ *  @param ascent  上行高度
+ *  @param descent 下行高度
+ */
+- (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent;
+
+/**
  *  添加View 或 绘画 到该区域
  *
  *  @param rect 绘画区域
  */
 - (void)drawRunWithRect:(CGRect)rect;
+
+@end
+
+@protocol TYAppendTextRunProtocol <TYTextRunProtocol>
+
+@required
+/**
+ *  追加attributedString属性 appendTextRun调用
+ *
+ *  @return 返回需要追加的attributedString属性
+ */
+- (NSAttributedString *)appendTextRunAttributedString;
 
 @end

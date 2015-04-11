@@ -28,4 +28,16 @@
     }
 }
 
+- (NSAttributedString *)appendTextRunAttributedString
+{
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:_text];
+    
+    // 验证范围
+    if (NSEqualRanges(self.range, NSMakeRange(0, 0))) {
+        self.range = NSMakeRange(0, attributedString.length);
+    }
+    [self addTextRunWithAttributedString:attributedString];
+    return [attributedString copy];
+}
+
 @end

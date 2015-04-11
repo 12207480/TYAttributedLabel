@@ -8,8 +8,6 @@
 
 #import "TYAttributedLabel.h"
 #import <CoreText/CoreText.h>
-#import "TYDrawImageRun.h"
-#import "TYDrawViewRun.h"
 
 // 文本颜色
 #define kTextColor [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
@@ -63,6 +61,15 @@
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
+}
+
+- (NSString *)text{
+    return _attString.string;
+}
+
+- (NSAttributedString *)attributedText
+{
+    return _attString;
 }
 
 - (void)setText:(NSString *)text
@@ -133,9 +140,8 @@
 - (void)addTextRun:(id<TYTextRunProtocol>)textRun
 {
     if (textRun) {
-        if ([textRun isKindOfClass:[TYDrawRun class]]) {
-            ((TYDrawRun *)textRun).fontAscent = _font.ascender;
-            ((TYDrawRun *)textRun).fontDescent = -_font.descender;
+        if ([textRun respondsToSelector:@selector(setTextFontAscent:descent:)]) {
+            [textRun setTextFontAscent:_font.ascender descent:_font.descender];
         }
         [self.textRunArray addObject:textRun];
     }
@@ -149,133 +155,6 @@
         }
         [self resetFramesetter];
     }
-}
-
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
-{
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
-    imageRun.fontAscent = _font.ascender;
-    imageRun.fontDescent = -_font.descender;
-    imageRun.imageContent = imageContent;
-    imageRun.drawAlignment = alignment;
-    imageRun.range = range;
-    imageRun.size = size;
-    
-    [self addTextRun:imageRun];
-}
-
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
-{
-    [self addImageWithContent:imageContent range:range size:size alignment:TYDrawAlignmentTop];
-}
-
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range
-{
-    
-    if ([imageContent isKindOfClass:[UIImage class]]) {
-        [self addImageWithContent:imageContent range:range size:((UIImage *)imageContent).size];
-    } else {
-        [self addImageWithContent:imageContent range:range size:CGSizeMake(_font.pointSize, _font.ascender)];
-    }
-}
-
-- (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
-{
-    TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
-    viewRun.fontAscent = _font.ascender;
-    viewRun.fontDescent = -_font.descender;
-    viewRun.drawAlignment = alignment;
-    viewRun.view = view;
-    viewRun.superView = self;
-    viewRun.size = view.frame.size;
-    viewRun.range = range;
-    
-    [self addTextRun:viewRun];
-}
-
-- (void)addView:(UIView *)view range:(NSRange)range
-{
-    [self addView:view range:range alignment:TYDrawAlignmentTop];
-}
-
-
-#pragma mark - append text textRun
-
-- (void)appendText:(NSString *)text
-{
-    NSAttributedString *attributedText = [self createTextAttibuteStringWithText:text];
-    [self appendAttributedText:attributedText];
-}
-
-- (void)appendAttributedText:(NSAttributedString *)attributedText
-{
-    if (_attString == nil) {
-        _attString = [[NSMutableAttributedString alloc]init];
-    }
-    [_attString appendAttributedString:attributedText];
-    [self resetFramesetter];
-}
-
-- (void)appendTextRun:(id<TYTextRunProtocol>)textRun
-{
-    if (textRun) {
-        if ([textRun isKindOfClass:[TYDrawRun class]]) {
-            ((TYDrawRun *)textRun).fontAscent = _font.ascender;
-            ((TYDrawRun *)textRun).fontDescent = -_font.descender;
-        }
-        // 替换字符
-        unichar objectReplacementChar           = 0xFFFC;
-        NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
-        NSMutableAttributedString *attachText   = [[NSMutableAttributedString alloc]initWithString:objectReplacementString];
-        [textRun addTextRunWithAttributedString:attachText];
-
-        [self appendAttributedText:attachText];
-    }
-}
-
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size alignment:(TYDrawAlignment)alignment
-{
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
-    imageRun.fontAscent = _font.ascender;
-    imageRun.fontDescent = -_font.descender;
-    imageRun.drawAlignment = alignment;
-    imageRun.imageContent = imageContent;
-    imageRun.size = size;
-    
-    [self appendTextRun:imageRun];
-}
-
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size
-{
-    [self appendImageWithContent:imageContent size:size alignment:TYDrawAlignmentTop];
-}
-
-- (void)appendImageWithContent:(id)imageContent
-{
-    if ([imageContent isKindOfClass:[UIImage class]]) {
-        [self appendImageWithContent:imageContent size:((UIImage *)imageContent).size];
-    } else {
-        [self appendImageWithContent:imageContent size:CGSizeMake(_font.pointSize, _font.ascender)];
-    }
-
-}
-
-- (void)appendView:(UIView *)view alignment:(TYDrawAlignment)alignment
-{
-    TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
-    viewRun.fontAscent = _font.ascender;
-    viewRun.fontDescent = -_font.descender;
-    viewRun.drawAlignment = alignment;
-    viewRun.view = view;
-    viewRun.superView = self;
-    viewRun.size = view.frame.size;
-    
-    [self appendTextRun:viewRun];
-}
-
-- (void)appendView:(UIView *)view
-{
-    [self appendView:view alignment:TYDrawAlignmentTop];
 }
 
 - (void)resetAllAttributed
@@ -306,10 +185,10 @@
     // 是否更新了内容
     if (_framesetter == nil) {
         
-        if (_attString == nil) {
-            _attString = [self createTextAttibuteStringWithText:_text];
-            
-        }
+//        if (_attString == nil) {
+//            _attString = [self createTextAttibuteStringWithText:_text];
+//            
+//        }
         // 添加文本run属性
         [self addTextRunsWithAtrributedString:_attString];
         
@@ -532,6 +411,38 @@
         CFRelease(_framesetter);
     }
     _attString = nil;
+}
+
+@end
+
+#pragma mark - append text textRun
+
+@implementation TYAttributedLabel (AppendAttributedString)
+
+- (void)appendText:(NSString *)text
+{
+    NSAttributedString *attributedText = [self createTextAttibuteStringWithText:text];
+    [self appendTextAttributedString:attributedText];
+}
+
+- (void)appendTextAttributedString:(NSAttributedString *)attributedText
+{
+    if (_attString == nil) {
+        _attString = [[NSMutableAttributedString alloc]init];
+    }
+    [_attString appendAttributedString:attributedText];
+    [self resetFramesetter];
+}
+
+- (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun
+{
+    if (textRun) {
+        if ([textRun respondsToSelector:@selector(setTextFontAscent:descent:)]) {
+            [textRun setTextFontAscent:_font.ascender descent:_font.descender];
+        }
+        
+        [self appendTextAttributedString:[textRun appendTextRunAttributedString]];
+    }
 }
 
 @end
