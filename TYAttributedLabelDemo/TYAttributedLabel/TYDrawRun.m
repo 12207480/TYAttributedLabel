@@ -82,6 +82,11 @@
     CFRelease(runDelegate);
 }
 
+- (void)drawRunWithRect:(CGRect)rect
+{
+    
+}
+
 - (CGFloat)getDrawRunAscentHeight
 {
     CGFloat ascent = 0;

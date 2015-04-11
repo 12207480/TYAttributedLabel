@@ -139,10 +139,13 @@
 #pragma mark - add textRun
 - (void)addTextRun:(id<TYTextRunProtocol>)textRun
 {
-    if (textRun) {
-        if ([textRun respondsToSelector:@selector(setTextFontAscent:descent:)]) {
-            [textRun setTextFontAscent:_font.ascender descent:_font.descender];
+    if (textRun ) {
+        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
+        } else if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
+            [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
         }
+
         [self.textRunArray addObject:textRun];
     }
 }
@@ -311,8 +314,8 @@
                 
                 CGRect runRect = CGRectMake(lineOrigin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL), lineOrigin.y - runDescent, runWidth, runAscent + runDescent);
                 
-                if ([textRun respondsToSelector:@selector(drawRunWithRect:)]) {
-                    [textRun drawRunWithRect:runRect];
+                if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+                    [(id<TYDrawRunProtocol>)textRun drawRunWithRect:runRect];
                 }
                 
                 [runRectDictionary setObject:textRun forKey:[NSValue valueWithCGRect:runRect]];
@@ -437,8 +440,10 @@
 - (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun
 {
     if (textRun) {
-        if ([textRun respondsToSelector:@selector(setTextFontAscent:descent:)]) {
-            [textRun setTextFontAscent:_font.ascender descent:_font.descender];
+        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
+        } else if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
+            [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
         }
         
         [self appendTextAttributedString:[textRun appendTextRunAttributedString]];

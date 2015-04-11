@@ -31,23 +31,6 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
  */
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString;
 
-@optional
-
-/**
- *  设置文本字符 上行高度 和下行高度
- *
- *  @param ascent  上行高度
- *  @param descent 下行高度
- */
-- (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent;
-
-/**
- *  添加View 或 绘画 到该区域
- *
- *  @param rect 绘画区域
- */
-- (void)drawRunWithRect:(CGRect)rect;
-
 @end
 
 @protocol TYAppendTextRunProtocol <TYTextRunProtocol>
@@ -59,5 +42,33 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
  *  @return 返回需要追加的attributedString属性
  */
 - (NSAttributedString *)appendTextRunAttributedString;
+
+@end
+
+@protocol TYDrawRunProtocol <TYAppendTextRunProtocol>
+
+/**
+ *  添加View 或 绘画 到该区域
+ *
+ *  @param rect 绘画区域
+ */
+- (void)drawRunWithRect:(CGRect)rect;
+
+/**
+ *  设置文本字符 上行高度 和下行高度
+ *
+ *  @param ascent  上行高度
+ *  @param descent 下行高度
+ */
+- (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent;
+
+@end
+
+@protocol TYDrawViewRunProtocol <TYDrawRunProtocol>
+
+/**
+ *  设置引用label
+ */
+- (void)setSuperView:(UIView *)supView;
 
 @end

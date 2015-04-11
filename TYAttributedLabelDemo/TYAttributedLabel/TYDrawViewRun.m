@@ -10,17 +10,28 @@
 
 @implementation TYDrawViewRun
 
-- (void)drawRunWithRect:(CGRect)rect
+- (void)setSuperView:(UIView *)superView
 {
-    if (_view == nil || _superView == nil) return;
-
-    if (_view.superview == nil) {
-        [_superView addSubview:_view];
+    if (!_view.superview) {
+        [superView addSubview:_view];
+        return;
     }
     
-    // 设置frame 注意 转换rect  CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    [_view setFrame:CGRectMake(rect.origin.x, _superView.bounds.size.height - rect.origin.y - rect.size.height, rect.size.width, rect.size.height)];
+    if (_view.superview && _view.superview != superView) {
+        [_view removeFromSuperview];
+        [superView addSubview:_view];
+    }
 }
+
+- (void)drawRunWithRect:(CGRect)rect
+{
+    if (_view == nil || _view.superview == nil) return;
+
+    // 设置frame 注意 转换rect  CoreText context coordinates are the opposite to UIKit so we flip the bounds
+    [_view setFrame:CGRectMake(rect.origin.x, _view.superview.bounds.size.height - rect.origin.y - rect.size.height, rect.size.width, rect.size.height)];
+}
+
+
 
 - (void)dealloc{
     // 需要去掉supview 的 强引用 否则内存泄露

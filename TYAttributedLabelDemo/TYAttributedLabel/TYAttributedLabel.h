@@ -26,6 +26,7 @@
 
 @property (nonatomic, assign) id<TYAttributedLabelDelegate> delegate;
 
+@property (nonatomic, strong)   NSString        *text;
 @property (nonatomic, strong)   UIColor         *textColor;         // 文字颜色
 @property (nonatomic, strong)   UIFont          *font;              // 文字大小
 

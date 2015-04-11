@@ -8,10 +8,8 @@
 
 #import "TYDrawRun.h"
 
-@interface TYDrawViewRun : TYDrawRun
+@interface TYDrawViewRun : TYDrawRun<TYDrawViewRunProtocol>
 
 @property (nonatomic, strong)   UIView *view;       // 添加view
-
-@property (nonatomic, weak)     UIView *superView;  // 父类view
 
 @end

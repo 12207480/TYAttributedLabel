@@ -19,7 +19,6 @@
     imageRun.drawAlignment = alignment;
     imageRun.range = range;
     imageRun.size = size;
-    
     [self addTextRun:imageRun];
 }
 

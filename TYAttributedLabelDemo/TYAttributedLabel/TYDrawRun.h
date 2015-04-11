@@ -8,7 +8,7 @@
 
 #import "TYTextRunProtocol.h"
 
-@interface TYDrawRun : NSObject<TYAppendTextRunProtocol>
+@interface TYDrawRun : NSObject<TYDrawRunProtocol>
 @property (nonatomic, assign)   NSRange         range;          // 文本范围
 @property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距
 @property (nonatomic, assign)   CGSize          size;           // 绘画物大小
