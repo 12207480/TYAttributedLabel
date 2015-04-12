@@ -21,7 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
-    label.sizeAdjustTextChange = YES;
+    //label.sizeToFitTextChange = YES;
     self.label = label;
     //[label addTextRunArray:@[@" ",@" "]];
     [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
@@ -74,6 +74,8 @@
 - (void)changeFont
 {
     self.label.font = [self.label.font fontWithSize:self.label.font.pointSize +2];
+    self.label.textColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];
+    [self.label sizeToFit];
 }
 
 - (void)didReceiveMemoryWarning {

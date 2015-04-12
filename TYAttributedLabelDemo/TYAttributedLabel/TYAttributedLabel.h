@@ -37,8 +37,6 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
-@property (nonatomic, assign)   BOOL            sizeAdjustTextChange;    // frame大小是否自动适应文本改变
-
 /**
  *  获取普通文本内容
  */
@@ -76,6 +74,11 @@
  *  @param textRunArray textRun数组（需遵循协议TYTextRunProtocol,否则不会添加）
  */
 - (void)addTextRunArray:(NSArray *)textRunArray;
+
+/**
+ *  调用可以自动计算frame大小
+ */
+- (void)sizeToFit;
 
 /**
  *  获取文本真正的高度

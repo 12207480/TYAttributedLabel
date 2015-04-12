@@ -20,6 +20,8 @@
 @property (nonatomic, strong)   NSMutableArray              *textRunArray;      // run数组
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         //点击手势
+
+@property (nonatomic, assign)   BOOL                        isFitToSize;
 @end
 
 @implementation TYAttributedLabel
@@ -76,6 +78,7 @@
 {
     _attString = [self createTextAttibuteStringWithText:text];
     [self resetAllAttributed];
+    _isFitToSize = YES;
     [self resetFramesetter];
 }
 
@@ -83,6 +86,7 @@
 {
     _attString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedText];
     [self resetAllAttributed];
+    _isFitToSize = YES;
     [self resetFramesetter];
 }
 
@@ -92,6 +96,7 @@
         _textColor = textColor;
         
         [_attString addAttributeTextColor:textColor];
+        _isFitToSize = YES;
         [self resetFramesetter];
     }
 }
@@ -191,10 +196,9 @@
     }
     if ([NSThread isMainThread])
     {
-        if (_sizeAdjustTextChange) {
-            [self adjustTextChangeSize];
-        }
-        
+//        if (_sizeToFitTextChange) {
+//            [self setNeedFitToSize];
+//        }
         [self setNeedsDisplay];
     }
 }
@@ -209,6 +213,7 @@
         [self addTextRunsWithAtrributedString:_attString];
         
         _framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_attString);
+        
     }
 }
 
@@ -268,14 +273,13 @@
     }
 }
 
-
 #pragma mark - 绘画
 - (void)drawRect:(CGRect)rect {
     
     if (_attString == nil) {
         return;
     }
-    
+    _isFitToSize = NO;
     //	跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
@@ -437,16 +441,37 @@
     return ceilf(suggestedSize.height)+1;
 }
 
-- (void)adjustTextChangeSize
+- (void)setNeedFitToSize
 {
-    CGFloat height = [self getHeightWithWidth:CGRectGetWidth(self.frame)];
-    
-    if (height != CGRectGetHeight(self.frame)) {
-        CGRect frame = self.frame;
-        frame.size.height = height;
-        [self setFrame:frame];
+    if (!_isFitToSize) {
+        _isFitToSize = YES;
+        [self sizeToFit];
+        NSLog(@"view bounds %@",NSStringFromCGRect(self.bounds));
     }
 }
+
+- (void)sizeToFit
+{
+    [super sizeToFit];
+}
+
+- (CGSize)sizeThatFits:(CGSize)size
+{
+    CGFloat width = CGRectGetWidth(self.frame);
+    CGFloat height = [self getHeightWithWidth:width];
+    return CGSizeMake(width, height);
+}
+
+//- (void)adjustTextChangeSize
+//{
+//    CGFloat height = [self getHeightWithWidth:CGRectGetWidth(self.frame)];
+//    
+//    if (height != CGRectGetHeight(self.frame)) {
+//        CGRect frame = self.frame;
+//        frame.size.height = height;
+//        [self setFrame:frame];
+//    }
+//}
 
 #pragma mark 调用这个获得合适的Frame
 - (void)setFrameWithOrign:(CGPoint)orign Width:(CGFloat)width
