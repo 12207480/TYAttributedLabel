@@ -68,12 +68,12 @@
  */
 - (void)addTextRun:(id<TYTextRunProtocol>)textRun;
 
-///**
-// *  添加 textRun数组 （自定义显示内容）
-// *
-// *  @param textRunArray textRun数组（需遵循协议TYTextRunProtocol）
-// */
-//- (void)addTextRunArray:(NSArray *)textRunArray;
+/**
+ *  添加 textRun数组 （自定义显示内容）
+ *
+ *  @param textRunArray textRun数组（需遵循协议TYTextRunProtocol,否则不会添加）
+ */
+- (void)addTextRunArray:(NSArray *)textRunArray;
 
 /**
  *  获取文本真正的高度

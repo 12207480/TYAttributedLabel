@@ -154,8 +154,10 @@
 - (void)addTextRunArray:(NSArray *)textRunArray
 {
     if (textRunArray) {
-        for (id<TYTextRunProtocol> textRun in textRunArray) {
-            [self addTextRun:textRun];
+        for (id textRun in textRunArray) {
+            if ([textRun conformsToProtocol:@protocol(TYTextRunProtocol)]) {
+                [self addTextRun:textRun];
+            }
         }
         [self resetFramesetter];
     }
