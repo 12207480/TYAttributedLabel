@@ -142,7 +142,8 @@
     if (textRun ) {
         if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
             [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
-        } else if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
+        }
+        if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
             [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
         }
 
@@ -442,7 +443,8 @@
     if (textRun) {
         if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
             [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
-        } else if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
+        }
+        if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
             [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
         }
         

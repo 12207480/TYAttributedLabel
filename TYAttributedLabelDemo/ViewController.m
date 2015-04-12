@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "TYAttributedLabel.h"
 #import "TYDrawImageRun.h"
+#import "TYDrawViewRun.h"
 
 @interface ViewController ()
 
@@ -55,7 +56,11 @@
     button.frame = CGRectMake(0, 0, 60, 15);
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"avatar"]];
     imageView.frame = CGRectMake(0, 0, 60, 60);
-    [label addView:button range:NSMakeRange(146, 1)];
+    TYDrawViewRun * drawView = [[TYDrawViewRun alloc]init];
+    drawView.view = button;
+    drawView.range = NSMakeRange(146, 1);
+    [label addTextRun:drawView];
+    //[label addView:button range:NSMakeRange(146, 1)];
     [label appendView:imageView alignment:TYDrawAlignmentButtom];
     [label appendImageWithContent:@"haha"];
     [label setFrameWithOrign:CGPointMake(0, 64) Width:CGRectGetWidth(self.view.frame)];

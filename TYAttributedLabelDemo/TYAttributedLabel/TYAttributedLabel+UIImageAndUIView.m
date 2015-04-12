@@ -43,7 +43,6 @@
     viewRun.drawAlignment = alignment;
     viewRun.view = view;
     viewRun.superView = self;
-    viewRun.size = view.frame.size;
     viewRun.range = range;
     
     [self addTextRun:viewRun];
@@ -85,7 +84,6 @@
     viewRun.drawAlignment = alignment;
     viewRun.view = view;
     viewRun.superView = self;
-    viewRun.size = view.frame.size;
     
     [self appendTextRun:viewRun];
 }
