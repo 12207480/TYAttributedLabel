@@ -42,7 +42,6 @@
     TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
     viewRun.drawAlignment = alignment;
     viewRun.view = view;
-    viewRun.superView = self;
     viewRun.range = range;
     
     [self addTextRun:viewRun];
@@ -83,7 +82,6 @@
     TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
     viewRun.drawAlignment = alignment;
     viewRun.view = view;
-    viewRun.superView = self;
     
     [self appendTextRun:viewRun];
 }

@@ -189,10 +189,10 @@
     // 是否更新了内容
     if (_framesetter == nil) {
         
-//        if (_attString == nil) {
-//            _attString = [self createTextAttibuteStringWithText:_text];
-//            
-//        }
+        if (_attString == nil) {
+            _attString = [[NSMutableAttributedString alloc]init];
+            
+        }
         // 添加文本run属性
         [self addTextRunsWithAtrributedString:_attString];
         
@@ -242,7 +242,7 @@
     [attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
 }
 
-// 添加文本run属性
+#pragma mark -  添加文本run属性
 - (void)addTextRunsWithAtrributedString:(NSMutableAttributedString *)attString
 {
     if (_textRunArray.count > 0) {
