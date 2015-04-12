@@ -8,6 +8,10 @@
 
 #import "TYDrawViewRun.h"
 
+@interface TYDrawViewRun ()
+@property (nonatomic, weak) UIView *superView;
+@end
+
 @implementation TYDrawViewRun
 
 - (void)setView:(UIView *)view
@@ -21,23 +25,30 @@
 
 - (void)setSuperView:(UIView *)superView
 {
-    if (!_view.superview) {
-        [superView addSubview:_view];
-        return;
+    if (_view.superview) {
+        [_view removeFromSuperview];
     }
     
-    if (_view.superview && _view.superview != superView) {
-        [_view removeFromSuperview];
-        [superView addSubview:_view];
+    if (superView) {
+        _superView = superView;
     }
+}
+
+- (void)didNotDrawRun
+{
+    [_view removeFromSuperview];
 }
 
 - (void)drawRunWithRect:(CGRect)rect
 {
-    if (_view == nil || _view.superview == nil) return;
-
+    if (_view == nil || _superView == nil) return;
+    
     // 设置frame 注意 转换rect  CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    [_view setFrame:CGRectMake(rect.origin.x, _view.superview.bounds.size.height - rect.origin.y - rect.size.height, rect.size.width, rect.size.height)];
+    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _superView.bounds.size.height), 1.f, -1.f);
+    rect = CGRectApplyAffineTransform(rect, transform);
+    [_view setFrame:CGRectMake(rect.origin.x,rect.origin.y, rect.size.width, rect.size.height)];
+    [_superView addSubview:_view];
+    //[_view setFrame:CGRectMake(rect.origin.x, _view.superview.bounds.size.height - rect.origin.y - rect.size.height, rect.size.width, rect.size.height)];
 }
 
 

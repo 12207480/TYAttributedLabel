@@ -322,15 +322,39 @@
                 }
                 
                 [runRectDictionary setObject:textRun forKey:[NSValue valueWithCGRect:runRect]];
+                
             }
 
         }
     }
     
+    
     if (runRectDictionary.count > 0) {
-        _runRectDictionary = [runRectDictionary copy];
-        [self addSingleTapGesture];
+        // 添加响应点击rect
+        [self addRunRectDictionary:[runRectDictionary copy]];
     }
+}
+
+// 添加响应点击rect
+- (void)addRunRectDictionary:(NSDictionary *)runRectDictionary
+{
+    if (runRectDictionary.count < _runRectDictionary.count) {
+        
+        NSMutableArray *drawRunArray = [[_runRectDictionary allValues]mutableCopy];
+        // 剔除已经画出来的
+        [drawRunArray removeObjectsInArray:[runRectDictionary allValues]];
+        
+        // 遍历不会画出来的
+        for (id<TYTextRunProtocol>drawRun in drawRunArray) {
+            if ([drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)]
+                && [drawRun respondsToSelector:@selector(didNotDrawRun)]) {
+                [(id<TYDrawRunProtocol>)drawRun didNotDrawRun];
+            }
+        }
+    }
+    
+    _runRectDictionary = runRectDictionary;
+    [self addSingleTapGesture];
 }
 
 #pragma mark 添加点击手势

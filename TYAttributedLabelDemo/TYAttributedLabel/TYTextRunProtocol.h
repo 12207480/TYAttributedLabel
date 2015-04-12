@@ -62,6 +62,13 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
  */
 - (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent;
 
+@optional
+
+/**
+ *  不会把你绘画出来
+ */
+- (void)didNotDrawRun;
+
 @end
 
 @protocol TYDrawViewRunProtocol <TYDrawRunProtocol>
