@@ -21,6 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
+    label.sizeAdjustTextChange = YES;
     self.label = label;
     //[label addTextRunArray:@[@" ",@" "]];
     [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];

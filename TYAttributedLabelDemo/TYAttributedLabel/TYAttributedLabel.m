@@ -102,6 +102,7 @@
         _font = font;
         
         [_attString addAttributeFont:font];
+        [self resetTextRunArray];
         [self resetFramesetter];
     }
 }
@@ -171,6 +172,15 @@
     [self setupProperty];
 }
 
+- (void)resetTextRunArray
+{
+    for (id<TYTextRunProtocol>textRun in self.textRunArray) {
+        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
+        }
+    }
+}
+
 #pragma mark 重置framesetter
 - (void)resetFramesetter
 {
@@ -181,6 +191,10 @@
     }
     if ([NSThread isMainThread])
     {
+        if (_sizeAdjustTextChange) {
+            [self adjustTextChangeSize];
+        }
+        
         [self setNeedsDisplay];
     }
 }
@@ -191,10 +205,6 @@
     // 是否更新了内容
     if (_framesetter == nil) {
         
-        if (_attString == nil) {
-            _attString = [[NSMutableAttributedString alloc]init];
-            
-        }
         // 添加文本run属性
         [self addTextRunsWithAtrributedString:_attString];
         
@@ -247,7 +257,7 @@
 #pragma mark -  添加文本run属性
 - (void)addTextRunsWithAtrributedString:(NSMutableAttributedString *)attString
 {
-    if (_textRunArray.count > 0) {
+    if (attString && _textRunArray.count > 0) {
         for (id<TYTextRunProtocol> textRun in _textRunArray) {
             // 验证范围
             if (NSMaxRange([textRun range]) < attString.length) {
@@ -261,7 +271,10 @@
 
 #pragma mark - 绘画
 - (void)drawRect:(CGRect)rect {
-    // Drawing code
+    
+    if (_attString == nil) {
+        return;
+    }
     
     //	跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
     CGContextRef context = UIGraphicsGetCurrentContext();
@@ -339,7 +352,6 @@
 - (void)addRunRectDictionary:(NSDictionary *)runRectDictionary
 {
     if (runRectDictionary.count < _runRectDictionary.count) {
-        
         NSMutableArray *drawRunArray = [[_runRectDictionary allValues]mutableCopy];
         // 剔除已经画出来的
         [drawRunArray removeObjectsInArray:[runRectDictionary allValues]];
@@ -423,6 +435,17 @@
     CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(width,MAXFLOAT), NULL);
     
     return ceilf(suggestedSize.height)+1;
+}
+
+- (void)adjustTextChangeSize
+{
+    CGFloat height = [self getHeightWithWidth:CGRectGetWidth(self.frame)];
+    
+    if (height != CGRectGetHeight(self.frame)) {
+        CGRect frame = self.frame;
+        frame.size.height = height;
+        [self setFrame:frame];
+    }
 }
 
 #pragma mark 调用这个获得合适的Frame

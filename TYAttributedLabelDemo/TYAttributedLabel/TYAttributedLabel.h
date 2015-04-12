@@ -37,6 +37,8 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
+@property (nonatomic, assign)   BOOL            sizeAdjustTextChange;    // frame大小是否自动适应文本改变
+
 /**
  *  获取普通文本内容
  */
