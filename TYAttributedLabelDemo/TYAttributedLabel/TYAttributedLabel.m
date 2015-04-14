@@ -220,13 +220,17 @@ typedef enum TYAttributedLabelState : NSInteger {
 #pragma mark 重置framesetter
 - (void)resetFramesetter
 {
-    if (_framesetter)
-    {
+    if (_framesetter){
         CFRelease(_framesetter);
         _framesetter = nil;
     }
-    if ([NSThread isMainThread])
-    {
+    
+    if (_frameRef) {
+        CFRelease(_frameRef);
+        _frameRef = nil;
+    }
+    
+    if ([NSThread isMainThread]){
         [self setNeedsDisplay];
     }
 }
@@ -321,12 +325,11 @@ typedef enum TYAttributedLabelState : NSInteger {
     // CTFramesetter 是使用 Core Text 绘制时最重要的类。它管理您的字体引用和文本绘制帧。这里在 framesetter 之后通过一个所选的文本范围（这里我们选择整个文本）与需要绘制到的矩形路径创建一个帧。
     [self updateFramesetterIfNeeded];
     
-    if (_frameRef) {
-        CFRelease(_frameRef);
-        _frameRef = nil;
+    BOOL reDraw = NO;
+    if (_frameRef == nil) {
+        _frameRef = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, [_attString length]), path, NULL);
+        reDraw = YES;
     }
-    
-    _frameRef = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, [_attString length]), path, NULL);
     
     if (self.state == TYAttributedLabelStateTouching || self.state == TYAttributedLabelStateSelecting) {
         [self drawSelectionArea];
@@ -337,6 +340,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     
     // 画其他元素
     [self drawTextRunFrame:_frameRef context:context];
+
 }
 
 #pragma mark - drawTextRun
@@ -744,8 +748,8 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (void)userLongPressedGuestureDetected:(UILongPressGestureRecognizer *)recognizer {
     CGPoint point = [recognizer locationInView:self];
     //debugMethod();
-    NSLog(@"state = %d", recognizer.state);
-    NSLog(@"point = %@", NSStringFromCGPoint(point));
+    //NSLog(@"state = %d", recognizer.state);
+    //NSLog(@"point = %@", NSStringFromCGPoint(point));
     if (recognizer.state == UIGestureRecognizerStateBegan ||
         recognizer.state == UIGestureRecognizerStateChanged) {
         CFIndex index = [self touchContentOffsetInView:self atPoint:point];
@@ -799,11 +803,11 @@ typedef enum TYAttributedLabelState : NSInteger {
     CGPoint point = [recognizer locationInView:self];
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -28, -10), point)) {
-            NSLog(@"try to move left anchor");
+            //NSLog(@"try to move left anchor");
             _leftSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
         } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -28, -10), point)) {
-            NSLog(@"try to move right anchor");
+            //NSLog(@"try to move right anchor");
             _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
         }
@@ -814,12 +818,12 @@ typedef enum TYAttributedLabelState : NSInteger {
             return;
         }
         if (_leftSelectionAnchor.tag == ANCHOR_TARGET_TAG && index < _selectionEndPosition) {
-            NSLog(@"change start position to %ld", index);
+            //NSLog(@"change start position to %ld", index);
             _selectionStartPosition = index;
             self.magnifierView.touchPoint = point;
             [self hideMenuController];
         } else if (_rightSelectionAnchor.tag == ANCHOR_TARGET_TAG && index > _selectionStartPosition) {
-            NSLog(@"change end position to %ld", index);
+            //NSLog(@"change end position to %ld", index);
             _selectionEndPosition = index;
             self.magnifierView.touchPoint = point;
             [self hideMenuController];
@@ -827,7 +831,7 @@ typedef enum TYAttributedLabelState : NSInteger {
         
     } else if (recognizer.state == UIGestureRecognizerStateEnded ||
                recognizer.state == UIGestureRecognizerStateCancelled) {
-        NSLog(@"end move");
+        //NSLog(@"end move");
         _leftSelectionAnchor.tag = 0;
         _rightSelectionAnchor.tag = 0;
         [self removeMaginfierView];
