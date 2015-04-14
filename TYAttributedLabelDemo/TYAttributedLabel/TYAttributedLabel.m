@@ -230,9 +230,7 @@ typedef enum TYAttributedLabelState : NSInteger {
         _frameRef = nil;
     }
     
-    if ([NSThread isMainThread]){
-        [self setNeedsDisplay];
-    }
+    [self setNeedsDisplay];
 }
 
 #pragma mark 更新framesetter，如果需要
@@ -811,10 +809,10 @@ typedef enum TYAttributedLabelState : NSInteger {
             _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
         }
-        
+        [self setNeedsDisplay];
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         CFIndex index = [self touchContentOffsetInView:self atPoint:point];
-        if (index == -1) {
+        if (index == -1 || ( _selectionEndPosition != _selectionStartPosition && (index == _selectionEndPosition || index == _selectionStartPosition))) {
             return;
         }
         if (_leftSelectionAnchor.tag == ANCHOR_TARGET_TAG && index < _selectionEndPosition) {
@@ -828,7 +826,7 @@ typedef enum TYAttributedLabelState : NSInteger {
             self.magnifierView.touchPoint = point;
             [self hideMenuController];
         }
-        
+        [self setNeedsDisplay];
     } else if (recognizer.state == UIGestureRecognizerStateEnded ||
                recognizer.state == UIGestureRecognizerStateCancelled) {
         //NSLog(@"end move");
@@ -836,8 +834,8 @@ typedef enum TYAttributedLabelState : NSInteger {
         _rightSelectionAnchor.tag = 0;
         [self removeMaginfierView];
         [self showMenuController];
+        [self setNeedsDisplay];
     }
-    [self setNeedsDisplay];
 }
 
 - (void)drawAnchors {
