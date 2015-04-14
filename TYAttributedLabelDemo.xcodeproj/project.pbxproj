@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = B05BA7B51AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m */; };
+		B0DF51991ADBE45C0067467D /* MagnifiterView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0DF51981ADBE45C0067467D /* MagnifiterView.m */; };
 		D34A49871AD4D5510036B7EF /* TYTextRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextRun.m */; };
 		D34A498E1AD4FA760036B7EF /* TYDrawRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A498D1AD4FA760036B7EF /* TYDrawRun.m */; };
 		D34A49911AD4FF370036B7EF /* TYLinkTextRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49901AD4FF370036B7EF /* TYLinkTextRun.m */; };
@@ -38,6 +39,8 @@
 
 /* Begin PBXFileReference section */
 		B05BA7B51AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TYAttributedLabel+UIImageAndUIView.m"; sourceTree = "<group>"; };
+		B0DF51971ADBE45C0067467D /* MagnifiterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagnifiterView.h; sourceTree = "<group>"; };
+		B0DF51981ADBE45C0067467D /* MagnifiterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagnifiterView.m; sourceTree = "<group>"; };
 		D34A49851AD4D5510036B7EF /* TYTextRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextRun.h; sourceTree = "<group>"; };
 		D34A49861AD4D5510036B7EF /* TYTextRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextRun.m; sourceTree = "<group>"; };
 		D34A498C1AD4FA760036B7EF /* TYDrawRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawRun.h; sourceTree = "<group>"; };
@@ -167,6 +170,8 @@
 				D34A49941AD50EB70036B7EF /* TYDrawImageRun.m */,
 				D34BE7401AD669F000BECD40 /* TYDrawViewRun.h */,
 				D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */,
+				B0DF51971ADBE45C0067467D /* MagnifiterView.h */,
+				B0DF51981ADBE45C0067467D /* MagnifiterView.m */,
 				D3709F411AD3C71900145EC6 /* NSMutableAttributedString+TY.h */,
 				D3709F421AD3C71900145EC6 /* NSMutableAttributedString+TY.m */,
 			);
@@ -279,6 +284,7 @@
 				D34A49951AD50EB70036B7EF /* TYDrawImageRun.m in Sources */,
 				D3709F131AD3A5C000145EC6 /* AppDelegate.m in Sources */,
 				D34BE7421AD669F000BECD40 /* TYDrawViewRun.m in Sources */,
+				B0DF51991ADBE45C0067467D /* MagnifiterView.m in Sources */,
 				B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */,
 				D3709F101AD3A5C000145EC6 /* main.m in Sources */,
 				D3709F431AD3C71900145EC6 /* NSMutableAttributedString+TY.m in Sources */,
@@ -410,6 +416,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TYAttributedLabelDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -420,6 +427,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = TYAttributedLabelDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
