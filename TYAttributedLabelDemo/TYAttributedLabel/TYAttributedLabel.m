@@ -95,10 +95,6 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
-- (void)addLongPressGestureRecognizer{
-    
-}
-
 - (NSString *)text{
     return _attString.string;
 }
@@ -338,7 +334,8 @@ typedef enum TYAttributedLabelState : NSInteger {
     
     // 画其他元素
     [self drawTextRunFrame:_frameRef context:context];
-
+    
+    CFRelease(path);
 }
 
 #pragma mark - drawTextRun
@@ -518,58 +515,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     _attString = nil;
 }
 
-- (void)drawSelectionArea
-{
-    
-}
-
-- (void)drawAnchors
-{
-    
-}
-
-@end
-
-#pragma mark - append text textRun
-
-@implementation TYAttributedLabel (AppendAttributedString)
-
-- (void)appendText:(NSString *)text
-{
-    NSAttributedString *attributedText = [self createTextAttibuteStringWithText:text];
-    [self appendTextAttributedString:attributedText];
-}
-
-- (void)appendTextAttributedString:(NSAttributedString *)attributedText
-{
-    if (_attString == nil) {
-        _attString = [[NSMutableAttributedString alloc]init];
-    }
-    [_attString appendAttributedString:attributedText];
-    [self resetFramesetter];
-}
-
-- (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun
-{
-    if (textRun) {
-        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
-        }
-        if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
-            [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
-        }
-        
-        [self appendTextAttributedString:[textRun appendTextRunAttributedString]];
-    }
-}
-
-@end
-
 #pragma mark - 长按出现菜单选择
-
-@implementation TYAttributedLabel (LongPressShowMenu)
-
-
 - (void)addLongPressGestureRecognizer{
     UIGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                              action:@selector(userLongPressedGuestureDetected:)];
@@ -679,7 +625,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 }
 
 - (CFIndex)touchContentOffsetInView:(UIView *)view atPoint:(CGPoint)point{
-    //CTFrameRef textFrame = data.ctFrame;
+    
     CFArrayRef lines = CTFrameGetLines(_frameRef);
     if (!lines) {
         return -1;
@@ -754,6 +700,9 @@ typedef enum TYAttributedLabelState : NSInteger {
         if (index != -1 && index < _attString.length) {
             _selectionStartPosition = index;
             _selectionEndPosition = index + 2;
+        } else {
+            _selectionStartPosition = -1;
+            _selectionEndPosition = -1;
         }
         self.magnifierView.touchPoint = point;
         self.state = TYAttributedLabelStateTouching;
@@ -765,33 +714,6 @@ typedef enum TYAttributedLabelState : NSInteger {
             self.state = TYAttributedLabelStateNormal;
         }
     }
-}
-
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    if (action == @selector(copy:) || action == @selector(selectAll:)) {
-        return YES;
-    }
-    return NO;
-}
-
-- (void)copy:(id)sender
-{
-    if (_selectionStartPosition > -1 && _selectionEndPosition > -1) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        NSString *selectText = [self.text substringWithRange:NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition)];
-        NSLog(@"%@",selectText);
-        [pasteboard setString:selectText];
-    }
-    self.state = TYAttributedLabelStateNormal;
-}
-
-- (void)selectAll:(id)sender
-{
-    _selectionStartPosition = 0;
-    _selectionEndPosition = self.text.length-1;
-    
-    [self setNeedsDisplay];
-    [self showMenuController];
 }
 
 - (void)userPanGuestureDetected:(UIGestureRecognizer *)recognizer {
@@ -1000,9 +922,73 @@ typedef enum TYAttributedLabelState : NSInteger {
     CGContextFillRect(context, rect);
 }
 
+#pragma mark - 菜单响应函数
+
 - (BOOL)canBecomeFirstResponder {
     return YES;
 }
 
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (action == @selector(copy:) || action == @selector(selectAll:)) {
+        return YES;
+    }
+    return NO;
+}
+
+- (void)copy:(id)sender
+{
+    if (_selectionStartPosition > -1 && _selectionEndPosition > -1) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        NSString *selectText = [self.text substringWithRange:NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition)];
+        NSLog(@"%@",selectText);
+        [pasteboard setString:selectText];
+    }
+    self.state = TYAttributedLabelStateNormal;
+}
+
+- (void)selectAll:(id)sender
+{
+    _selectionStartPosition = 0;
+    _selectionEndPosition = self.text.length-1;
+    
+    [self setNeedsDisplay];
+    [self showMenuController];
+}
 
 @end
+
+#pragma mark - append text textRun
+
+@implementation TYAttributedLabel (AppendAttributedString)
+
+- (void)appendText:(NSString *)text
+{
+    NSAttributedString *attributedText = [self createTextAttibuteStringWithText:text];
+    [self appendTextAttributedString:attributedText];
+}
+
+- (void)appendTextAttributedString:(NSAttributedString *)attributedText
+{
+    if (_attString == nil) {
+        _attString = [[NSMutableAttributedString alloc]init];
+    }
+    [_attString appendAttributedString:attributedText];
+    [self resetFramesetter];
+}
+
+- (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun
+{
+    if (textRun) {
+        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
+        }
+        if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
+            [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
+        }
+        
+        [self appendTextAttributedString:[textRun appendTextRunAttributedString]];
+    }
+}
+
+@end
+
