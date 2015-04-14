@@ -11,7 +11,7 @@
 #import <CoreText/CoreText.h>
 
 // 文本颜色
-#define kTextColor [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
+#define kTextColor      [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
 
 #define RGB(R, G, B)    [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1.0]
 
@@ -34,12 +34,12 @@ typedef enum TYAttributedLabelState : NSInteger {
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         //点击手势
 
-@property (nonatomic) NSInteger selectionStartPosition;
-@property (nonatomic) NSInteger selectionEndPosition;
-@property (nonatomic) TYAttributedLabelState state;
-@property (strong, nonatomic) UIImageView *leftSelectionAnchor;
-@property (strong, nonatomic) UIImageView *rightSelectionAnchor;
-@property (strong, nonatomic) MagnifiterView *magnifierView;
+@property (nonatomic)           NSInteger                   selectionStartPosition;
+@property (nonatomic)           NSInteger                   selectionEndPosition;
+@property (nonatomic)           TYAttributedLabelState      state;
+@property (strong, nonatomic)   UIImageView                 *leftSelectionAnchor;
+@property (strong, nonatomic)   UIImageView                 *rightSelectionAnchor;
+@property (strong, nonatomic)   MagnifiterView              *magnifierView;
 
 @end
 
@@ -49,9 +49,6 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     if (self = [super initWithFrame:frame]) {
         [self setupProperty];
-        if (_longPressShowMenuEnable) {
-            [self addLongPressGestureRecognizer];
-        }
     }
     return self;
 }
@@ -60,9 +57,6 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self setupProperty];
-        if (_longPressShowMenuEnable) {
-            [self addLongPressGestureRecognizer];
-        }
     }
     return self;
 }
@@ -89,7 +83,16 @@ typedef enum TYAttributedLabelState : NSInteger {
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
     _state = TYAttributedLabelStateNormal;
-    _longPressShowMenuEnable = YES;
+    _longPressShowMenuEnable = NO;
+}
+
+- (void)setLongPressShowMenuEnable:(BOOL)longPressShowMenuEnable
+{
+    _longPressShowMenuEnable = longPressShowMenuEnable;
+    
+    if (longPressShowMenuEnable) {
+        [self addLongPressGestureRecognizer];
+    }
 }
 
 - (void)addLongPressGestureRecognizer{
@@ -336,16 +339,6 @@ typedef enum TYAttributedLabelState : NSInteger {
     [self drawTextRunFrame:_frameRef context:context];
 }
 
-- (void)drawSelectionArea
-{
-    
-}
-
-- (void)drawAnchors
-{
-    
-}
-
 #pragma mark - drawTextRun
 - (void)drawTextRunFrame:(CTFrameRef)frame context:(CGContextRef)context
 {
@@ -523,6 +516,16 @@ typedef enum TYAttributedLabelState : NSInteger {
     _attString = nil;
 }
 
+- (void)drawSelectionArea
+{
+    
+}
+
+- (void)drawAnchors
+{
+    
+}
+
 @end
 
 #pragma mark - append text textRun
@@ -564,6 +567,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 
 @implementation TYAttributedLabel (LongPressShowMenu)
 
+
 - (void)addLongPressGestureRecognizer{
     UIGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                              action:@selector(userLongPressedGuestureDetected:)];
@@ -577,6 +581,9 @@ typedef enum TYAttributedLabelState : NSInteger {
 }
 
 - (void)setupAnchors {
+    if (_selectionStartPosition < 0 && _selectionEndPosition < 0) {
+        return;
+    }
     _leftSelectionAnchor = [self createSelectionAnchorWithTop:YES];
     _rightSelectionAnchor = [self createSelectionAnchorWithTop:NO];
     [self addSubview:_leftSelectionAnchor];
@@ -767,12 +774,22 @@ typedef enum TYAttributedLabelState : NSInteger {
 
 - (void)copy:(id)sender
 {
-    
+    if (_selectionStartPosition > -1 && _selectionEndPosition > -1) {
+        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+        NSString *selectText = [self.text substringWithRange:NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition)];
+        NSLog(@"%@",selectText);
+        [pasteboard setString:selectText];
+    }
+    self.state = TYAttributedLabelStateNormal;
 }
 
 - (void)selectAll:(id)sender
 {
+    _selectionStartPosition = 0;
+    _selectionEndPosition = self.text.length-1;
     
+    [self setNeedsDisplay];
+    [self showMenuController];
 }
 
 - (void)userPanGuestureDetected:(UIGestureRecognizer *)recognizer {
@@ -781,15 +798,16 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
     CGPoint point = [recognizer locationInView:self];
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -25, -6), point)) {
+        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -28, -10), point)) {
             NSLog(@"try to move left anchor");
             _leftSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
-        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -25, -6), point)) {
+        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -28, -10), point)) {
             NSLog(@"try to move right anchor");
             _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
         }
+        
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         CFIndex index = [self touchContentOffsetInView:self atPoint:point];
         if (index == -1) {

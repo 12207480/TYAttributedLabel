@@ -37,7 +37,7 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
-@property (nonatomic, assign)   BOOL            longPressShowMenuEnable;// 长按出现菜单是否启用
+@property (nonatomic, assign)   BOOL            longPressShowMenuEnable;// 长按出现菜单,默认不启用
 
 /**
  *  获取普通文本内容

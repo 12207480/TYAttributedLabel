@@ -21,6 +21,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
+    label.longPressShowMenuEnable = YES;
     //label.sizeToFitTextChange = YES;
     self.label = label;
     //[label addTextRunArray:@[@" ",@" "]];
