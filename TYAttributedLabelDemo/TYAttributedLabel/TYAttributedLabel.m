@@ -326,12 +326,13 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
     
     if (self.state == TYAttributedLabelStateTouching || self.state == TYAttributedLabelStateSelecting) {
-        [self drawSelectionArea];
-        [self drawAnchors];
+        NSRange selectRange = NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition);
+        [self drawSelectionAreaInRange:selectRange bgColor:RGB(204, 221, 236)];
+        [self drawAnchorsWithRange:selectRange];
     }
     
     CTFrameDraw(_frameRef, context);	// CTFrameDraw 将 frame 描述到设备上下文
-    
+
     // 画其他元素
     [self drawTextRunFrame:_frameRef context:context];
     
@@ -465,7 +466,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
-#pragma mark - 获得label最合适的高度 (请在设置text 字体和大小 行距等等 后在调用)
+#pragma mark - 获得label最合适的高度
 - (int)getHeightWithWidth:(CGFloat)width
 {
     if (_attString == nil) {
@@ -633,30 +634,29 @@ typedef enum TYAttributedLabelState : NSInteger {
     CFIndex count = CFArrayGetCount(lines);
     
     // 获得每一行的origin坐标
-    CGPoint origins[count];
-    CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
-    
-    // 翻转坐标系
-    CGAffineTransform transform =  CGAffineTransformMakeTranslation(0, view.bounds.size.height);
-    transform = CGAffineTransformScale(transform, 1.f, -1.f);
-    
-    CFIndex idx = -1;
-    for (int i = 0; i < count; i++) {
-        CGPoint linePoint = origins[i];
-        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-        // 获得每一行的CGRect信息
-        CGRect flippedRect = [self getLineBounds:line point:linePoint];
-        CGRect rect = CGRectApplyAffineTransform(flippedRect, transform);
-        
-        if (CGRectContainsPoint(rect, point)) {
-            // 将点击的坐标转换成相对于当前行的坐标
-            CGPoint relativePoint = CGPointMake(point.x-CGRectGetMinX(rect),
-                                                point.y-CGRectGetMinY(rect));
-            // 获得当前点击坐标对应的字符串偏移
-            idx = CTLineGetStringIndexForPosition(line, relativePoint);
+    CFIndex index = -1;
+    if (count != 0) {
+        CGPoint origins[count];
+        CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
+        CGFloat viewHeight = CGRectGetHeight(view.frame);
+        for (int i = 0; i < count; i++){
+            
+            CGPoint baselineOrigin = origins[i];
+            baselineOrigin.y = viewHeight - baselineOrigin.y;
+            
+            CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+            CGFloat ascent, descent;
+            CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
+            
+            CGRect lineFrame = CGRectMake(baselineOrigin.x, baselineOrigin.y - ascent, lineWidth, ascent + descent);
+            if (CGRectContainsPoint(lineFrame, point)){
+                index = CTLineGetStringIndexForPosition(line, point);
+                
+            }
         }
+        
     }
-    return idx;
+    return index;
 }
 
 - (CGRect)getLineBounds:(CTLineRef)line point:(CGPoint)point {
@@ -691,15 +691,17 @@ typedef enum TYAttributedLabelState : NSInteger {
 
 - (void)userLongPressedGuestureDetected:(UILongPressGestureRecognizer *)recognizer {
     CGPoint point = [recognizer locationInView:self];
-    //debugMethod();
     //NSLog(@"state = %d", recognizer.state);
     //NSLog(@"point = %@", NSStringFromCGPoint(point));
     if (recognizer.state == UIGestureRecognizerStateBegan ||
         recognizer.state == UIGestureRecognizerStateChanged) {
         CFIndex index = [self touchContentOffsetInView:self atPoint:point];
         if (index != -1 && index < _attString.length) {
-            _selectionStartPosition = index;
-            _selectionEndPosition = index + 2;
+            // 获取智能中文词组
+            NSRange range = [self characterRangeAtIndex:index];
+            _selectionStartPosition = range.location;
+            _selectionEndPosition = range.location + range.length;
+
         } else {
             _selectionStartPosition = -1;
             _selectionEndPosition = -1;
@@ -722,11 +724,11 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
     CGPoint point = [recognizer locationInView:self];
     if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -28, -10), point)) {
+        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -26, -10), point)) {
             //NSLog(@"try to move left anchor");
             _leftSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
-        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -28, -10), point)) {
+        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -26, -10), point)) {
             //NSLog(@"try to move right anchor");
             _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
             [self hideMenuController];
@@ -760,8 +762,11 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
-- (void)drawAnchors {
-    if (_selectionStartPosition < 0 || _selectionEndPosition > _attString.length) {
+- (void)drawAnchorsWithRange:(NSRange)selectRange {
+    
+    NSInteger selectionStartPosition = selectRange.location;
+    NSInteger selectionEndPosition = NSMaxRange(selectRange);
+    if (selectionStartPosition < 0 || selectionEndPosition > _attString.length) {
         return;
     }
     
@@ -783,17 +788,17 @@ typedef enum TYAttributedLabelState : NSInteger {
         CTLineRef line = CFArrayGetValueAtIndex(lines, i);
         CFRange range = CTLineGetStringRange(line);
         
-        if ([self isPosition:_selectionStartPosition inRange:range]) {
+        if ([self isPosition:selectionStartPosition inRange:range]) {
             CGFloat ascent, descent, leading, offset;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionStartPosition, NULL);
+            offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
             CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGPoint origin = CGPointMake(linePoint.x + offset - 5, linePoint.y + ascent + 11);
             origin = CGPointApplyAffineTransform(origin, transform);
             _leftSelectionAnchor.frame = CGRectMake(origin.x, origin.y, CGRectGetWidth(_leftSelectionAnchor.frame), CGRectGetHeight(_leftSelectionAnchor.frame));
         }
-        if ([self isPosition:_selectionEndPosition inRange:range]) {
+        if ([self isPosition:selectionEndPosition inRange:range]) {
             CGFloat ascent, descent, leading, offset;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionEndPosition, NULL);
+            offset = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
             CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGPoint origin = CGPointMake(linePoint.x + offset - 5, linePoint.y - descent+28);
             origin = CGPointApplyAffineTransform(origin, transform);
@@ -803,8 +808,12 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
-- (void)drawSelectionArea {
-    if (_selectionStartPosition < 0 || _selectionEndPosition > _attString.length) {
+- (void)drawSelectionAreaInRange:(NSRange)selectRange bgColor:(UIColor *)bgColor{
+    
+    NSInteger selectionStartPosition = selectRange.location;
+    NSInteger selectionEndPosition = NSMaxRange(selectRange);
+    
+    if (selectionStartPosition < 0 || selectionEndPosition > _attString.length) {
         return;
     }
     
@@ -821,37 +830,37 @@ typedef enum TYAttributedLabelState : NSInteger {
         CTLineRef line = CFArrayGetValueAtIndex(lines, i);
         CFRange range = CTLineGetStringRange(line);
         // 1. start和end在一个line,则直接弄完break
-        if ([self isPosition:_selectionStartPosition inRange:range] && [self isPosition:_selectionEndPosition inRange:range]) {
+        if ([self isPosition:selectionStartPosition inRange:range] && [self isPosition:selectionEndPosition inRange:range]) {
             CGFloat ascent, descent, leading, offset, offset2;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionStartPosition, NULL);
-            offset2 = CTLineGetOffsetForStringIndex(line, _selectionEndPosition, NULL);
+            offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
+            offset2 = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
             CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, offset2 - offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect];
+            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
             break;
         }
         
         // 2. start和end不在一个line
         // 2.1 如果start在line中，则填充Start后面部分区域
-        if ([self isPosition:_selectionStartPosition inRange:range]) {
+        if ([self isPosition:selectionStartPosition inRange:range]) {
             CGFloat ascent, descent, leading, width, offset;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionStartPosition, NULL);
+            offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
             width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, width - offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect];
+            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
         } // 2.2 如果 start在line前，end在line后，则填充整个区域
-        else if (_selectionStartPosition < range.location && _selectionEndPosition >= range.location + range.length) {
+        else if (selectionStartPosition < range.location && selectionEndPosition >= range.location + range.length) {
             CGFloat ascent, descent, leading, width;
             width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x, linePoint.y - descent, width, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect];
+            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
         } // 2.3 如果start在line前，end在line中，则填充end前面的区域,break
-        else if (_selectionStartPosition < range.location && [self isPosition:_selectionEndPosition inRange:range]) {
+        else if (selectionStartPosition < range.location && [self isPosition:selectionEndPosition inRange:range]) {
             CGFloat ascent, descent, leading, width, offset;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionEndPosition, NULL);
+            offset = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
             width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x, linePoint.y - descent, offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect];
+            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
         }
     }
 }
@@ -915,11 +924,56 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
-- (void)fillSelectionAreaInRect:(CGRect)rect {
-    UIColor *bgColor = RGB(204, 221, 236);
+- (void)fillSelectionAreaInRect:(CGRect)rect bgColor:(UIColor *)bgColor {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, bgColor.CGColor);
     CGContextFillRect(context, rect);
+}
+
+#pragma mark - 中文字典串
+- (NSRange)characterRangeAtIndex:(NSInteger)index
+{
+    __block NSArray *lines = (NSArray*)CTFrameGetLines(_frameRef);
+    NSInteger count = [lines count];
+    __block NSRange returnRange = NSMakeRange(NSNotFound, 0);
+    
+    for (int i=0; i < count; i++) {
+        
+        __block CTLineRef line = (__bridge CTLineRef)[lines objectAtIndex:i];
+        CFRange cfRange = CTLineGetStringRange(line);
+        CFRange cfRange_Next = CFRangeMake(0, 0);
+        if (i < count - 1) {
+            __block CTLineRef line_Next = (__bridge CTLineRef)[lines objectAtIndex:i+1];
+            cfRange_Next = CTLineGetStringRange(line_Next);
+        }
+        
+        NSRange range = NSMakeRange(cfRange.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length == kCFNotFound ? 0 : cfRange.length);
+        
+        if (index >= range.location && index <= range.location+range.length) {
+            
+            if (range.length > 1) {
+                NSRange newRange = NSMakeRange(range.location, range.length + cfRange_Next.length);
+                NSInteger textLength = self.text.length;
+                [self.text enumerateSubstringsInRange:newRange options:NSStringEnumerationByWords usingBlock:^(NSString *subString, NSRange subStringRange, NSRange enclosingRange, BOOL *stop){
+                    
+                    if (index - subStringRange.location <= subStringRange.length&&index - subStringRange.location!=0) {
+                        returnRange = subStringRange;
+                        
+                        if (returnRange.length <= 2 && textLength > 1) {//为的是长按选择的文字永远大于或等于2个，方便拖动
+                            returnRange.length = 2;
+                        }
+                        *stop = YES;
+                        
+                    }
+                    
+                }];
+                
+            }
+            
+        }
+    }
+    
+    return returnRange;
 }
 
 #pragma mark - 菜单响应函数

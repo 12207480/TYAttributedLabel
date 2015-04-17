@@ -14,6 +14,7 @@
 @property (nonatomic, assign)   NSRange     range;
 @property (nonatomic, strong)   NSString    *text;
 @property (nonatomic, strong)   UIColor     *textColor;         // 文字颜色
+@property (nonatomic, strong)   UIColor     *bgColor;           // 背景颜色
 @property (nonatomic, strong)   UIFont      *font;              // 字体
 
 @property (nonatomic, assign)   CTUnderlineStyle underLineStyle;// 下划线样式（单 双）（默认没有）

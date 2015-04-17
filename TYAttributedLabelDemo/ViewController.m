@@ -77,6 +77,14 @@
     self.label.font = [self.label.font fontWithSize:self.label.font.pointSize +2];
     self.label.textColor = [UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:1];
     [self.label sizeToFit];
+    
+    [self performSelector:@selector(deleteLabel) withObject:nil afterDelay:2];
+}
+
+- (void)deleteLabel
+{
+    [self.label removeFromSuperview];
+    self.label = nil;
 }
 
 - (void)didReceiveMemoryWarning {
