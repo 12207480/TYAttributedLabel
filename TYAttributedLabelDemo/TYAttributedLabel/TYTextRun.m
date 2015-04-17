@@ -22,10 +22,6 @@
         [attributedString addAttributeFont:self.font range:self.range];
     }
     
-    if (self.bgColor) {
-        
-    }
-    
     // 下划线
     if (self.underLineStyle) {
         [attributedString addAttributeUnderlineStyle:self.underLineStyle modifier:self.modifier range:self.range];

@@ -529,6 +529,81 @@ typedef enum TYAttributedLabelState : NSInteger {
     
 }
 
+// 长按手势
+- (void)userLongPressedGuestureDetected:(UILongPressGestureRecognizer *)recognizer {
+    CGPoint point = [recognizer locationInView:self];
+    //NSLog(@"state = %d", recognizer.state);
+    //NSLog(@"point = %@", NSStringFromCGPoint(point));
+    if (recognizer.state == UIGestureRecognizerStateBegan ||
+        recognizer.state == UIGestureRecognizerStateChanged) {
+        CFIndex index = [self touchContentOffsetInView:self atPoint:point];
+        if (index != -1 && index < _attString.length) {
+            // 获取智能中文词组
+            NSRange range = [self characterRangeAtIndex:index];
+            _selectionStartPosition = range.location;
+            _selectionEndPosition = range.location + range.length;
+            
+        } else {
+            _selectionStartPosition = -1;
+            _selectionEndPosition = -1;
+        }
+        self.magnifierView.touchPoint = point;
+        self.state = TYAttributedLabelStateTouching;
+    } else {
+        if (_selectionStartPosition >= 0 && _selectionEndPosition <= _attString.length) {
+            self.state = TYAttributedLabelStateSelecting;
+            [self showMenuController];
+        } else {
+            self.state = TYAttributedLabelStateNormal;
+        }
+    }
+}
+
+// 拖动手势
+- (void)userPanGuestureDetected:(UIGestureRecognizer *)recognizer {
+    if (self.state == TYAttributedLabelStateNormal) {
+        return;
+    }
+    CGPoint point = [recognizer locationInView:self];
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -26, -10), point)) {
+            //NSLog(@"try to move left anchor");
+            _leftSelectionAnchor.tag = ANCHOR_TARGET_TAG;
+            [self hideMenuController];
+        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -26, -10), point)) {
+            //NSLog(@"try to move right anchor");
+            _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
+            [self hideMenuController];
+        }
+        [self setNeedsDisplay];
+    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
+        CFIndex index = [self touchContentOffsetInView:self atPoint:point];
+        if (index == -1 || ( _selectionEndPosition != _selectionStartPosition && (index == _selectionEndPosition || index == _selectionStartPosition))) {
+            return;
+        }
+        if (_leftSelectionAnchor.tag == ANCHOR_TARGET_TAG && index < _selectionEndPosition) {
+            //NSLog(@"change start position to %ld", index);
+            _selectionStartPosition = index;
+            self.magnifierView.touchPoint = point;
+            [self hideMenuController];
+        } else if (_rightSelectionAnchor.tag == ANCHOR_TARGET_TAG && index > _selectionStartPosition) {
+            //NSLog(@"change end position to %ld", index);
+            _selectionEndPosition = index;
+            self.magnifierView.touchPoint = point;
+            [self hideMenuController];
+        }
+        [self setNeedsDisplay];
+    } else if (recognizer.state == UIGestureRecognizerStateEnded ||
+               recognizer.state == UIGestureRecognizerStateCancelled) {
+        //NSLog(@"end move");
+        _leftSelectionAnchor.tag = 0;
+        _rightSelectionAnchor.tag = 0;
+        [self removeMaginfierView];
+        [self showMenuController];
+        [self setNeedsDisplay];
+    }
+}
+
 - (void)setupAnchors {
     if (_selectionStartPosition < 0 && _selectionEndPosition < 0) {
         return;
@@ -659,15 +734,6 @@ typedef enum TYAttributedLabelState : NSInteger {
     return index;
 }
 
-- (CGRect)getLineBounds:(CTLineRef)line point:(CGPoint)point {
-    CGFloat ascent = 0.0f;
-    CGFloat descent = 0.0f;
-    CGFloat leading = 0.0f;
-    CGFloat width = (CGFloat)CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-    CGFloat height = ascent + descent;
-    return CGRectMake(point.x, point.y - descent, width, height);
-}
-
 - (void)showMenuController {
     if ([self becomeFirstResponder]) {
         CGRect selectionRect = [self rectForMenuController];
@@ -689,79 +755,8 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
-- (void)userLongPressedGuestureDetected:(UILongPressGestureRecognizer *)recognizer {
-    CGPoint point = [recognizer locationInView:self];
-    //NSLog(@"state = %d", recognizer.state);
-    //NSLog(@"point = %@", NSStringFromCGPoint(point));
-    if (recognizer.state == UIGestureRecognizerStateBegan ||
-        recognizer.state == UIGestureRecognizerStateChanged) {
-        CFIndex index = [self touchContentOffsetInView:self atPoint:point];
-        if (index != -1 && index < _attString.length) {
-            // 获取智能中文词组
-            NSRange range = [self characterRangeAtIndex:index];
-            _selectionStartPosition = range.location;
-            _selectionEndPosition = range.location + range.length;
 
-        } else {
-            _selectionStartPosition = -1;
-            _selectionEndPosition = -1;
-        }
-        self.magnifierView.touchPoint = point;
-        self.state = TYAttributedLabelStateTouching;
-    } else {
-        if (_selectionStartPosition >= 0 && _selectionEndPosition <= _attString.length) {
-            self.state = TYAttributedLabelStateSelecting;
-            [self showMenuController];
-        } else {
-            self.state = TYAttributedLabelStateNormal;
-        }
-    }
-}
-
-- (void)userPanGuestureDetected:(UIGestureRecognizer *)recognizer {
-    if (self.state == TYAttributedLabelStateNormal) {
-        return;
-    }
-    CGPoint point = [recognizer locationInView:self];
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -26, -10), point)) {
-            //NSLog(@"try to move left anchor");
-            _leftSelectionAnchor.tag = ANCHOR_TARGET_TAG;
-            [self hideMenuController];
-        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -26, -10), point)) {
-            //NSLog(@"try to move right anchor");
-            _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
-            [self hideMenuController];
-        }
-        [self setNeedsDisplay];
-    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
-        CFIndex index = [self touchContentOffsetInView:self atPoint:point];
-        if (index == -1 || ( _selectionEndPosition != _selectionStartPosition && (index == _selectionEndPosition || index == _selectionStartPosition))) {
-            return;
-        }
-        if (_leftSelectionAnchor.tag == ANCHOR_TARGET_TAG && index < _selectionEndPosition) {
-            //NSLog(@"change start position to %ld", index);
-            _selectionStartPosition = index;
-            self.magnifierView.touchPoint = point;
-            [self hideMenuController];
-        } else if (_rightSelectionAnchor.tag == ANCHOR_TARGET_TAG && index > _selectionStartPosition) {
-            //NSLog(@"change end position to %ld", index);
-            _selectionEndPosition = index;
-            self.magnifierView.touchPoint = point;
-            [self hideMenuController];
-        }
-        [self setNeedsDisplay];
-    } else if (recognizer.state == UIGestureRecognizerStateEnded ||
-               recognizer.state == UIGestureRecognizerStateCancelled) {
-        //NSLog(@"end move");
-        _leftSelectionAnchor.tag = 0;
-        _rightSelectionAnchor.tag = 0;
-        [self removeMaginfierView];
-        [self showMenuController];
-        [self setNeedsDisplay];
-    }
-}
-
+// 绘画选择指示箭头
 - (void)drawAnchorsWithRange:(NSRange)selectRange {
     
     NSInteger selectionStartPosition = selectRange.location;
@@ -808,6 +803,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     }
 }
 
+// 绘画选择区域
 - (void)drawSelectionAreaInRange:(NSRange)selectRange bgColor:(UIColor *)bgColor{
     
     NSInteger selectionStartPosition = selectRange.location;
