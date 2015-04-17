@@ -16,6 +16,12 @@
 		D34A49971AD52D980036B7EF /* haha.png in Resources */ = {isa = PBXBuildFile; fileRef = D34A49961AD52D980036B7EF /* haha.png */; };
 		D34A49991AD52D9E0036B7EF /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = D34A49981AD52D9E0036B7EF /* avatar.png */; };
 		D34BE7421AD669F000BECD40 /* TYDrawViewRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */; };
+		D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */; };
+		D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */; };
+		D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47D01AE0DB500048B58A /* ImageTextViewController.m */; };
+		D35F47D41AE0DBE30048B58A /* CustomeTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47D31AE0DBE30048B58A /* CustomeTextViewController.m */; };
+		D35F47DA1AE101880048B58A /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47D91AE101880048B58A /* RegexKitLite.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D35F47E01AE102B30048B58A /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D35F47DF1AE102B30048B58A /* libicucore.dylib */; };
 		D3709F101AD3A5C000145EC6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D3709F0F1AD3A5C000145EC6 /* main.m */; };
 		D3709F131AD3A5C000145EC6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D3709F121AD3A5C000145EC6 /* AppDelegate.m */; };
 		D3709F161AD3A5C000145EC6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3709F151AD3A5C000145EC6 /* ViewController.m */; };
@@ -54,6 +60,17 @@
 		D34A49981AD52D9E0036B7EF /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
 		D34BE7401AD669F000BECD40 /* TYDrawViewRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawViewRun.h; sourceTree = "<group>"; };
 		D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawViewRun.m; sourceTree = "<group>"; };
+		D35F47C91AE0DAF20048B58A /* SimpleTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleTextViewController.h; sourceTree = "<group>"; };
+		D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleTextViewController.m; sourceTree = "<group>"; };
+		D35F47CC1AE0DB370048B58A /* AttributedTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributedTextViewController.h; sourceTree = "<group>"; };
+		D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributedTextViewController.m; sourceTree = "<group>"; };
+		D35F47CF1AE0DB500048B58A /* ImageTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTextViewController.h; sourceTree = "<group>"; };
+		D35F47D01AE0DB500048B58A /* ImageTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTextViewController.m; sourceTree = "<group>"; };
+		D35F47D21AE0DBE30048B58A /* CustomeTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomeTextViewController.h; sourceTree = "<group>"; };
+		D35F47D31AE0DBE30048B58A /* CustomeTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomeTextViewController.m; sourceTree = "<group>"; };
+		D35F47D81AE101880048B58A /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		D35F47D91AE101880048B58A /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		D35F47DF1AE102B30048B58A /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		D3709F0A1AD3A5C000145EC6 /* TYAttributedLabelDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TYAttributedLabelDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3709F0E1AD3A5C000145EC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3709F0F1AD3A5C000145EC6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -78,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D35F47E01AE102B30048B58A /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +112,7 @@
 		D3709F011AD3A5C000145EC6 = {
 			isa = PBXGroup;
 			children = (
+				D35F47DF1AE102B30048B58A /* libicucore.dylib */,
 				D3709F0C1AD3A5C000145EC6 /* TYAttributedLabelDemo */,
 				D3709F261AD3A5C000145EC6 /* TYAttributedLabelDemoTests */,
 				D3709F0B1AD3A5C000145EC6 /* Products */,
@@ -113,10 +132,20 @@
 			isa = PBXGroup;
 			children = (
 				D3709F331AD3A5D600145EC6 /* TYAttributedLabel */,
+				D35F47D81AE101880048B58A /* RegexKitLite.h */,
+				D35F47D91AE101880048B58A /* RegexKitLite.m */,
 				D3709F111AD3A5C000145EC6 /* AppDelegate.h */,
 				D3709F121AD3A5C000145EC6 /* AppDelegate.m */,
 				D3709F141AD3A5C000145EC6 /* ViewController.h */,
 				D3709F151AD3A5C000145EC6 /* ViewController.m */,
+				D35F47C91AE0DAF20048B58A /* SimpleTextViewController.h */,
+				D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */,
+				D35F47CC1AE0DB370048B58A /* AttributedTextViewController.h */,
+				D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */,
+				D35F47CF1AE0DB500048B58A /* ImageTextViewController.h */,
+				D35F47D01AE0DB500048B58A /* ImageTextViewController.m */,
+				D35F47D21AE0DBE30048B58A /* CustomeTextViewController.h */,
+				D35F47D31AE0DBE30048B58A /* CustomeTextViewController.m */,
 				D3709F171AD3A5C000145EC6 /* Main.storyboard */,
 				D3709F1A1AD3A5C000145EC6 /* Images.xcassets */,
 				D3709F1C1AD3A5C000145EC6 /* LaunchScreen.xib */,
@@ -280,7 +309,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D35F47DA1AE101880048B58A /* RegexKitLite.m in Sources */,
 				D3709F161AD3A5C000145EC6 /* ViewController.m in Sources */,
+				D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */,
 				D34A49951AD50EB70036B7EF /* TYDrawImageRun.m in Sources */,
 				D3709F131AD3A5C000145EC6 /* AppDelegate.m in Sources */,
 				D34BE7421AD669F000BECD40 /* TYDrawViewRun.m in Sources */,
@@ -288,10 +319,13 @@
 				B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */,
 				D3709F101AD3A5C000145EC6 /* main.m in Sources */,
 				D3709F431AD3C71900145EC6 /* NSMutableAttributedString+TY.m in Sources */,
+				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,
+				D35F47D41AE0DBE30048B58A /* CustomeTextViewController.m in Sources */,
 				D34A49871AD4D5510036B7EF /* TYTextRun.m in Sources */,
 				D34A498E1AD4FA760036B7EF /* TYDrawRun.m in Sources */,
 				D34A49911AD4FF370036B7EF /* TYLinkTextRun.m in Sources */,
 				D3709F361AD3A60800145EC6 /* TYAttributedLabel.m in Sources */,
+				D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +452,7 @@
 				INFOPLIST_FILE = TYAttributedLabelDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -429,6 +464,7 @@
 				INFOPLIST_FILE = TYAttributedLabelDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

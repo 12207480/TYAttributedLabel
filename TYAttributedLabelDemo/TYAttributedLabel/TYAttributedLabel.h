@@ -12,9 +12,8 @@
 
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>
-
 @optional
-
+// 点击代理
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextRunProtocol>)TextRun;
 
 @end
@@ -37,7 +36,7 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
-@property (nonatomic, assign)   BOOL            longPressShowMenuEnable;// 长按出现菜单,默认不启用
+@property (nonatomic, assign)   BOOL            longPressShowMenuEnable;// 长按出现菜单选择,默认不启用
 
 /**
  *  获取普通文本内容

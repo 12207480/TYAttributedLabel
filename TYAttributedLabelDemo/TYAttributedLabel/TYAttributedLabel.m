@@ -913,11 +913,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 }
 
 - (BOOL)isPosition:(NSInteger)position inRange:(CFRange)range {
-    if (position >= range.location && position < range.location + range.length) {
-        return YES;
-    } else {
-        return NO;
-    }
+    return (position >= range.location && position < range.location + range.length);
 }
 
 - (void)fillSelectionAreaInRect:(CGRect)rect bgColor:(UIColor *)bgColor {
@@ -926,7 +922,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     CGContextFillRect(context, rect);
 }
 
-#pragma mark - 中文字典串
+// 中文字典串
 - (NSRange)characterRangeAtIndex:(NSInteger)index
 {
     __block NSArray *lines = (NSArray*)CTFrameGetLines(_frameRef);
