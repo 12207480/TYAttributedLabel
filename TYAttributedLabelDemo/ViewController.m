@@ -15,6 +15,7 @@
 #import "ImageTextViewController.h"
 #import "LinkTextViewController.h"
 #import "ParseTextViewController.h"
+#import "AddViewTextViewController.h"
 
 @interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic,strong) TYAttributedLabel *label;
@@ -27,7 +28,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    self.dataDic = @{@"SimpleText":[SimpleTextViewController class],@"AttributedText":[AttributedTextViewController class],@"ImageText":[ImageTextViewController class],@"LinkText":[LinkTextViewController class],@"parseText":[ParseTextViewController class]};
+    self.dataDic = @{@"SimpleText":[SimpleTextViewController class],@"AttributedText":[AttributedTextViewController class],@"ImageText":[ImageTextViewController class],@"LinkText":[LinkTextViewController class],@"parseText":[ParseTextViewController class],@"AddViewText":[AddViewTextViewController class]};
     
     [self addTableView];
     

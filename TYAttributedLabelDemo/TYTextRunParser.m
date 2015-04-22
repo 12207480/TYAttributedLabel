@@ -67,7 +67,10 @@
 {
     TYTextRun *textRun = [[TYTextRun alloc]init];
     textRun.text = dic[@"content"];
-    textRun.font = [UIFont systemFontOfSize:[dic[@"size"] integerValue]];
+    NSInteger fontSize = [dic[@"size"] integerValue];
+    if (fontSize > 0) {
+        textRun.font = [UIFont systemFontOfSize:fontSize];
+    }
     textRun.textColor = [self colorFromTemplate:dic[@"color"]];
     
     return textRun;

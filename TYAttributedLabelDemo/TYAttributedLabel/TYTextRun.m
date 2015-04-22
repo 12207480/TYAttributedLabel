@@ -11,6 +11,14 @@
 
 @implementation TYTextRun
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        _font = [UIFont systemFontOfSize:15];
+    }
+    return self;
+}
+
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     // 颜色

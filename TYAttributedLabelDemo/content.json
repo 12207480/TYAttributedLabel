@@ -37,7 +37,6 @@
   },
   { "color" : "default",
     "content" : "\n这里我的github链接:",
-    "size" : 16,
     "type" : "txt"
   },
   { "color" : "blue",
@@ -48,7 +47,6 @@
   },
   { "color" : "default",
     "content" : ",大家可以点击一下",
-    "size" : 17,
     "type" : "txt"
   }
 ]

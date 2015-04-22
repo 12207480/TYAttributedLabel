@@ -9,9 +9,10 @@
 #import "ParseTextViewController.h"
 #import "TYAttributedLabel.h"
 #import "TYTextRunParser.h"
+#import "TYLinkTextRun.h"
 
 @interface ParseTextViewController ()<TYAttributedLabelDelegate>
-@property (nonatomic, strong) TYAttributedLabel *label;
+@property (nonatomic, weak) TYAttributedLabel *label;
 @end
 
 @implementation ParseTextViewController
@@ -46,6 +47,22 @@
     
     if (textRunArray.count > 0) {
         [_label appendTextRunArray:textRunArray];
+    }
+}
+
+#pragma mark - TYAttributedLabelDelegate
+
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextRunProtocol>)TextRun
+{
+    if ([TextRun isKindOfClass:[TYLinkTextRun class]]) {
+        NSString *linkStr = ((TYLinkTextRun*)TextRun).linkStr;
+        
+        if ([linkStr hasPrefix:@"http"]) {
+            [ [ UIApplication sharedApplication] openURL:[ NSURL URLWithString:linkStr]];
+        }else {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"点击提示" message:linkStr delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+            [alertView show];
+        }
     }
 }
 
