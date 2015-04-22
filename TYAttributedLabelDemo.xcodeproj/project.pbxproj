@@ -17,6 +17,7 @@
 		D34A49971AD52D980036B7EF /* haha.png in Resources */ = {isa = PBXBuildFile; fileRef = D34A49961AD52D980036B7EF /* haha.png */; };
 		D34A49991AD52D9E0036B7EF /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = D34A49981AD52D9E0036B7EF /* avatar.png */; };
 		D34BE7421AD669F000BECD40 /* TYDrawViewRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */; };
+		D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */; };
 		D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */; };
 		D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */; };
 		D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47D01AE0DB500048B58A /* ImageTextViewController.m */; };
@@ -62,6 +63,8 @@
 		D34A49981AD52D9E0036B7EF /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
 		D34BE7401AD669F000BECD40 /* TYDrawViewRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawViewRun.h; sourceTree = "<group>"; };
 		D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawViewRun.m; sourceTree = "<group>"; };
+		D3553BCA1AE732C8005D8F31 /* LinkTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkTextViewController.h; sourceTree = "<group>"; };
+		D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkTextViewController.m; sourceTree = "<group>"; };
 		D35F47C91AE0DAF20048B58A /* SimpleTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleTextViewController.h; sourceTree = "<group>"; };
 		D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleTextViewController.m; sourceTree = "<group>"; };
 		D35F47CC1AE0DB370048B58A /* AttributedTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributedTextViewController.h; sourceTree = "<group>"; };
@@ -146,6 +149,8 @@
 				D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */,
 				D35F47CF1AE0DB500048B58A /* ImageTextViewController.h */,
 				D35F47D01AE0DB500048B58A /* ImageTextViewController.m */,
+				D3553BCA1AE732C8005D8F31 /* LinkTextViewController.h */,
+				D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */,
 				D35F47D21AE0DBE30048B58A /* CustomeTextViewController.h */,
 				D35F47D31AE0DBE30048B58A /* CustomeTextViewController.m */,
 				D3709F171AD3A5C000145EC6 /* Main.storyboard */,
@@ -330,6 +335,7 @@
 				D34A49911AD4FF370036B7EF /* TYLinkTextRun.m in Sources */,
 				D3709F361AD3A60800145EC6 /* TYAttributedLabel.m in Sources */,
 				D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */,
+				D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

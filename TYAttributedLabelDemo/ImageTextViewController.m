@@ -105,12 +105,12 @@
     
     [label addTextRunArray:tmpArray];
     TYTextRun *textRun = [[TYTextRun alloc]init];
-    textRun.range = [text rangeOfString:@"[CYLoLi,320,180]其实所有漂泊的人，"];//NSMakeRange(16, 8);
+    textRun.range = [text rangeOfString:@"[CYLoLi,320,180]其实所有漂泊的人，"];
     textRun.textColor = RGB(213, 0, 0, 1);
     textRun.font = [UIFont systemFontOfSize:16];
     [label addTextRun:textRun];
     textRun = [[TYTextRun alloc]init];
-    textRun.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"];//NSMakeRange(16, 8);
+    textRun.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"];
     textRun.textColor = RGB(0, 155, 0, 1);
     textRun.font = [UIFont systemFontOfSize:18];
     [label addTextRun:textRun];

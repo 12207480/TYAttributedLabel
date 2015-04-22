@@ -296,10 +296,16 @@ typedef enum TYAttributedLabelState : NSInteger {
         // 排序range
         [self sortTextRunArray:_textRunArray];
         
+        NSMutableArray *drawRunArray = [NSMutableArray array];
         for (id<TYTextRunProtocol> textRun in _textRunArray) {
             
             // 修正图片替换字符来的误差
-            [self fixRangeWithDrawRun:textRun];
+            //[self fixRangeWithTextRun:textRun];
+            
+            if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol) ]) {
+                [drawRunArray addObject:textRun];
+                continue;
+            }
             
             // 验证范围
             if (NSMaxRange(textRun.range) <= attString.length) {
@@ -309,6 +315,11 @@ typedef enum TYAttributedLabelState : NSInteger {
             
         }
         [_textRunArray removeAllObjects];
+        
+        for (id<TYDrawRunProtocol> drawRun in drawRunArray) {
+            [self fixRangeWithDrawRun:drawRun];
+            [drawRun addTextRunWithAttributedString:attString];
+        }
     }
 }
 
@@ -325,22 +336,40 @@ typedef enum TYAttributedLabelState : NSInteger {
     }];
 }
 
-- (void)fixRangeWithDrawRun:(id<TYTextRunProtocol>)drawRun
-{
+- (void)fixRangeWithDrawRun:(id<TYDrawRunProtocol>)drawRun{
+    
+    if (drawRun.range.length <= 1 || ![drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)])
+        return;
+
     NSInteger location = drawRun.range.location - _replaceStringNum;
     NSInteger length = drawRun.range.length - _replaceStringNum;
     if (location < 0 && length > 0) {
         drawRun.range = NSMakeRange(drawRun.range.location, length);
     }else if (location < 0 && length <= 0){
-        drawRun.range = NSMakeRange(0, 0);
+        drawRun.range = NSMakeRange(NSNotFound, 0);
+        return;
     }else {
         drawRun.range = NSMakeRange(drawRun.range.location - _replaceStringNum, drawRun.range.length);
     }
-    
-    if (drawRun.range.length > 1 && [drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-        _replaceStringNum += drawRun.range.length - 1;
-    }
+    _replaceStringNum += drawRun.range.length - 1;
 }
+
+//- (void)fixRangeWithTextRun:(id<TYTextRunProtocol>)drawRun
+//{
+//    NSInteger location = drawRun.range.location - _replaceStringNum;
+//    NSInteger length = drawRun.range.length - _replaceStringNum;
+//    if (location < 0 && length > 0) {
+//        drawRun.range = NSMakeRange(drawRun.range.location, length);
+//    }else if (location < 0 && length <= 0){
+//        drawRun.range = NSMakeRange(NSNotFound, 0);
+//    }else {
+//        drawRun.range = NSMakeRange(drawRun.range.location - _replaceStringNum, drawRun.range.length);
+//    }
+//    
+//    if (drawRun.range.length > 1 && [drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+//        _replaceStringNum += drawRun.range.length - 1;
+//    }
+//}
 
 
 #pragma mark - 绘画

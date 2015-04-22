@@ -10,6 +10,15 @@
 
 @implementation TYLinkTextRun
 
+- (instancetype)init
+{
+    if (self = [super init]) {
+        self.underLineStyle = kCTUnderlineStyleSingle;
+        self.modifier = kCTUnderlinePatternSolid;
+    }
+    return self;
+}
+
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     [super addTextRunWithAttributedString:attributedString];
