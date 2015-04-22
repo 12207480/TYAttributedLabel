@@ -36,8 +36,8 @@
         [attributedString replaceCharactersInRange:range withString:[self spaceReplaceString]];
         // 修正range
         range = NSMakeRange(range.location, 1);
+        self.range = range;
     }
-    
     // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
     if (_size.height <= _fontAscent + _fontDescent) {
         _drawAlignment = TYDrawAlignmentCenter;

@@ -22,7 +22,8 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 /**
  *  范围
  */
-- (NSRange)range;
+@property (nonatomic,assign) NSRange range;
+//- (NSRange)range;
 
 /**
  *  添加属性到全文attributedString addTextRun调用

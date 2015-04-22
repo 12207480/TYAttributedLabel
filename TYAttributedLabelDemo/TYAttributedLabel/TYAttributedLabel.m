@@ -32,7 +32,8 @@ typedef enum TYAttributedLabelState : NSInteger {
 @property (nonatomic, strong)   NSMutableAttributedString   *attString;         // 文字属性
 @property (nonatomic, strong)   NSMutableArray              *textRunArray;      // run数组
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
-@property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         //点击手势
+@property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         // 点击手势
+@property (nonatomic, assign)   NSInteger                   replaceStringNum;   // 图片替换字符数
 
 @property (nonatomic)           NSInteger                   selectionStartPosition;
 @property (nonatomic)           NSInteger                   selectionEndPosition;
@@ -84,6 +85,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     _textColor = kTextColor;
     _state = TYAttributedLabelStateNormal;
     _longPressShowMenuEnable = NO;
+    _replaceStringNum = 0;
 }
 
 - (void)setLongPressShowMenuEnable:(BOOL)longPressShowMenuEnable
@@ -187,7 +189,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (void)addTextRunArray:(NSArray *)textRunArray
 {
     if (textRunArray) {
-        for (id textRun in textRunArray) {
+        for (id<TYTextRunProtocol> textRun in textRunArray) {
             if ([textRun conformsToProtocol:@protocol(TYTextRunProtocol)]) {
                 [self addTextRun:textRun];
             }
@@ -200,6 +202,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     _runRectDictionary = nil;
     _textRunArray = nil;
+    _replaceStringNum = 0;
     [self removeSingleTapGesture];
     [self setupProperty];
 }
@@ -289,15 +292,56 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (void)addTextRunsWithAtrributedString:(NSMutableAttributedString *)attString
 {
     if (attString && _textRunArray.count > 0) {
+        
+        // 排序range
+        [self sortTextRunArray:_textRunArray];
+        
         for (id<TYTextRunProtocol> textRun in _textRunArray) {
+            
+            // 修正图片替换字符来的误差
+            [self fixRangeWithDrawRun:textRun];
+            
             // 验证范围
-            if (NSMaxRange([textRun range]) < attString.length) {
+            if (NSMaxRange(textRun.range) <= attString.length) {
+                
                 [textRun addTextRunWithAttributedString:attString];
             }
+            
         }
         [_textRunArray removeAllObjects];
     }
 }
+
+- (void)sortTextRunArray:(NSMutableArray *)textRunArray
+{
+    [textRunArray sortUsingComparator:^NSComparisonResult(id<TYTextRunProtocol> obj1, id<TYTextRunProtocol> obj2) {
+        if (obj1.range.location < obj2.range.location) {
+            return NSOrderedAscending;
+        } else if (obj1.range.location > obj2.range.location){
+            return NSOrderedDescending;
+        }else {
+            return obj1.range.length > obj2.range.length ? NSOrderedAscending:NSOrderedDescending;
+        }
+    }];
+}
+
+- (void)fixRangeWithDrawRun:(id<TYTextRunProtocol>)drawRun
+{
+    NSInteger location = drawRun.range.location - _replaceStringNum;
+    NSInteger length = drawRun.range.length - _replaceStringNum;
+    if (location < 0 && length > 0) {
+        drawRun.range = NSMakeRange(drawRun.range.location, length);
+    }else if (location < 0 && length <= 0){
+        drawRun.range = NSMakeRange(0, 0);
+    }else {
+        drawRun.range = NSMakeRange(drawRun.range.location - _replaceStringNum, drawRun.range.length);
+    }
+    
+    if (drawRun.range.length > 1 && [drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
+        _replaceStringNum += drawRun.range.length - 1;
+    }
+}
+
 
 #pragma mark - 绘画
 - (void)drawRect:(CGRect)rect {

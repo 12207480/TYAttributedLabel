@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
 		B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = B05BA7B51AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m */; };
 		B0DF51991ADBE45C0067467D /* MagnifiterView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0DF51981ADBE45C0067467D /* MagnifiterView.m */; };
 		D34A49871AD4D5510036B7EF /* TYTextRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextRun.m */; };
@@ -44,6 +45,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B0165EF71AE157FA0003D580 /* CYLoLi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CYLoLi.png; sourceTree = "<group>"; };
 		B05BA7B51AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TYAttributedLabel+UIImageAndUIView.m"; sourceTree = "<group>"; };
 		B0DF51971ADBE45C0067467D /* MagnifiterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagnifiterView.h; sourceTree = "<group>"; };
 		B0DF51981ADBE45C0067467D /* MagnifiterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagnifiterView.m; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		D3709F0D1AD3A5C000145EC6 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B0165EF71AE157FA0003D580 /* CYLoLi.png */,
 				D34A49981AD52D9E0036B7EF /* avatar.png */,
 				D34A49961AD52D980036B7EF /* haha.png */,
 				D3709F0E1AD3A5C000145EC6 /* Info.plist */,
@@ -288,6 +291,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D3709F191AD3A5C000145EC6 /* Main.storyboard in Resources */,
+				B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */,
 				D34A49991AD52D9E0036B7EF /* avatar.png in Resources */,
 				D34A49971AD52D980036B7EF /* haha.png in Resources */,
 				D3709F1E1AD3A5C000145EC6 /* LaunchScreen.xib in Resources */,
