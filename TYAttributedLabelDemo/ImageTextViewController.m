@@ -90,7 +90,7 @@
     
     NSString *text = @"[CYLoLi,320,180]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。[avatar,60,60]";
     label.text = text;
-    NSMutableArray *tmpArray = [NSMutableArray array];//\\[([^]]+)\\]
+    NSMutableArray *tmpArray = [NSMutableArray array];
     [text enumerateStringsMatchedByRegex:@"\\[(\\w+?),(\\d+?),(\\d+?)\\]" usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
         
         if (captureCount > 3) {

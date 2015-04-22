@@ -343,6 +343,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 
     NSInteger location = drawRun.range.location - _replaceStringNum;
     NSInteger length = drawRun.range.length - _replaceStringNum;
+    
     if (location < 0 && length > 0) {
         drawRun.range = NSMakeRange(drawRun.range.location, length);
     }else if (location < 0 && length <= 0){
@@ -1106,6 +1107,18 @@ typedef enum TYAttributedLabelState : NSInteger {
         }
         
         [self appendTextAttributedString:[textRun appendTextRunAttributedString]];
+    }
+}
+
+- (void)appendTextRunArray:(NSArray *)textRunArray
+{
+    if (textRunArray) {
+        for (id<TYAppendTextRunProtocol> textRun in textRunArray) {
+            if ([textRun conformsToProtocol:@protocol(TYAppendTextRunProtocol)]) {
+                [self appendTextRun:textRun];
+            }
+        }
+        [self resetFramesetter];
     }
 }
 

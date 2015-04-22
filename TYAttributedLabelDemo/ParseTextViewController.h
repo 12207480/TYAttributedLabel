@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CustomeTextViewController : UIViewController
+@interface ParseTextViewController : UIViewController
 
 @end

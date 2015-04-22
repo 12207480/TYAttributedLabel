@@ -1,0 +1,54 @@
+[ { 
+    "type" : "img",
+    "width" : 320,
+    "height" : 180,
+    "name" : "CYLoLi.png"
+  },
+  { "color" : "blue",
+    "content" : "其实所有漂泊的人，不过是为了有一天能够不再漂泊，能用自己的力量撑起身后的家人和自己爱的人。\n",
+    "size" : 17,
+    "type" : "txt"
+  },
+  { "color" : "red",
+    "content" : "总有一天你将破蛹而出，成长得比人们期待的还要美丽。",
+    "size" : 22,
+    "type" : "txt"
+  },
+  { "color" : "black",
+    "content" : "\n面对着汹涌而来的现实，觉得自己渺小无力。",
+    "size" : 16,
+    "type" : "txt"
+  },
+  { "color" : "orange",
+    "size" : 18,
+    "content" : "但这，也是生命的一部分，做好现在你能做的，然后，一切都会好的。",
+    "type" : "txt"
+  },
+  { "color" : "red",
+    "size" : 17,
+    "content" : "我们都将孤独地长大，不要害怕。",
+    "type" : "txt"
+  },
+  {
+    "type" : "img",
+    "width" : 60,
+    "height" : 60,
+    "name" : "avatar.png"
+  },
+  { "color" : "default",
+    "content" : "\n这里我的github链接:",
+    "size" : 16,
+    "type" : "txt"
+  },
+  { "color" : "blue",
+    "content" : "链接文字",
+    "size" : 16,
+    "url" : "https://github.com/12207480",
+    "type" : "link"
+  },
+  { "color" : "default",
+    "content" : ",大家可以点击一下",
+    "size" : 17,
+    "type" : "txt"
+  }
+]

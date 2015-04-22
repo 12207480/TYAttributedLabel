@@ -117,6 +117,13 @@
  */
 - (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun;
 
+/**
+ *  追加 textRun 数组
+ *
+ *  @param textRunArray 自定义run数组（需遵循协议TYAppendTextRunProtocol,否则不会添加）
+ */
+- (void)appendTextRunArray:(NSArray *)textRunArray;
+
 @end
 
 #pragma mark - 扩展支持UIImage和UIView
