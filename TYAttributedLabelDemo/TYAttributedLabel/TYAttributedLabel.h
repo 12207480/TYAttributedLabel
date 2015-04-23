@@ -14,7 +14,7 @@
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
 // 点击代理
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextRunProtocol>)TextRun;
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextRunProtocol>)textRun;
 
 @end
 

@@ -48,10 +48,7 @@
     rect = CGRectApplyAffineTransform(rect, transform);
     [_view setFrame:CGRectMake(rect.origin.x,rect.origin.y, rect.size.width, rect.size.height)];
     [_superView addSubview:_view];
-    //[_view setFrame:CGRectMake(rect.origin.x, _view.superview.bounds.size.height - rect.origin.y - rect.size.height, rect.size.width, rect.size.height)];
 }
-
-
 
 - (void)dealloc{
     // 需要去掉supview 的 强引用 否则内存泄露

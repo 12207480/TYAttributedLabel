@@ -11,9 +11,9 @@
 #import <CoreText/CoreText.h>
 
 // 文本颜色
-#define kTextColor      [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
-
-#define RGB(R, G, B)    [UIColor colorWithRed:R/255.0 green:G/255.0 blue:B/255.0 alpha:1.0]
+#define kTextColor       [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
+#define kSelectAreaColor [UIColor colorWithRed:204/255.0 green:211/255.0 blue:236/255.0 alpha:1]
+#define kCursorColor     [UIColor colorWithRed:28/255.0 green:107/255.0 blue:222/255.0 alpha:1]
 
 #define ANCHOR_TARGET_TAG 1
 #define FONT_HEIGHT  40
@@ -23,6 +23,9 @@ typedef enum TYAttributedLabelState : NSInteger {
     TYAttributedLabelStateTouching,     // 正在按下，需要弹出放大镜
     TYAttributedLabelStateSelecting     // 选中了一些文本，需要弹出复制菜单
 }TYAttributedLabelState;
+
+NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
+NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelNeedDisplayNotification";
 
 @interface TYAttributedLabel ()
 {
@@ -35,9 +38,11 @@ typedef enum TYAttributedLabelState : NSInteger {
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         // 点击手势
 @property (nonatomic, assign)   NSInteger                   replaceStringNum;   // 图片替换字符数
 
-@property (nonatomic)           NSInteger                   selectionStartPosition;
-@property (nonatomic)           NSInteger                   selectionEndPosition;
-@property (nonatomic)           TYAttributedLabelState      state;
+@property (nonatomic, strong)   UIGestureRecognizer         *longPressRecognizer;
+@property (nonatomic, strong)   UIGestureRecognizer         *panRecognizer;
+@property (nonatomic, assign)   NSInteger                   selectionStartPosition;
+@property (nonatomic, assign)   NSInteger                   selectionEndPosition;
+@property (nonatomic, assign)   TYAttributedLabelState      state;
 @property (strong, nonatomic)   UIImageView                 *leftSelectionAnchor;
 @property (strong, nonatomic)   UIImageView                 *rightSelectionAnchor;
 @property (strong, nonatomic)   MagnifiterView              *magnifierView;
@@ -50,6 +55,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     if (self = [super initWithFrame:frame]) {
         [self setupProperty];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsDisplay) name:kTYAttributedLabelNeedDisplayNotification object:nil];
     }
     return self;
 }
@@ -58,6 +64,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self setupProperty];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsDisplay) name:kTYAttributedLabelNeedDisplayNotification object:nil];
     }
     return self;
 }
@@ -74,12 +81,12 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (void)setupProperty
 {
     if (self.backgroundColor == nil) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     self.userInteractionEnabled = NO;
-    _font = [UIFont systemFontOfSize:16];
+    _font = [UIFont systemFontOfSize:15];
     _characterSpacing = 1;
-    _linesSpacing = 4;
+    _linesSpacing = 5;
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
@@ -91,9 +98,10 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (void)setLongPressShowMenuEnable:(BOOL)longPressShowMenuEnable
 {
     _longPressShowMenuEnable = longPressShowMenuEnable;
-    
     if (longPressShowMenuEnable) {
         [self addLongPressGestureRecognizer];
+    }else {
+        [self removeLongPressGestureRecognizer];
     }
 }
 
@@ -175,9 +183,6 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (void)addTextRun:(id<TYTextRunProtocol>)textRun
 {
     if (textRun ) {
-        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
-        }
         if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
             [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
         }
@@ -211,7 +216,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     for (id<TYTextRunProtocol>textRun in self.textRunArray) {
         if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
+            [(id<TYDrawRunProtocol>)textRun setTextReplaceStringNum:nil fontAscent:_font.ascender descent:_font.descender];
         }
     }
 }
@@ -232,7 +237,6 @@ typedef enum TYAttributedLabelState : NSInteger {
     [self setNeedsDisplay];
 }
 
-#pragma mark 更新framesetter，如果需要
 - (void)updateFramesetterIfNeeded
 {
     // 是否更新了内容
@@ -300,8 +304,6 @@ typedef enum TYAttributedLabelState : NSInteger {
         for (id<TYTextRunProtocol> textRun in _textRunArray) {
             
             // 修正图片替换字符来的误差
-            //[self fixRangeWithTextRun:textRun];
-            
             if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol) ]) {
                 [drawRunArray addObject:textRun];
                 continue;
@@ -317,7 +319,7 @@ typedef enum TYAttributedLabelState : NSInteger {
         [_textRunArray removeAllObjects];
         
         for (id<TYDrawRunProtocol> drawRun in drawRunArray) {
-            [self fixRangeWithDrawRun:drawRun];
+            [drawRun setTextReplaceStringNum:&_replaceStringNum fontAscent:_font.ascender descent:_font.descender];
             [drawRun addTextRunWithAttributedString:attString];
         }
     }
@@ -336,44 +338,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     }];
 }
 
-- (void)fixRangeWithDrawRun:(id<TYDrawRunProtocol>)drawRun{
-    
-    if (drawRun.range.length <= 1 || ![drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)])
-        return;
-
-    NSInteger location = drawRun.range.location - _replaceStringNum;
-    NSInteger length = drawRun.range.length - _replaceStringNum;
-    
-    if (location < 0 && length > 0) {
-        drawRun.range = NSMakeRange(drawRun.range.location, length);
-    }else if (location < 0 && length <= 0){
-        drawRun.range = NSMakeRange(NSNotFound, 0);
-        return;
-    }else {
-        drawRun.range = NSMakeRange(drawRun.range.location - _replaceStringNum, drawRun.range.length);
-    }
-    _replaceStringNum += drawRun.range.length - 1;
-}
-
-//- (void)fixRangeWithTextRun:(id<TYTextRunProtocol>)drawRun
-//{
-//    NSInteger location = drawRun.range.location - _replaceStringNum;
-//    NSInteger length = drawRun.range.length - _replaceStringNum;
-//    if (location < 0 && length > 0) {
-//        drawRun.range = NSMakeRange(drawRun.range.location, length);
-//    }else if (location < 0 && length <= 0){
-//        drawRun.range = NSMakeRange(NSNotFound, 0);
-//    }else {
-//        drawRun.range = NSMakeRange(drawRun.range.location - _replaceStringNum, drawRun.range.length);
-//    }
-//    
-//    if (drawRun.range.length > 1 && [drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-//        _replaceStringNum += drawRun.range.length - 1;
-//    }
-//}
-
-
-#pragma mark - 绘画
+#pragma mark - 绘画drawRect
 - (void)drawRect:(CGRect)rect {
     
     if (_attString == nil) {
@@ -401,7 +366,7 @@ typedef enum TYAttributedLabelState : NSInteger {
     
     if (self.state == TYAttributedLabelStateTouching || self.state == TYAttributedLabelStateSelecting) {
         NSRange selectRange = NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition);
-        [self drawSelectionAreaInRange:selectRange bgColor:RGB(204, 221, 236)];
+        [self drawSelectionAreaInRange:selectRange bgColor:kSelectAreaColor];
         [self drawAnchorsWithRange:selectRange];
     }
     
@@ -588,18 +553,37 @@ typedef enum TYAttributedLabelState : NSInteger {
         CFRelease(_frameRef);
     }
     _attString = nil;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - 长按出现菜单选择
 - (void)addLongPressGestureRecognizer{
-    UIGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                             action:@selector(userLongPressedGuestureDetected:)];
-    [self addGestureRecognizer:longPressRecognizer];
+    if (_longPressRecognizer == nil) {
+        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                 action:@selector(userLongPressedGuestureDetected:)];
+        [self addGestureRecognizer:_longPressRecognizer];
+    }
     
-    UIGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                                 action:@selector(userPanGuestureDetected:)];
-    [self addGestureRecognizer:panRecognizer];
+    if (_panRecognizer == nil) {
+        _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                                 action:@selector(userPanGuestureDetected:)];
+        [self addGestureRecognizer:_panRecognizer];
+    }
+    
     self.userInteractionEnabled = YES;
+}
+
+- (void)removeLongPressGestureRecognizer{
+    if (_longPressRecognizer) {
+        [self removeGestureRecognizer:_longPressRecognizer];
+        _longPressRecognizer = nil;
+    }
+    
+    if (_panRecognizer) {
+        [self removeGestureRecognizer:_panRecognizer];
+        _panRecognizer = nil;
+    }
     
 }
 
@@ -700,7 +684,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 - (UIImage *)cursorWithFontHeight:(CGFloat)height isTop:(BOOL)top {
     // 22
     CGRect rect = CGRectMake(0, 0, 22, height * 2);
-    UIColor *color = RGB(28, 107, 222);
+    UIColor *color = kCursorColor;
     UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
     // draw point
@@ -1100,7 +1084,7 @@ typedef enum TYAttributedLabelState : NSInteger {
 {
     if (textRun) {
         if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-            [(id<TYDrawRunProtocol>)textRun setTextFontAscent:_font.ascender descent:_font.descender];
+            [(id<TYDrawRunProtocol>)textRun setTextReplaceStringNum:nil fontAscent:_font.ascender descent:_font.descender];
         }
         if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
             [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];

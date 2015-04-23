@@ -14,7 +14,9 @@ typedef enum : NSUInteger {
     TYDrawAlignmentButtom,  // 顶部齐平 向下伸展
 } TYDrawAlignment;
 
-static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
+extern NSString *const kTYTextRunAttributedName;
+extern NSString *const kTYAttributedLabelNeedDisplayNotification;
+//#define kTYAttributedLabelNeedDisplayNotification @"TYAttributedLabelNeedDisplayNotification"
 
 @protocol TYTextRunProtocol <NSObject>
 @required
@@ -58,10 +60,11 @@ static NSString * const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 /**
  *  设置文本字符 上行高度 和下行高度
  *
+ *  @param replaceStringNumPtr  已经替换的字符数目指针
  *  @param ascent  上行高度
  *  @param descent 下行高度
  */
-- (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent;
+- (void)setTextReplaceStringNum:(NSInteger *)replaceStringNumPtr fontAscent:(CGFloat)ascent descent:(CGFloat)descent;
 
 @optional
 

@@ -12,21 +12,44 @@
 @interface TYDrawRun (){
     CGFloat         _fontAscent;
     CGFloat         _fontDescent;
+    
+    NSRange         _fixRange;
 }
 @end
 
 @implementation TYDrawRun
 
-- (void)setTextFontAscent:(CGFloat)ascent descent:(CGFloat)descent
+- (void)setTextReplaceStringNum:(NSInteger *)replaceStringNumPtr fontAscent:(CGFloat)ascent descent:(CGFloat)descent;
 {
     _fontAscent = ascent;
     _fontDescent = -descent;
+    
+    [self fixRangeWithReplaceStringNum:replaceStringNumPtr];
+}
+
+- (void)fixRangeWithReplaceStringNum:(NSInteger *)replaceStringNumPtr
+{
+    if (_range.length <= 1 || replaceStringNumPtr == nil)
+        return ;
+    
+    NSInteger location = _range.location - *replaceStringNumPtr;
+    NSInteger length = _range.length - *replaceStringNumPtr;
+    
+    if (location < 0 && length > 0) {
+        _fixRange = NSMakeRange(_range.location, length);
+    }else if (location < 0 && length <= 0){
+        _fixRange = NSMakeRange(0, 0);
+        return;
+    }else {
+        _fixRange = NSMakeRange(_range.location - *replaceStringNumPtr, _range.length);
+    }
+    *replaceStringNumPtr += _range.length - 1;
 }
 
 - (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     // 判断是不是追加
-    NSRange range = self.range;
+    NSRange range = _fixRange;
     
     if (NSEqualRanges(range, NSMakeRange(0, 0))) {
         [attributedString appendAttributedString:[[NSAttributedString alloc]initWithString:[self spaceReplaceString]]];
@@ -36,7 +59,6 @@
         [attributedString replaceCharactersInRange:range withString:[self spaceReplaceString]];
         // 修正range
         range = NSMakeRange(range.location, 1);
-        self.range = range;
     }
     // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
     if (_size.height <= _fontAscent + _fontDescent) {
@@ -50,7 +72,7 @@
 - (NSAttributedString *)appendTextRunAttributedString
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]init];
-    self.range = NSMakeRange(0, 0);
+    _range = NSMakeRange(0, 0);
     [self addTextRunWithAttributedString:attributedString];
     return [attributedString copy];
 }
