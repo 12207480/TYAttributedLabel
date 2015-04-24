@@ -144,7 +144,6 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
         _font = font;
         
         [_attString addAttributeFont:font];
-        [self resetTextRunArray];
         [self resetFramesetter];
     }
 }
@@ -210,15 +209,6 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     _replaceStringNum = 0;
     [self removeSingleTapGesture];
     [self setupProperty];
-}
-
-- (void)resetTextRunArray
-{
-    for (id<TYTextRunProtocol>textRun in self.textRunArray) {
-        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-            [(id<TYDrawRunProtocol>)textRun setTextReplaceStringNum:nil fontAscent:_font.ascender descent:_font.descender];
-        }
-    }
 }
 
 #pragma mark 重置framesetter
@@ -311,7 +301,6 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
             
             // 验证范围
             if (NSMaxRange(textRun.range) <= attString.length) {
-                
                 [textRun addTextRunWithAttributedString:attString];
             }
             
@@ -386,6 +375,7 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     CGPoint lineOrigins[CFArrayGetCount(lines)];
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
     
+    CGFloat viewWidth = CGRectGetWidth(self.frame);
     NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
     // 获取每行有多少run
     for (int i = 0; i < CFArrayGetCount(lines); i++) {
@@ -409,6 +399,10 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
             
             if (textRun) {
                 CGFloat runWidth  = CTRunGetTypographicBounds(run, CFRangeMake(0,0), &runAscent, &runDescent, NULL);
+                
+                if (viewWidth > 0 && runWidth > viewWidth) {
+                    runWidth  = viewWidth;
+                }
                 
                 CGRect runRect = CGRectMake(lineOrigin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL), lineOrigin.y - runDescent, runWidth, runAscent + runDescent);
                 

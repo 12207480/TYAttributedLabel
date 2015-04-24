@@ -27,6 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.dataDic = @{@"SimpleText":[SimpleTextViewController class],@"AttributedText":[AttributedTextViewController class],@"ImageText":[ImageTextViewController class],@"LinkText":[LinkTextViewController class],@"parseText":[ParseTextViewController class],@"AddViewText":[AddViewTextViewController class]};
     
@@ -37,7 +38,7 @@
 - (void)addTableView
 {
     // 添加tableView
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame)-64)];
+    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
     tableView.delegate = self;
     tableView.dataSource = self;
     [self.view addSubview:tableView];

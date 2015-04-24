@@ -74,7 +74,7 @@
         }else {
         
             [label appendText:@"(UIImageView)→ →"];
-            //[label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
+        
             UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"avatar"]];
             imageView.frame = CGRectMake(0, 0,60,60);
             [label appendView:imageView];
@@ -82,6 +82,7 @@
         }
         index++;
     }
+    [label appendImageWithContent:@"haha" size:CGSizeMake(15, 15)];
     
     [label sizeToFit];
 }
@@ -90,6 +91,7 @@
 {
     _label.characterSpacing += 1;
     _label.linesSpacing += 1;
+    _label.font = [UIFont systemFontOfSize:_label.font.pointSize +1];
     [_label sizeToFit];
     [_scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(_label.frame)+10)];
 }
