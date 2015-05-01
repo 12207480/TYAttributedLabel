@@ -481,8 +481,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             if(CGRectContainsPoint(rect, point)){
                 NSLog(@"点击了 run ");
                 // 调用代理
-                if ([_delegate respondsToSelector:@selector(attributedLabel:textRunClicked:)]) {
-                    [_delegate attributedLabel:weakSelf textRunClicked:obj];
+                if ([_delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)]) {
+                    [_delegate attributedLabel:weakSelf textStorageClicked:obj];
                     *stop = YES;
                 }
             }

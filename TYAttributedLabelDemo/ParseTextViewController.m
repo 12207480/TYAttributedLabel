@@ -52,7 +52,7 @@
 
 #pragma mark - TYAttributedLabelDelegate
 
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextStorageProtocol>)TextRun
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextRun
 {
     if ([TextRun isKindOfClass:[TYLinkTextStorage class]]) {
         NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkStr;
