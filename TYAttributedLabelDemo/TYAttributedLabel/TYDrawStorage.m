@@ -1,15 +1,16 @@
 //
-//  TYDrawRun.m
+//  TYDrawStorage.m
 //  TYAttributedLabelDemo
 //
 //  Created by tanyang on 15/4/8.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYDrawRun.h"
+#import "TYDrawStorage.h"
 #import <CoreText/CoreText.h>
+#import "TYAttributedLabel.h"
 
-@interface TYDrawRun (){
+@interface TYDrawStorage (){
     CGFloat         _fontAscent;
     CGFloat         _fontDescent;
     
@@ -17,36 +18,41 @@
 }
 @end
 
-@implementation TYDrawRun
+@implementation TYDrawStorage
 
-- (void)setTextReplaceStringNum:(NSInteger *)replaceStringNumPtr fontAscent:(CGFloat)ascent descent:(CGFloat)descent;
+- (void)setOwnerView:(TYAttributedLabel *)ownerView
+{
+    [self setTextfontAscent:ownerView.font.ascender descent:ownerView.font.descender];
+    
+    [self fixRangeWithReplaceStringNum:ownerView.replaceStringNum];
+}
+
+- (void)setTextfontAscent:(CGFloat)ascent descent:(CGFloat)descent;
 {
     _fontAscent = ascent;
     _fontDescent = -descent;
-    
-    [self fixRangeWithReplaceStringNum:replaceStringNumPtr];
 }
 
-- (void)fixRangeWithReplaceStringNum:(NSInteger *)replaceStringNumPtr
+- (void)fixRangeWithReplaceStringNum:(NSInteger )replaceStringNum
 {
-    if (_range.length <= 1 || replaceStringNumPtr == nil)
+    if (_range.length <= 1 || replaceStringNum < 0)
         return ;
     
-    NSInteger location = _range.location - *replaceStringNumPtr;
-    NSInteger length = _range.length - *replaceStringNumPtr;
+    NSInteger location = _range.location - replaceStringNum;
+    NSInteger length = _range.length - replaceStringNum;
     
     if (location < 0 && length > 0) {
         _fixRange = NSMakeRange(_range.location, length);
     }else if (location < 0 && length <= 0){
         _fixRange = NSMakeRange(0, 0);
-        return;
+        return ;
     }else {
-        _fixRange = NSMakeRange(_range.location - *replaceStringNumPtr, _range.length);
+        _fixRange = NSMakeRange(_range.location - replaceStringNum, _range.length);
     }
-    *replaceStringNumPtr += _range.length - 1;
+    //return _range.length - 1;
 }
 
-- (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
+- (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     // 判断是不是追加
     NSRange range = _fixRange;
@@ -69,11 +75,11 @@
     [self addRunDelegateWithAttributedString:attributedString range:range];
 }
 
-- (NSAttributedString *)appendTextRunAttributedString
+- (NSAttributedString *)appendTextStorageAttributedString
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]init];
     _range = NSMakeRange(0, 0);
-    [self addTextRunWithAttributedString:attributedString];
+    [self addTextStorageWithAttributedString:attributedString];
     return [attributedString copy];
 }
 
@@ -104,7 +110,7 @@
     CFRelease(runDelegate);
 }
 
-- (void)drawRunWithRect:(CGRect)rect
+- (void)drawStorageWithRect:(CGRect)rect
 {
     
 }
@@ -177,19 +183,19 @@ void TYTextRunDelegateDeallocCallback( void* refCon ){
 //CTRun的回调，获取高度
 CGFloat TYTextRunDelegateGetAscentCallback( void *refCon ){
     
-    TYDrawRun *textRun = (__bridge TYDrawRun *)refCon;
+    TYDrawStorage *textRun = (__bridge TYDrawStorage *)refCon;
     return [textRun getDrawRunAscentHeight];
 }
 
 CGFloat TYTextRunDelegateGetDescentCallback(void *refCon){
-    TYDrawRun *textRun = (__bridge TYDrawRun *)refCon;
+    TYDrawStorage *textRun = (__bridge TYDrawStorage *)refCon;
     return [textRun getDrawRunDescentHeight];
 }
 
 //CTRun的回调，获取宽度
 CGFloat TYTextRunDelegateGetWidthCallback(void *refCon){
     
-    TYDrawRun *textRun = (__bridge TYDrawRun *)refCon;
+    TYDrawStorage *textRun = (__bridge TYDrawStorage *)refCon;
     return [textRun getDrawRunWidth];
 }
 

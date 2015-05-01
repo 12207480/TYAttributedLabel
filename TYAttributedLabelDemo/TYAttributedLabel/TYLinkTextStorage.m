@@ -1,14 +1,14 @@
 //
-//  TYLinkTextRun.m
+//  TYLinkTextStorage.m
 //  TYAttributedLabelDemo
 //
 //  Created by tanyang on 15/4/8.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYLinkTextRun.h"
+#import "TYLinkTextStorage.h"
 
-@implementation TYLinkTextRun
+@implementation TYLinkTextStorage
 
 - (instancetype)init
 {
@@ -19,9 +19,9 @@
     return self;
 }
 
-- (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
+- (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
-    [super addTextRunWithAttributedString:attributedString];
+    [super addTextStorageWithAttributedString:attributedString];
     [attributedString addAttribute:kTYTextRunAttributedName value:self range:self.range];
 }
 

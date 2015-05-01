@@ -1,5 +1,5 @@
 //
-//  TYDrawRun.h
+//  TYDrawStorage.h
 //  TYAttributedLabelDemo
 //
 //  Created by tanyang on 15/4/8.
@@ -8,7 +8,7 @@
 
 #import "TYTextRunProtocol.h"
 
-@interface TYDrawRun : NSObject<TYDrawRunProtocol>
+@interface TYDrawStorage : NSObject<TYDrawStorageProtocol>
 @property (nonatomic, assign)   NSRange         range;          // 文本范围
 @property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距
 @property (nonatomic, assign)   CGSize          size;           // 绘画物大小

@@ -1,5 +1,5 @@
 //
-//  TYTextRun.h
+//  TYTextStorage.h
 //  TYAttributedLabelDemo
 //
 //  Created by tanyang on 15/4/8.
@@ -9,7 +9,7 @@
 #import "TYTextRunProtocol.h"
 #import <CoreText/CoreText.h>
 
-@interface TYTextRun : NSObject<TYAppendTextRunProtocol>
+@interface TYTextStorage : NSObject<TYAppendTextStorageProtocol>
 
 @property (nonatomic, assign)   NSRange     range;
 @property (nonatomic, strong)   NSString    *text;              // append text文本

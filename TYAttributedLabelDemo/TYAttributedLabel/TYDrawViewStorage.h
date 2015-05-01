@@ -1,14 +1,14 @@
 //
-//  TYDrawViewRun.h
+//  TYDrawViewStorage.h
 //  TYAttributedLabelDemo
 //
-//  Created by SunYong on 15/4/9.
+//  Created by tanyang on 15/4/9.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYDrawRun.h"
+#import "TYDrawStorage.h"
 
-@interface TYDrawViewRun : TYDrawRun<TYDrawViewRunProtocol>
+@interface TYDrawViewStorage : TYDrawStorage
 
 @property (nonatomic, strong)   UIView *view;       // 添加view
 

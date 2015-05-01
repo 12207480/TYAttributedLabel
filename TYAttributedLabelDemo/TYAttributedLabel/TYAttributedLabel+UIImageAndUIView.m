@@ -7,19 +7,19 @@
 //
 
 #import "TYAttributedLabel.h"
-#import "TYDrawImageRun.h"
-#import "TYDrawViewRun.h"
+#import "TYDrawImageStorage.h"
+#import "TYDrawViewStorage.h"
 
 @implementation TYAttributedLabel (UIImageAndUIView)
 
 - (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
     imageRun.imageContent = imageContent;
     imageRun.drawAlignment = alignment;
     imageRun.range = range;
     imageRun.size = size;
-    [self addTextRun:imageRun];
+    [self addTextStorage:imageRun];
 }
 
 - (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
@@ -39,12 +39,12 @@
 
 - (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
 {
-    TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
+    TYDrawViewStorage *viewRun = [[TYDrawViewStorage alloc]init];
     viewRun.drawAlignment = alignment;
     viewRun.view = view;
     viewRun.range = range;
     
-    [self addTextRun:viewRun];
+    [self addTextStorage:viewRun];
 }
 
 - (void)addView:(UIView *)view range:(NSRange)range
@@ -54,12 +54,12 @@
 
 - (void)appendImageWithContent:(id)imageContent size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
     imageRun.drawAlignment = alignment;
     imageRun.imageContent = imageContent;
     imageRun.size = size;
     
-    [self appendTextRun:imageRun];
+    [self appendTextStorage:imageRun];
 }
 
 - (void)appendImageWithContent:(id)imageContent size:(CGSize)size
@@ -79,11 +79,11 @@
 
 - (void)appendView:(UIView *)view alignment:(TYDrawAlignment)alignment
 {
-    TYDrawViewRun *viewRun = [[TYDrawViewRun alloc]init];
+    TYDrawViewStorage *viewRun = [[TYDrawViewStorage alloc]init];
     viewRun.drawAlignment = alignment;
     viewRun.view = view;
     
-    [self appendTextRun:viewRun];
+    [self appendTextStorage:viewRun];
 }
 
 - (void)appendView:(UIView *)view

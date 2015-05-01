@@ -1,16 +1,16 @@
 //
-//  TYDrawImageRun.m
+//  TYDrawImageStorage.m
 //  TYAttributedLabelDemo
 //
-//  Created by SunYong on 15/4/8.
+//  Created by tanyang on 15/4/8.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYDrawImageRun.h"
+#import "TYDrawImageStorage.h"
 
-@implementation TYDrawImageRun
+@implementation TYDrawImageStorage
 
-- (void)drawRunWithRect:(CGRect)rect
+- (void)drawStorageWithRect:(CGRect)rect
 {
     UIImage *image = nil;
     

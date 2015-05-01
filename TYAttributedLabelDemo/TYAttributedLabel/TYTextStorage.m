@@ -1,15 +1,15 @@
 //
-//  TYTextRun.m
+//  TYTextStorage.m
 //  TYAttributedLabelDemo
 //
 //  Created by tanyang on 15/4/8.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYTextRun.h"
+#import "TYTextStorage.h"
 #import "NSMutableAttributedString+TY.h"
 
-@implementation TYTextRun
+@implementation TYTextStorage
 
 - (instancetype)init
 {
@@ -19,7 +19,7 @@
     return self;
 }
 
-- (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString
+- (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     // 颜色
     if (self.textColor) {
@@ -36,7 +36,7 @@
     }
 }
 
-- (NSAttributedString *)appendTextRunAttributedString
+- (NSAttributedString *)appendTextStorageAttributedString
 {
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:_text];
     
@@ -44,7 +44,7 @@
     if (NSEqualRanges(self.range, NSMakeRange(0, 0))) {
         self.range = NSMakeRange(0, attributedString.length);
     }
-    [self addTextRunWithAttributedString:attributedString];
+    [self addTextStorageWithAttributedString:attributedString];
     return [attributedString copy];
 }
 

@@ -1,18 +1,18 @@
 //
-//  TYDrawViewRun.m
+//  TYDrawViewStorage.m
 //  TYAttributedLabelDemo
 //
-//  Created by SunYong on 15/4/9.
+//  Created by tanyang on 15/4/9.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYDrawViewRun.h"
+#import "TYDrawViewStorage.h"
 
-@interface TYDrawViewRun ()
+@interface TYDrawViewStorage ()
 @property (nonatomic, weak) UIView *superView;
 @end
 
-@implementation TYDrawViewRun
+@implementation TYDrawViewStorage
 
 - (void)setView:(UIView *)view
 {
@@ -23,14 +23,14 @@
     }
 }
 
-- (void)setSuperView:(UIView *)superView
+- (void)setOwnerView:(UIView *)ownerView
 {
     if (_view.superview) {
         [_view removeFromSuperview];
     }
     
-    if (superView) {
-        _superView = superView;
+    if (ownerView) {
+        _superView = ownerView;
     }
 }
 
@@ -39,7 +39,7 @@
     [_view removeFromSuperview];
 }
 
-- (void)drawRunWithRect:(CGRect)rect
+- (void)drawStorageWithRect:(CGRect)rect
 {
     if (_view == nil || _superView == nil) return;
     

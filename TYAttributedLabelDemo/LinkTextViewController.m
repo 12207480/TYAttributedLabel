@@ -8,7 +8,7 @@
 
 #import "LinkTextViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYLinkTextRun.h"
+#import "TYLinkTextStorage.h"
 
 @interface LinkTextViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic, weak) TYAttributedLabel *label1;
@@ -41,12 +41,12 @@
     for (NSString *text in textArray) {
         
         if (index == 2) {
-            TYLinkTextRun *linkTextRun = [[TYLinkTextRun alloc]init];
+            TYLinkTextStorage *linkTextRun = [[TYLinkTextStorage alloc]init];
             linkTextRun.text = text;
             linkTextRun.font = [UIFont systemFontOfSize:15+arc4random()%4];
             linkTextRun.textColor = colorArray[index%5];
             linkTextRun.linkStr = @"http://www.baidu.com";
-            [label1 appendTextRun:linkTextRun];
+            [label1 appendTextStorage:linkTextRun];
         }else {
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
             [attributedString addAttributeTextColor:colorArray[index%5]];
@@ -70,14 +70,14 @@
     NSMutableArray *textRunArray = [NSMutableArray array];
     for (NSString *subText in textArray) {
         if (index == 2) {
-            TYLinkTextRun *linkTextRun = [[TYLinkTextRun alloc]init];
+            TYLinkTextStorage *linkTextRun = [[TYLinkTextStorage alloc]init];
             linkTextRun.range = [text rangeOfString:subText];
             linkTextRun.font = [UIFont systemFontOfSize:15+arc4random()%4];
             linkTextRun.textColor = colorArray[index%5];
             linkTextRun.linkStr = @"我被点中了哦O(∩_∩)O~";
             [textRunArray addObject:linkTextRun];
         } else {
-            TYTextRun *textRun = [[TYTextRun alloc]init];
+            TYTextStorage *textRun = [[TYTextStorage alloc]init];
             textRun.font = [UIFont systemFontOfSize:15+arc4random()%4];
             textRun.textColor = colorArray[index%5];
             textRun.range = [text rangeOfString:subText];
@@ -89,7 +89,7 @@
     TYAttributedLabel *label2 = [[TYAttributedLabel alloc]init];
     label2.delegate = self;
     label2.text = text;
-    [label2 addTextRunArray:textRunArray];
+    [label2 addTextStorageArray:textRunArray];
     
     label2.linesSpacing = 8;
     label2.characterSpacing = 2;
@@ -98,10 +98,10 @@
 
 }
 
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextRunProtocol>)TextRun
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextStorageProtocol>)TextRun
 {
-    if ([TextRun isKindOfClass:[TYLinkTextRun class]]) {
-        NSString *linkStr = ((TYLinkTextRun*)TextRun).linkStr;
+    if ([TextRun isKindOfClass:[TYLinkTextStorage class]]) {
+        NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkStr;
         
         if ([linkStr hasPrefix:@"http:"]) {
             [ [ UIApplication sharedApplication] openURL:[ NSURL URLWithString:linkStr]];

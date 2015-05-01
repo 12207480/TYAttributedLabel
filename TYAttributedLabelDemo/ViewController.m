@@ -8,8 +8,8 @@
 
 #import "ViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYDrawImageRun.h"
-#import "TYDrawViewRun.h"
+#import "TYDrawImageStorage.h"
+#import "TYDrawViewStorage.h"
 #import "SimpleTextViewController.h"
 #import "AttributedTextViewController.h"
 #import "ImageTextViewController.h"
@@ -88,24 +88,24 @@
         [label appendText:[components objectAtIndex:i]];
         if (i != count - 1)
         {
-            TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+            TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
             imageRun.imageContent = @"haha";
             imageRun.size = CGSizeMake(15, 15);
-            [label appendTextRun:imageRun];
+            [label appendTextStorage:imageRun];
         }
     }
-    TYDrawImageRun *imageRun1 = [[TYDrawImageRun alloc]init];
+    TYDrawImageStorage *imageRun1 = [[TYDrawImageStorage alloc]init];
     imageRun1.imageContent = @"avatar";
     imageRun1.drawAlignment = TYDrawAlignmentCenter;
     imageRun1.size = CGSizeMake(60, 60);
     imageRun1.range = NSMakeRange(120, 1);
-    [label addTextRun:imageRun1];
+    [label addTextStorage:imageRun1];
     
-    TYDrawImageRun *imageRun2 = [[TYDrawImageRun alloc]init];
+    TYDrawImageStorage *imageRun2 = [[TYDrawImageStorage alloc]init];
     imageRun2.imageContent = @"haha";
     imageRun2.size = CGSizeMake(15, 15);
     imageRun2.range = NSMakeRange(68, 1);
-    [label addTextRun:imageRun2];
+    [label addTextStorage:imageRun2];
     
     //[label addImageWithContent:@"avatar" range:NSMakeRange(120, 2) size:CGSizeMake(60, 60)];
     
@@ -115,10 +115,10 @@
     button.frame = CGRectMake(0, 0, 60, 15);
     UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"avatar"]];
     imageView.frame = CGRectMake(0, 0, 60, 60);
-    TYDrawViewRun * drawView = [[TYDrawViewRun alloc]init];
+    TYDrawViewStorage * drawView = [[TYDrawViewStorage alloc]init];
     drawView.view = button;
     drawView.range = NSMakeRange(146, 1);
-    [label addTextRun:drawView];
+    [label addTextStorage:drawView];
     //[label addView:button range:NSMakeRange(146, 1)];
     [label appendView:imageView alignment:TYDrawAlignmentButtom];
     [label appendImageWithContent:@"haha"];

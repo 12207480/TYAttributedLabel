@@ -14,7 +14,7 @@
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
 // 点击代理
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextRunProtocol>)textRun;
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textRunClicked:(id<TYTextStorageProtocol>)textRun;
 
 @end
 
@@ -36,6 +36,7 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
+@property (nonatomic, assign,readonly)NSInteger replaceStringNum;   // 图片替换字符数
 @property (nonatomic, assign)   BOOL            longPressShowMenuEnable;// 长按出现菜单选择,默认不启用
 
 /**
@@ -63,18 +64,18 @@
 - (void)setAttributedText: (NSAttributedString *)attributedText;
 
 /**
- *  添加 textRun （自定义显示内容）
+ *  添加 textStorage （自定义显示内容）
  *
- *  @param textRun 自定义run
+ *  @param textStorage 自定义
  */
-- (void)addTextRun:(id<TYTextRunProtocol>)textRun;
+- (void)addTextStorage:(id<TYTextStorageProtocol>)textStorage;
 
 /**
  *  添加 textRun数组 （自定义显示内容）
  *
  *  @param textRunArray textRun数组（需遵循协议TYTextRunProtocol,否则不会添加）
  */
-- (void)addTextRunArray:(NSArray *)textRunArray;
+- (void)addTextStorageArray:(NSArray *)textStorageArray;
 
 /**
  *  调用可以自动计算frame大小
@@ -111,18 +112,18 @@
 - (void)appendTextAttributedString: (NSAttributedString *)attributedText;
 
 /**
- *  追加 textRun （自定义显示内容）
+ *  追加 textStorage （自定义显示内容）
  *
- *  @param textRun 自定义run（自定义显示内容）
+ *  @param textStorage 自定义Storage（自定义显示内容）
  */
-- (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun;
+- (void)appendTextStorage:(id<TYAppendTextStorageProtocol>)textStorage;
 
 /**
- *  追加 textRun 数组
+ *  追加 textStorage 数组
  *
- *  @param textRunArray 自定义run数组（需遵循协议TYAppendTextRunProtocol,否则不会添加）
+ *  @param textStorageArray 自定义run数组（需遵循协议TYAppendTextStorageProtocol,否则不会添加）
  */
-- (void)appendTextRunArray:(NSArray *)textRunArray;
+- (void)appendTextStorageArray:(NSArray *)textStorageArray;
 
 @end
 
@@ -130,21 +131,21 @@
 
 @interface TYAttributedLabel (UIImageAndUIView)
 
-#pragma mark - addRun
+#pragma mark - addStorage
 /**
- *  添加 imageRun (默认size大小: UIImage 按照image.size, 其他按照font大小)
+ *  添加 imageStorage (默认size大小: UIImage 按照image.size, 其他按照font大小)
  */
 - (void)addImageWithContent:(id)imageContent range:(NSRange)range;
 
 /**
- *  添加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  添加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  */
 - (void)addImageWithContent:(id)imageContent
                       range:(NSRange)range
                        size:(CGSize)size;
 
 /**
- *  添加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  添加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  *
  *  @param imageContent 格式（NSURL，NSString，UIImage）
  *  @param range        所在文本位置
@@ -157,12 +158,12 @@
                   alignment: (TYDrawAlignment)alignment;
 
 /**
- *  添加 viewRun (添加 UI控件 需要设置frame)
+ *  添加 viewStorage (添加 UI控件 需要设置frame)
  */
 - (void)addView:(UIView *)view range:(NSRange)range;
 
 /**
- *  添加 viewRun (添加 UI控件 需要设置frame)
+ *  添加 viewStorage (添加 UI控件 需要设置frame)
  *
  *  @param view         UIView (UI控件)
  *  @param range        所在文本位置
@@ -172,20 +173,20 @@
           range:(NSRange)range
       alignment:(TYDrawAlignment)alignment;
 
-#pragma mark - appendRun
+#pragma mark - appendStorage
 
 /**
- *  追加 imageRun （imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageStorage （imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  */
 - (void)appendImageWithContent:(id)imageContent;
 
 /**
- *  追加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  */
 - (void)appendImageWithContent:(id)imageContent size:(CGSize)size ;
 
 /**
- *  追加 imageRun（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
  *
  *  @param imageContent 格式（NSURL，NSString，UIImage）
  *  @param size         图片大小
@@ -196,12 +197,12 @@
                      alignment:(TYDrawAlignment)alignment;
 
 /**
- *  追加 viewRun (添加 UI控件 需要设置frame)
+ *  追加 viewStorage (添加 UI控件 需要设置frame)
  */
 - (void)appendView:(UIView *)view;
 
 /**
- *  追加 viewRun (添加 UI控件 需要设置frame)
+ *  追加 viewStorage (添加 UI控件 需要设置frame)
  *
  *  @param view  UIView (UI控件)
  *  @param alignment view对齐

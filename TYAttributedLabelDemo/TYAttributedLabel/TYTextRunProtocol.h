@@ -1,5 +1,5 @@
 //
-//  TYTextRunProtocol.h
+//  TYTextStorageProtocol.h
 //  TYAttributedLabelDemo
 //
 //  Created by tanyang on 15/4/8.
@@ -15,10 +15,8 @@ typedef enum : NSUInteger {
 } TYDrawAlignment;
 
 extern NSString *const kTYTextRunAttributedName;
-extern NSString *const kTYAttributedLabelNeedDisplayNotification;
-//#define kTYAttributedLabelNeedDisplayNotification @"TYAttributedLabelNeedDisplayNotification"
 
-@protocol TYTextRunProtocol <NSObject>
+@protocol TYTextStorageProtocol <NSObject>
 @required
 
 /**
@@ -28,43 +26,41 @@ extern NSString *const kTYAttributedLabelNeedDisplayNotification;
 //- (NSRange)range;
 
 /**
- *  添加属性到全文attributedString addTextRun调用
+ *  添加属性到全文attributedString addTextStorage调用
  *
  *  @param attributedString 属性字符串
  */
-- (void)addTextRunWithAttributedString:(NSMutableAttributedString *)attributedString;
+- (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString;
 
 @end
 
-@protocol TYAppendTextRunProtocol <TYTextRunProtocol>
+@protocol TYAppendTextStorageProtocol <TYTextStorageProtocol>
 
 @required
 /**
- *  追加attributedString属性 appendTextRun调用
+ *  追加attributedString属性 appendTextStorage调用
  *
  *  @return 返回需要追加的attributedString属性
  */
-- (NSAttributedString *)appendTextRunAttributedString;
+- (NSAttributedString *)appendTextStorageAttributedString;
 
 @end
 
-@protocol TYDrawRunProtocol <TYAppendTextRunProtocol>
+@protocol TYDrawStorageProtocol <TYAppendTextStorageProtocol>
 
 /**
  *  添加View 或 绘画 到该区域
  *
  *  @param rect 绘画区域
  */
-- (void)drawRunWithRect:(CGRect)rect;
+- (void)drawStorageWithRect:(CGRect)rect;
 
 /**
- *  设置文本字符 上行高度 和下行高度
+ *  设置所属的view
  *
- *  @param replaceStringNumPtr  已经替换的字符数目指针
- *  @param ascent  上行高度
- *  @param descent 下行高度
+ *  @param ownerView ownerView
  */
-- (void)setTextReplaceStringNum:(NSInteger *)replaceStringNumPtr fontAscent:(CGFloat)ascent descent:(CGFloat)descent;
+- (void)setOwnerView:(UIView *)ownerView;
 
 @optional
 
@@ -75,11 +71,3 @@ extern NSString *const kTYAttributedLabelNeedDisplayNotification;
 
 @end
 
-@protocol TYDrawViewRunProtocol <TYDrawRunProtocol>
-
-/**
- *  设置引用label
- */
-- (void)setSuperView:(UIView *)supView;
-
-@end

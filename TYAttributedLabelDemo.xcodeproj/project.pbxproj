@@ -10,13 +10,13 @@
 		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
 		B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = B05BA7B51AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m */; };
 		B0DF51991ADBE45C0067467D /* MagnifiterView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0DF51981ADBE45C0067467D /* MagnifiterView.m */; };
-		D34A49871AD4D5510036B7EF /* TYTextRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextRun.m */; };
-		D34A498E1AD4FA760036B7EF /* TYDrawRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A498D1AD4FA760036B7EF /* TYDrawRun.m */; };
-		D34A49911AD4FF370036B7EF /* TYLinkTextRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49901AD4FF370036B7EF /* TYLinkTextRun.m */; };
-		D34A49951AD50EB70036B7EF /* TYDrawImageRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49941AD50EB70036B7EF /* TYDrawImageRun.m */; };
+		D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextStorage.m */; };
+		D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */; };
+		D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */; };
+		D34A49951AD50EB70036B7EF /* TYDrawImageStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49941AD50EB70036B7EF /* TYDrawImageStorage.m */; };
 		D34A49971AD52D980036B7EF /* haha.png in Resources */ = {isa = PBXBuildFile; fileRef = D34A49961AD52D980036B7EF /* haha.png */; };
 		D34A49991AD52D9E0036B7EF /* avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = D34A49981AD52D9E0036B7EF /* avatar.png */; };
-		D34BE7421AD669F000BECD40 /* TYDrawViewRun.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */; };
+		D34BE7421AD669F000BECD40 /* TYDrawViewStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BE7411AD669F000BECD40 /* TYDrawViewStorage.m */; };
 		D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */; };
 		D3553BCF1AE7746A005D8F31 /* content.json in Resources */ = {isa = PBXBuildFile; fileRef = D3553BCE1AE7746A005D8F31 /* content.json */; };
 		D3553BD21AE778DB005D8F31 /* TYTextRunParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BD11AE778DB005D8F31 /* TYTextRunParser.m */; };
@@ -53,19 +53,19 @@
 		B05BA7B51AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TYAttributedLabel+UIImageAndUIView.m"; sourceTree = "<group>"; };
 		B0DF51971ADBE45C0067467D /* MagnifiterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MagnifiterView.h; sourceTree = "<group>"; };
 		B0DF51981ADBE45C0067467D /* MagnifiterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MagnifiterView.m; sourceTree = "<group>"; };
-		D34A49851AD4D5510036B7EF /* TYTextRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextRun.h; sourceTree = "<group>"; };
-		D34A49861AD4D5510036B7EF /* TYTextRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextRun.m; sourceTree = "<group>"; };
-		D34A498C1AD4FA760036B7EF /* TYDrawRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawRun.h; sourceTree = "<group>"; };
-		D34A498D1AD4FA760036B7EF /* TYDrawRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawRun.m; sourceTree = "<group>"; };
-		D34A498F1AD4FF370036B7EF /* TYLinkTextRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYLinkTextRun.h; sourceTree = "<group>"; };
-		D34A49901AD4FF370036B7EF /* TYLinkTextRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLinkTextRun.m; sourceTree = "<group>"; };
+		D34A49851AD4D5510036B7EF /* TYTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextStorage.h; sourceTree = "<group>"; };
+		D34A49861AD4D5510036B7EF /* TYTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
+		D34A498C1AD4FA760036B7EF /* TYDrawStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawStorage.h; sourceTree = "<group>"; };
+		D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawStorage.m; sourceTree = "<group>"; };
+		D34A498F1AD4FF370036B7EF /* TYLinkTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYLinkTextStorage.h; sourceTree = "<group>"; };
+		D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYLinkTextStorage.m; sourceTree = "<group>"; };
 		D34A49921AD505150036B7EF /* TYTextRunProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextRunProtocol.h; sourceTree = "<group>"; };
-		D34A49931AD50EB70036B7EF /* TYDrawImageRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawImageRun.h; sourceTree = "<group>"; };
-		D34A49941AD50EB70036B7EF /* TYDrawImageRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawImageRun.m; sourceTree = "<group>"; };
+		D34A49931AD50EB70036B7EF /* TYDrawImageStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawImageStorage.h; sourceTree = "<group>"; };
+		D34A49941AD50EB70036B7EF /* TYDrawImageStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawImageStorage.m; sourceTree = "<group>"; };
 		D34A49961AD52D980036B7EF /* haha.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = haha.png; sourceTree = "<group>"; };
 		D34A49981AD52D9E0036B7EF /* avatar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = avatar.png; sourceTree = "<group>"; };
-		D34BE7401AD669F000BECD40 /* TYDrawViewRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawViewRun.h; sourceTree = "<group>"; };
-		D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawViewRun.m; sourceTree = "<group>"; };
+		D34BE7401AD669F000BECD40 /* TYDrawViewStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawViewStorage.h; sourceTree = "<group>"; };
+		D34BE7411AD669F000BECD40 /* TYDrawViewStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYDrawViewStorage.m; sourceTree = "<group>"; };
 		D3553BCA1AE732C8005D8F31 /* LinkTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkTextViewController.h; sourceTree = "<group>"; };
 		D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkTextViewController.m; sourceTree = "<group>"; };
 		D3553BCE1AE7746A005D8F31 /* content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content.json; sourceTree = "<group>"; };
@@ -212,16 +212,16 @@
 				D3709F411AD3C71900145EC6 /* NSMutableAttributedString+TY.h */,
 				D3709F421AD3C71900145EC6 /* NSMutableAttributedString+TY.m */,
 				D34A49921AD505150036B7EF /* TYTextRunProtocol.h */,
-				D34A49851AD4D5510036B7EF /* TYTextRun.h */,
-				D34A49861AD4D5510036B7EF /* TYTextRun.m */,
-				D34A498F1AD4FF370036B7EF /* TYLinkTextRun.h */,
-				D34A49901AD4FF370036B7EF /* TYLinkTextRun.m */,
-				D34A498C1AD4FA760036B7EF /* TYDrawRun.h */,
-				D34A498D1AD4FA760036B7EF /* TYDrawRun.m */,
-				D34A49931AD50EB70036B7EF /* TYDrawImageRun.h */,
-				D34A49941AD50EB70036B7EF /* TYDrawImageRun.m */,
-				D34BE7401AD669F000BECD40 /* TYDrawViewRun.h */,
-				D34BE7411AD669F000BECD40 /* TYDrawViewRun.m */,
+				D34A49851AD4D5510036B7EF /* TYTextStorage.h */,
+				D34A49861AD4D5510036B7EF /* TYTextStorage.m */,
+				D34A498F1AD4FF370036B7EF /* TYLinkTextStorage.h */,
+				D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */,
+				D34A498C1AD4FA760036B7EF /* TYDrawStorage.h */,
+				D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */,
+				D34A49931AD50EB70036B7EF /* TYDrawImageStorage.h */,
+				D34A49941AD50EB70036B7EF /* TYDrawImageStorage.m */,
+				D34BE7401AD669F000BECD40 /* TYDrawViewStorage.h */,
+				D34BE7411AD669F000BECD40 /* TYDrawViewStorage.m */,
 				B0DF51971ADBE45C0067467D /* MagnifiterView.h */,
 				B0DF51981ADBE45C0067467D /* MagnifiterView.m */,
 			);
@@ -336,9 +336,9 @@
 				D3709F161AD3A5C000145EC6 /* ViewController.m in Sources */,
 				D3553BD51AE79106005D8F31 /* AddViewTextViewController.m in Sources */,
 				D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */,
-				D34A49951AD50EB70036B7EF /* TYDrawImageRun.m in Sources */,
+				D34A49951AD50EB70036B7EF /* TYDrawImageStorage.m in Sources */,
 				D3709F131AD3A5C000145EC6 /* AppDelegate.m in Sources */,
-				D34BE7421AD669F000BECD40 /* TYDrawViewRun.m in Sources */,
+				D34BE7421AD669F000BECD40 /* TYDrawViewStorage.m in Sources */,
 				B0DF51991ADBE45C0067467D /* MagnifiterView.m in Sources */,
 				B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */,
 				D3709F101AD3A5C000145EC6 /* main.m in Sources */,
@@ -346,9 +346,9 @@
 				D3553BD21AE778DB005D8F31 /* TYTextRunParser.m in Sources */,
 				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,
 				D35F47D41AE0DBE30048B58A /* ParseTextViewController.m in Sources */,
-				D34A49871AD4D5510036B7EF /* TYTextRun.m in Sources */,
-				D34A498E1AD4FA760036B7EF /* TYDrawRun.m in Sources */,
-				D34A49911AD4FF370036B7EF /* TYLinkTextRun.m in Sources */,
+				D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */,
+				D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */,
+				D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */,
 				D3709F361AD3A60800145EC6 /* TYAttributedLabel.m in Sources */,
 				D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */,
 				D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */,

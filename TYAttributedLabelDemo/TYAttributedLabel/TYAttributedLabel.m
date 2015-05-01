@@ -25,18 +25,17 @@ typedef enum TYAttributedLabelState : NSInteger {
 }TYAttributedLabelState;
 
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
-NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelNeedDisplayNotification";
 
 @interface TYAttributedLabel ()
 {
     CTFramesetterRef            _framesetter;
     CTFrameRef                  _frameRef;
+    NSInteger                   _replaceStringNum;   // 图片替换字符数
 }
 @property (nonatomic, strong)   NSMutableAttributedString   *attString;         // 文字属性
-@property (nonatomic, strong)   NSMutableArray              *textRunArray;      // run数组
+@property (nonatomic, strong)   NSMutableArray              *textStorageArray;      // run数组
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         // 点击手势
-@property (nonatomic, assign)   NSInteger                   replaceStringNum;   // 图片替换字符数
 
 @property (nonatomic, strong)   UIGestureRecognizer         *longPressRecognizer;
 @property (nonatomic, strong)   UIGestureRecognizer         *panRecognizer;
@@ -55,7 +54,6 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
 {
     if (self = [super initWithFrame:frame]) {
         [self setupProperty];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsDisplay) name:kTYAttributedLabelNeedDisplayNotification object:nil];
     }
     return self;
 }
@@ -64,17 +62,16 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self setupProperty];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setNeedsDisplay) name:kTYAttributedLabelNeedDisplayNotification object:nil];
     }
     return self;
 }
 
-- (NSMutableArray *)textRunArray
+- (NSMutableArray *)textStorageArray
 {
-    if (_textRunArray == nil) {
-        _textRunArray = [NSMutableArray array];
+    if (_textStorageArray == nil) {
+        _textStorageArray = [NSMutableArray array];
     }
-    return _textRunArray;
+    return _textStorageArray;
 }
 
 #pragma mark - 设置属性
@@ -179,23 +176,19 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
 }
 
 #pragma mark - add textRun
-- (void)addTextRun:(id<TYTextRunProtocol>)textRun
+- (void)addTextStorage:(id<TYTextStorageProtocol>)textStorage
 {
-    if (textRun ) {
-        if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
-            [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
-        }
-
-        [self.textRunArray addObject:textRun];
+    if (textStorage) {
+        [self.textStorageArray addObject:textStorage];
     }
 }
 
-- (void)addTextRunArray:(NSArray *)textRunArray
+- (void)addTextStorageArray:(NSArray *)textStorageArray
 {
-    if (textRunArray) {
-        for (id<TYTextRunProtocol> textRun in textRunArray) {
-            if ([textRun conformsToProtocol:@protocol(TYTextRunProtocol)]) {
-                [self addTextRun:textRun];
+    if (textStorageArray) {
+        for (id<TYTextStorageProtocol> textStorage in textStorageArray) {
+            if ([textStorage conformsToProtocol:@protocol(TYTextStorageProtocol)]) {
+                [self addTextStorage:textStorage];
             }
         }
         [self resetFramesetter];
@@ -205,7 +198,7 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
 - (void)resetAllAttributed
 {
     _runRectDictionary = nil;
-    _textRunArray = nil;
+    _textStorageArray = nil;
     _replaceStringNum = 0;
     [self removeSingleTapGesture];
     [self setupProperty];
@@ -233,7 +226,7 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     if (_framesetter == nil) {
         
         // 添加文本run属性
-        [self addTextRunsWithAtrributedString:_attString];
+        [self addTextStoragesWithAtrributedString:_attString];
         
         _framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_attString);
         
@@ -282,41 +275,43 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     [attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
 }
 
-#pragma mark -  添加文本run属性
-- (void)addTextRunsWithAtrributedString:(NSMutableAttributedString *)attString
+#pragma mark -  添加文本Storage属性
+- (void)addTextStoragesWithAtrributedString:(NSMutableAttributedString *)attString
 {
-    if (attString && _textRunArray.count > 0) {
+    if (attString && _textStorageArray.count > 0) {
         
         // 排序range
-        [self sortTextRunArray:_textRunArray];
+        [self sortTextStorageArray:_textStorageArray];
         
-        NSMutableArray *drawRunArray = [NSMutableArray array];
-        for (id<TYTextRunProtocol> textRun in _textRunArray) {
+        NSMutableArray *drawStorageArray = [NSMutableArray array];
+        for (id<TYTextStorageProtocol> textStorage in _textStorageArray) {
             
             // 修正图片替换字符来的误差
-            if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol) ]) {
-                [drawRunArray addObject:textRun];
+            if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol) ]) {
+                [drawStorageArray addObject:textStorage];
                 continue;
             }
             
             // 验证范围
-            if (NSMaxRange(textRun.range) <= attString.length) {
-                [textRun addTextRunWithAttributedString:attString];
+            if (NSMaxRange(textStorage.range) <= attString.length) {
+                [textStorage addTextStorageWithAttributedString:attString];
             }
             
         }
-        [_textRunArray removeAllObjects];
+        [_textStorageArray removeAllObjects];
         
-        for (id<TYDrawRunProtocol> drawRun in drawRunArray) {
-            [drawRun setTextReplaceStringNum:&_replaceStringNum fontAscent:_font.ascender descent:_font.descender];
-            [drawRun addTextRunWithAttributedString:attString];
+        for (id<TYDrawStorageProtocol> drawStorage in drawStorageArray) {
+            NSInteger currentLenght = _attString.length;
+            [drawStorage setOwnerView:self];
+            [drawStorage addTextStorageWithAttributedString:attString];
+            _replaceStringNum += currentLenght - _attString.length;
         }
     }
 }
 
-- (void)sortTextRunArray:(NSMutableArray *)textRunArray
+- (void)sortTextStorageArray:(NSMutableArray *)textStorageArray
 {
-    [textRunArray sortUsingComparator:^NSComparisonResult(id<TYTextRunProtocol> obj1, id<TYTextRunProtocol> obj2) {
+    [textStorageArray sortUsingComparator:^NSComparisonResult(id<TYTextStorageProtocol> obj1, id<TYTextStorageProtocol> obj2) {
         if (obj1.range.location < obj2.range.location) {
             return NSOrderedAscending;
         } else if (obj1.range.location > obj2.range.location){
@@ -362,20 +357,20 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     CTFrameDraw(_frameRef, context);	// CTFrameDraw 将 frame 描述到设备上下文
 
     // 画其他元素
-    [self drawTextRunFrame:_frameRef context:context];
+    [self drawTextStorageWithFrame:_frameRef context:context];
     
     CFRelease(path);
 }
 
 #pragma mark - drawTextRun
-- (void)drawTextRunFrame:(CTFrameRef)frame context:(CGContextRef)context
+- (void)drawTextStorageWithFrame:(CTFrameRef)frame context:(CGContextRef)context
 {
     // 获取每行
     CFArrayRef lines = CTFrameGetLines(frame);
     CGPoint lineOrigins[CFArrayGetCount(lines)];
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
-    
     CGFloat viewWidth = CGRectGetWidth(self.frame);
+    
     NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
     // 获取每行有多少run
     for (int i = 0; i < CFArrayGetCount(lines); i++) {
@@ -394,23 +389,21 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
             CTRunRef run = CFArrayGetValueAtIndex(runs, j);
             // run的属性字典
             NSDictionary* attributes = (NSDictionary*)CTRunGetAttributes(run);
-            id<TYTextRunProtocol> textRun = [attributes objectForKey:kTYTextRunAttributedName];
-            //CTRunDelegateRef delegate = (__bridge CTRunDelegateRef)[attributes valueForKey:(id)kCTRunDelegateAttributeName];
+            id<TYTextStorageProtocol> textStorage = [attributes objectForKey:kTYTextRunAttributedName];
             
-            if (textRun) {
+            if (textStorage) {
                 CGFloat runWidth  = CTRunGetTypographicBounds(run, CFRangeMake(0,0), &runAscent, &runDescent, NULL);
                 
                 if (viewWidth > 0 && runWidth > viewWidth) {
                     runWidth  = viewWidth;
                 }
-                
                 CGRect runRect = CGRectMake(lineOrigin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL), lineOrigin.y - runDescent, runWidth, runAscent + runDescent);
                 
-                if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-                    [(id<TYDrawRunProtocol>)textRun drawRunWithRect:runRect];
+                if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+                    [(id<TYDrawStorageProtocol>)textStorage drawStorageWithRect:runRect];
                 }
                 
-                [runRectDictionary setObject:textRun forKey:[NSValue valueWithCGRect:runRect]];
+                [runRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
                 
             }
 
@@ -428,15 +421,15 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
 - (void)addRunRectDictionary:(NSDictionary *)runRectDictionary
 {
     if (runRectDictionary.count < _runRectDictionary.count) {
-        NSMutableArray *drawRunArray = [[_runRectDictionary allValues]mutableCopy];
+        NSMutableArray *drawStorageArray = [[_runRectDictionary allValues]mutableCopy];
         // 剔除已经画出来的
-        [drawRunArray removeObjectsInArray:[runRectDictionary allValues]];
+        [drawStorageArray removeObjectsInArray:[runRectDictionary allValues]];
         
         // 遍历不会画出来的
-        for (id<TYTextRunProtocol>drawRun in drawRunArray) {
-            if ([drawRun conformsToProtocol:@protocol(TYDrawRunProtocol)]
-                && [drawRun respondsToSelector:@selector(didNotDrawRun)]) {
-                [(id<TYDrawRunProtocol>)drawRun didNotDrawRun];
+        for (id<TYTextStorageProtocol>drawStorage in drawStorageArray) {
+            if ([drawStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]
+                && [drawStorage respondsToSelector:@selector(didNotDrawRun)]) {
+                [(id<TYDrawStorageProtocol>)drawStorage didNotDrawRun];
             }
         }
     }
@@ -479,7 +472,7 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     
         __typeof (self) __weak weakSelf = self;
         // 遍历run位置字典
-        [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextRunProtocol> obj, BOOL *stop) {
+        [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
         
             CGRect imgRect = [keyRectValue CGRectValue];
             CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
@@ -1074,26 +1067,22 @@ NSString *const kTYAttributedLabelNeedDisplayNotification = @"TYAttributedLabelN
     [self resetFramesetter];
 }
 
-- (void)appendTextRun:(id<TYAppendTextRunProtocol>)textRun
+- (void)appendTextStorage:(id<TYAppendTextStorageProtocol>)textStorage
 {
-    if (textRun) {
-        if ([textRun conformsToProtocol:@protocol(TYDrawRunProtocol)]) {
-            [(id<TYDrawRunProtocol>)textRun setTextReplaceStringNum:nil fontAscent:_font.ascender descent:_font.descender];
+    if (textStorage) {
+        if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+            [(id<TYDrawStorageProtocol>)textStorage setOwnerView:self];
         }
-        if ([textRun conformsToProtocol:@protocol(TYDrawViewRunProtocol)]){
-            [(id<TYDrawViewRunProtocol>)textRun setSuperView:self];
-        }
-        
-        [self appendTextAttributedString:[textRun appendTextRunAttributedString]];
+        [self appendTextAttributedString:[textStorage appendTextStorageAttributedString]];
     }
 }
 
-- (void)appendTextRunArray:(NSArray *)textRunArray
+- (void)appendTextStorageArray:(NSArray *)textStorageArray
 {
-    if (textRunArray) {
-        for (id<TYAppendTextRunProtocol> textRun in textRunArray) {
-            if ([textRun conformsToProtocol:@protocol(TYAppendTextRunProtocol)]) {
-                [self appendTextRun:textRun];
+    if (textStorageArray) {
+        for (id<TYAppendTextStorageProtocol> textStorage in textStorageArray) {
+            if ([textStorage conformsToProtocol:@protocol(TYAppendTextStorageProtocol)]) {
+                [self appendTextStorage:textStorage];
             }
         }
         [self resetFramesetter];

@@ -7,9 +7,9 @@
 //
 
 #import "TYTextRunParser.h"
-#import "TYTextRun.h"
-#import "TYDrawImageRun.h"
-#import "TYLinkTextRun.h"
+#import "TYTextStorage.h"
+#import "TYDrawImageStorage.h"
+#import "TYLinkTextStorage.h"
 
 @implementation TYTextRunParser
 
@@ -39,7 +39,7 @@
         
             for (NSDictionary *dic in jsonArray) {
                 NSString *type = dic[@"type"];
-                id<TYAppendTextRunProtocol> textRun = nil;
+                id<TYAppendTextStorageProtocol> textRun = nil;
                 
                 if ([type isEqualToString:@"txt"]) {
                     // 解析文本
@@ -63,9 +63,9 @@
     return nil;
 }
 
-+ (id<TYAppendTextRunProtocol>)parseTextRunFromDictinary:(NSDictionary *)dic
++ (id<TYAppendTextStorageProtocol>)parseTextRunFromDictinary:(NSDictionary *)dic
 {
-    TYTextRun *textRun = [[TYTextRun alloc]init];
+    TYTextStorage *textRun = [[TYTextStorage alloc]init];
     textRun.text = dic[@"content"];
     NSInteger fontSize = [dic[@"size"] integerValue];
     if (fontSize > 0) {
@@ -76,18 +76,18 @@
     return textRun;
 }
 
-+ (id<TYDrawRunProtocol>)parseImageRunFromDictinary:(NSDictionary *)dic
++ (id<TYDrawStorageProtocol>)parseImageRunFromDictinary:(NSDictionary *)dic
 {
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
     imageRun.imageContent = dic[@"name"];
     imageRun.size = CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
     
     return imageRun;
 }
 
-+ (id<TYAppendTextRunProtocol>)parseLinkRunFromDictinary:(NSDictionary *)dic
++ (id<TYAppendTextStorageProtocol>)parseLinkRunFromDictinary:(NSDictionary *)dic
 {
-    TYLinkTextRun *linkRun = [[TYLinkTextRun alloc]init];
+    TYLinkTextStorage *linkRun = [[TYLinkTextStorage alloc]init];
     linkRun.text = dic[@"content"];
     linkRun.font = [UIFont systemFontOfSize:[dic[@"size"] integerValue]];
     linkRun.textColor = [self colorFromTemplate:dic[@"color"]];

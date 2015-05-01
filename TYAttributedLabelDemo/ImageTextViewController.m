@@ -8,8 +8,8 @@
 
 #import "ImageTextViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYDrawImageRun.h"
-#import "TYTextRun.h"
+#import "TYDrawImageStorage.h"
+#import "TYTextStorage.h"
 #import "RegexKitLite.h"
 
 @interface ImageTextViewController ()
@@ -71,10 +71,10 @@
         index++;
     }
     //两种方法 [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
-    TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
     imageRun.imageContent = @"haha";
     imageRun.size = CGSizeMake(15, 15);
-    [label appendTextRun:imageRun];
+    [label appendTextStorage:imageRun];
     
     [label sizeToFit];
 }
@@ -94,7 +94,7 @@
     [text enumerateStringsMatchedByRegex:@"\\[(\\w+?),(\\d+?),(\\d+?)\\]" usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
         
         if (captureCount > 3) {
-            TYDrawImageRun *imageRun = [[TYDrawImageRun alloc]init];
+            TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
             imageRun.imageContent = capturedStrings[1];
             imageRun.range = capturedRanges[0];
             imageRun.size = CGSizeMake([capturedStrings[2]intValue], [capturedStrings[3]intValue]);
@@ -103,17 +103,17 @@
         }
     }];
     
-    [label addTextRunArray:tmpArray];
-    TYTextRun *textRun = [[TYTextRun alloc]init];
+    [label addTextStorageArray:tmpArray];
+    TYTextStorage *textRun = [[TYTextStorage alloc]init];
     textRun.range = [text rangeOfString:@"[CYLoLi,320,180]其实所有漂泊的人，"];
     textRun.textColor = RGB(213, 0, 0, 1);
     textRun.font = [UIFont systemFontOfSize:16];
-    [label addTextRun:textRun];
-    textRun = [[TYTextRun alloc]init];
+    [label addTextStorage:textRun];
+    textRun = [[TYTextStorage alloc]init];
     textRun.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"];
     textRun.textColor = RGB(0, 155, 0, 1);
     textRun.font = [UIFont systemFontOfSize:18];
-    [label addTextRun:textRun];
+    [label addTextStorage:textRun];
     
     [label sizeToFit];
     
