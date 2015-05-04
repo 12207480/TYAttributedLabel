@@ -41,12 +41,12 @@
     for (NSString *text in textArray) {
         
         if (index == 2) {
-            TYLinkTextStorage *linkTextRun = [[TYLinkTextStorage alloc]init];
-            linkTextRun.text = text;
-            linkTextRun.font = [UIFont systemFontOfSize:15+arc4random()%4];
-            linkTextRun.textColor = colorArray[index%5];
-            linkTextRun.linkStr = @"http://www.baidu.com";
-            [label1 appendTextStorage:linkTextRun];
+            TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
+            linkTextStorage.text = text;
+            linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
+            linkTextStorage.textColor = colorArray[index%5];
+            linkTextStorage.linkStr = @"http://www.baidu.com";
+            [label1 appendTextStorage:linkTextStorage];
         }else {
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
             [attributedString addAttributeTextColor:colorArray[index%5]];
@@ -70,18 +70,18 @@
     NSMutableArray *textRunArray = [NSMutableArray array];
     for (NSString *subText in textArray) {
         if (index == 2) {
-            TYLinkTextStorage *linkTextRun = [[TYLinkTextStorage alloc]init];
-            linkTextRun.range = [text rangeOfString:subText];
-            linkTextRun.font = [UIFont systemFontOfSize:15+arc4random()%4];
-            linkTextRun.textColor = colorArray[index%5];
-            linkTextRun.linkStr = @"我被点中了哦O(∩_∩)O~";
-            [textRunArray addObject:linkTextRun];
+            TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
+            linkTextStorage.range = [text rangeOfString:subText];
+            linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
+            linkTextStorage.textColor = colorArray[index%5];
+            linkTextStorage.linkStr = @"我被点中了哦O(∩_∩)O~";
+            [textRunArray addObject:linkTextStorage];
         } else {
-            TYTextStorage *textRun = [[TYTextStorage alloc]init];
-            textRun.font = [UIFont systemFontOfSize:15+arc4random()%4];
-            textRun.textColor = colorArray[index%5];
-            textRun.range = [text rangeOfString:subText];
-            [textRunArray addObject:textRun];
+            TYTextStorage *textStorage = [[TYTextStorage alloc]init];
+            textStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
+            textStorage.textColor = colorArray[index%5];
+            textStorage.range = [text rangeOfString:subText];
+            [textRunArray addObject:textStorage];
         }
         index++;
     }

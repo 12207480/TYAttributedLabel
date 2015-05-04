@@ -6,12 +6,12 @@
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYTextRunParser.h"
+#import "TYTextStorageParser.h"
 #import "TYTextStorage.h"
 #import "TYDrawImageStorage.h"
 #import "TYLinkTextStorage.h"
 
-@implementation TYTextRunParser
+@implementation TYTextStorageParser
 
 + (NSArray *)parseWithJsonFilePath:(NSString *)filePath
 {
@@ -33,67 +33,67 @@
 + (NSArray *)parseWithJsonArray:(NSArray *)jsonArray
 {
     if (jsonArray) {
-        NSMutableArray *textRunArray = [NSMutableArray array];
+        NSMutableArray *textStorageArray = [NSMutableArray array];
         
         if ([jsonArray isKindOfClass:[NSArray class]]){
         
             for (NSDictionary *dic in jsonArray) {
                 NSString *type = dic[@"type"];
-                id<TYAppendTextStorageProtocol> textRun = nil;
+                id<TYAppendTextStorageProtocol> textStorage = nil;
                 
                 if ([type isEqualToString:@"txt"]) {
                     // 解析文本
-                    textRun = [self parseTextRunFromDictinary:dic];
+                    textStorage = [self parseTextStorageFromDictinary:dic];
                 } else if ([type isEqualToString:@"img"]) {
                     // 解析图片
-                    textRun = [self parseImageRunFromDictinary:dic];
+                    textStorage = [self parseImageRunFromDictinary:dic];
                 } else if ([type isEqualToString:@"link"]) {
                     // 解析链接
-                    textRun = [self parseLinkRunFromDictinary:dic];
+                    textStorage = [self parseLinkRunFromDictinary:dic];
                 }
                 
-                if (textRun) {
-                    [textRunArray addObject:textRun];
+                if (textStorage) {
+                    [textStorageArray addObject:textStorage];
                 }
             }
 
         }
-        return [textRunArray copy];
+        return [textStorageArray copy];
     }
     return nil;
 }
 
-+ (id<TYAppendTextStorageProtocol>)parseTextRunFromDictinary:(NSDictionary *)dic
++ (id<TYAppendTextStorageProtocol>)parseTextStorageFromDictinary:(NSDictionary *)dic
 {
-    TYTextStorage *textRun = [[TYTextStorage alloc]init];
-    textRun.text = dic[@"content"];
+    TYTextStorage *textStorage = [[TYTextStorage alloc]init];
+    textStorage.text = dic[@"content"];
     NSInteger fontSize = [dic[@"size"] integerValue];
     if (fontSize > 0) {
-        textRun.font = [UIFont systemFontOfSize:fontSize];
+        textStorage.font = [UIFont systemFontOfSize:fontSize];
     }
-    textRun.textColor = [self colorFromTemplate:dic[@"color"]];
+    textStorage.textColor = [self colorFromTemplate:dic[@"color"]];
     
-    return textRun;
+    return textStorage;
 }
 
 + (id<TYDrawStorageProtocol>)parseImageRunFromDictinary:(NSDictionary *)dic
 {
-    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-    imageRun.imageContent = dic[@"name"];
-    imageRun.size = CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
+    TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+    imageStorage.imageContent = dic[@"name"];
+    imageStorage.size = CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
     
-    return imageRun;
+    return imageStorage;
 }
 
 + (id<TYAppendTextStorageProtocol>)parseLinkRunFromDictinary:(NSDictionary *)dic
 {
-    TYLinkTextStorage *linkRun = [[TYLinkTextStorage alloc]init];
-    linkRun.text = dic[@"content"];
-    linkRun.font = [UIFont systemFontOfSize:[dic[@"size"] integerValue]];
-    linkRun.textColor = [self colorFromTemplate:dic[@"color"]];
-    linkRun.linkStr = dic[@"url"];
+    TYLinkTextStorage *linkStorage = [[TYLinkTextStorage alloc]init];
+    linkStorage.text = dic[@"content"];
+    linkStorage.font = [UIFont systemFontOfSize:[dic[@"size"] integerValue]];
+    linkStorage.textColor = [self colorFromTemplate:dic[@"color"]];
+    linkStorage.linkStr = dic[@"url"];
     
-    return linkRun;
+    return linkStorage;
 }
 
 + (UIColor *)colorFromTemplate:(NSString *)name

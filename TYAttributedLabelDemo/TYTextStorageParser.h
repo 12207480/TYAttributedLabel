@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface TYTextRunParser : NSObject
+@interface TYTextStorageParser : NSObject
 
 + (NSArray *)parseWithJsonFilePath:(NSString *)filePath;
 

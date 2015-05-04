@@ -8,7 +8,7 @@
 
 #import "ParseTextViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYTextRunParser.h"
+#import "TYTextStorageParser.h"
 #import "TYLinkTextStorage.h"
 
 @interface ParseTextViewController ()<TYAttributedLabelDelegate>
@@ -43,19 +43,19 @@
 
 - (void)parseJsonFileWithPath:(NSString *)filePath
 {
-    NSArray *textRunArray = [TYTextRunParser parseWithJsonFilePath:filePath];
+    NSArray *textStorageArray = [TYTextStorageParser parseWithJsonFilePath:filePath];
     
-    if (textRunArray.count > 0) {
-        [_label appendTextStorageArray:textRunArray];
+    if (textStorageArray.count > 0) {
+        [_label appendTextStorageArray:textStorageArray];
     }
 }
 
 #pragma mark - TYAttributedLabelDelegate
 
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextRun
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextStorage
 {
-    if ([TextRun isKindOfClass:[TYLinkTextStorage class]]) {
-        NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkStr;
+    if ([TextStorage isKindOfClass:[TYLinkTextStorage class]]) {
+        NSString *linkStr = ((TYLinkTextStorage*)TextStorage).linkStr;
         
         if ([linkStr hasPrefix:@"http"]) {
             [ [ UIApplication sharedApplication] openURL:[ NSURL URLWithString:linkStr]];

@@ -71,10 +71,10 @@
         index++;
     }
     //两种方法 [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
-    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-    imageRun.imageContent = @"haha";
-    imageRun.size = CGSizeMake(15, 15);
-    [label appendTextStorage:imageRun];
+    TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+    imageStorage.imageContent = @"haha";
+    imageStorage.size = CGSizeMake(15, 15);
+    [label appendTextStorage:imageStorage];
     
     [label sizeToFit];
 }
@@ -104,16 +104,16 @@
     }];
     
     [label addTextStorageArray:tmpArray];
-    TYTextStorage *textRun = [[TYTextStorage alloc]init];
-    textRun.range = [text rangeOfString:@"[CYLoLi,320,180]其实所有漂泊的人，"];
-    textRun.textColor = RGB(213, 0, 0, 1);
-    textRun.font = [UIFont systemFontOfSize:16];
-    [label addTextStorage:textRun];
-    textRun = [[TYTextStorage alloc]init];
-    textRun.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"];
-    textRun.textColor = RGB(0, 155, 0, 1);
-    textRun.font = [UIFont systemFontOfSize:18];
-    [label addTextStorage:textRun];
+    TYTextStorage *textStorage = [[TYTextStorage alloc]init];
+    textStorage.range = [text rangeOfString:@"[CYLoLi,320,180]其实所有漂泊的人，"];
+    textStorage.textColor = RGB(213, 0, 0, 1);
+    textStorage.font = [UIFont systemFontOfSize:16];
+    [label addTextStorage:textStorage];
+    textStorage = [[TYTextStorage alloc]init];
+    textStorage.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"];
+    textStorage.textColor = RGB(0, 155, 0, 1);
+    textStorage.font = [UIFont systemFontOfSize:18];
+    [label addTextStorage:textStorage];
     
     [label sizeToFit];
     

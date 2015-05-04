@@ -19,7 +19,7 @@
 		D34BE7421AD669F000BECD40 /* TYDrawViewStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BE7411AD669F000BECD40 /* TYDrawViewStorage.m */; };
 		D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */; };
 		D3553BCF1AE7746A005D8F31 /* content.json in Resources */ = {isa = PBXBuildFile; fileRef = D3553BCE1AE7746A005D8F31 /* content.json */; };
-		D3553BD21AE778DB005D8F31 /* TYTextRunParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BD11AE778DB005D8F31 /* TYTextRunParser.m */; };
+		D3553BD21AE778DB005D8F31 /* TYTextStorageParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BD11AE778DB005D8F31 /* TYTextStorageParser.m */; };
 		D3553BD51AE79106005D8F31 /* AddViewTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3553BD41AE79106005D8F31 /* AddViewTextViewController.m */; };
 		D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */; };
 		D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */; };
@@ -69,8 +69,8 @@
 		D3553BCA1AE732C8005D8F31 /* LinkTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinkTextViewController.h; sourceTree = "<group>"; };
 		D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LinkTextViewController.m; sourceTree = "<group>"; };
 		D3553BCE1AE7746A005D8F31 /* content.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = content.json; sourceTree = "<group>"; };
-		D3553BD01AE778DB005D8F31 /* TYTextRunParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextRunParser.h; sourceTree = "<group>"; };
-		D3553BD11AE778DB005D8F31 /* TYTextRunParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextRunParser.m; sourceTree = "<group>"; };
+		D3553BD01AE778DB005D8F31 /* TYTextStorageParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextStorageParser.h; sourceTree = "<group>"; };
+		D3553BD11AE778DB005D8F31 /* TYTextStorageParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextStorageParser.m; sourceTree = "<group>"; };
 		D3553BD31AE79106005D8F31 /* AddViewTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddViewTextViewController.h; sourceTree = "<group>"; };
 		D3553BD41AE79106005D8F31 /* AddViewTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddViewTextViewController.m; sourceTree = "<group>"; };
 		D35F47C91AE0DAF20048B58A /* SimpleTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleTextViewController.h; sourceTree = "<group>"; };
@@ -163,8 +163,8 @@
 				D3553BD41AE79106005D8F31 /* AddViewTextViewController.m */,
 				D35F47D21AE0DBE30048B58A /* ParseTextViewController.h */,
 				D35F47D31AE0DBE30048B58A /* ParseTextViewController.m */,
-				D3553BD01AE778DB005D8F31 /* TYTextRunParser.h */,
-				D3553BD11AE778DB005D8F31 /* TYTextRunParser.m */,
+				D3553BD01AE778DB005D8F31 /* TYTextStorageParser.h */,
+				D3553BD11AE778DB005D8F31 /* TYTextStorageParser.m */,
 				D3709F171AD3A5C000145EC6 /* Main.storyboard */,
 				D3709F1A1AD3A5C000145EC6 /* Images.xcassets */,
 				D3709F1C1AD3A5C000145EC6 /* LaunchScreen.xib */,
@@ -343,7 +343,7 @@
 				B05BA7B61AD8DD36004FB26E /* TYAttributedLabel+UIImageAndUIView.m in Sources */,
 				D3709F101AD3A5C000145EC6 /* main.m in Sources */,
 				D3709F431AD3C71900145EC6 /* NSMutableAttributedString+TY.m in Sources */,
-				D3553BD21AE778DB005D8F31 /* TYTextRunParser.m in Sources */,
+				D3553BD21AE778DB005D8F31 /* TYTextStorageParser.m in Sources */,
 				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,
 				D35F47D41AE0DBE30048B58A /* ParseTextViewController.m in Sources */,
 				D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */,
