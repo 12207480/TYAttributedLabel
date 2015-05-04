@@ -94,12 +94,12 @@
     [text enumerateStringsMatchedByRegex:@"\\[(\\w+?),(\\d+?),(\\d+?)\\]" usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
         
         if (captureCount > 3) {
-            TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-            imageRun.imageName = capturedStrings[1];
-            imageRun.range = capturedRanges[0];
-            imageRun.size = CGSizeMake([capturedStrings[2]intValue], [capturedStrings[3]intValue]);
+            TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+            imageStorage.imageName = capturedStrings[1];
+            imageStorage.range = capturedRanges[0];
+            imageStorage.size = CGSizeMake([capturedStrings[2]intValue], [capturedStrings[3]intValue]);
             
-            [tmpArray addObject:imageRun];
+            [tmpArray addObject:imageStorage];
         }
     }];
     

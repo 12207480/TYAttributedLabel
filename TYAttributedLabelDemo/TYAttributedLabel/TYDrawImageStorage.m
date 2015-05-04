@@ -8,7 +8,17 @@
 
 #import "TYDrawImageStorage.h"
 
+@interface TYDrawImageStorage ()
+@property (nonatomic, weak) UIView *ownerView;
+@end
+
 @implementation TYDrawImageStorage
+
+- (void)setOwnerView:(UIView *)ownerView
+{
+    [super setOwnerView:ownerView];
+    _ownerView = ownerView;
+}
 
 - (void)drawStorageWithRect:(CGRect)rect
 {
@@ -22,7 +32,7 @@
         image = [UIImage imageNamed:_imageName];
     } else if (_imageURL){
         // 图片数据
-        
+        [self imageForUrl:_imageURL];
     }
     
     if (image) {
@@ -32,9 +42,18 @@
 }
 
 // 从网络获取图片
-- (UIImage *)imageForUrl:(NSURL *)imageUrl
+- (void)imageForUrl:(NSURL *)imageUrl
 {
-    return nil;
+    // 异步下载图片
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:imageUrl]];
+        
+        // 回到主线程显示图片
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.image = image;
+            [self.ownerView setNeedsDisplay];
+        });  
+    });
 }
 
 @end
