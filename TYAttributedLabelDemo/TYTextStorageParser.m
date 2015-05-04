@@ -79,7 +79,7 @@
 + (id<TYDrawStorageProtocol>)parseImageRunFromDictinary:(NSDictionary *)dic
 {
     TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
-    imageStorage.imageContent = dic[@"name"];
+    imageStorage.imageName = dic[@"name"];
     imageStorage.size = CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
     
     return imageStorage;

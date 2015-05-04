@@ -10,9 +10,10 @@
 
 @interface TYDrawImageStorage : TYDrawStorage
 
-/**
- *  支持格式:NSString - 本地image名， NSURL - image图片网址，UIImage - image数据
- */
-@property (nonatomic, strong) id    imageContent;
+@property (nonatomic, strong) UIImage   *image;
+
+@property (nonatomic, strong) NSString  *imageName;
+
+@property (nonatomic, strong) NSURL     *imageURL;
 
 @end

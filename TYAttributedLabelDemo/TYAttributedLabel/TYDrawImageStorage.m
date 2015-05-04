@@ -14,18 +14,15 @@
 {
     UIImage *image = nil;
     
-    if ([_imageContent isKindOfClass:[NSString class]]) {
+    if (_image) {
         // 本地图片名
-        image = [UIImage imageNamed:_imageContent];
-    }else if ([_imageContent isKindOfClass:[NSURL class]]){
+        image = _image;
+    }else if (_imageName){
         // 图片网址
-        image = [self imageForUrl:_imageContent];
-    } else if ([_imageContent isKindOfClass:[UIImage class]]){
+        image = [UIImage imageNamed:_imageName];
+    } else if (_imageURL){
         // 图片数据
-        image = _imageContent;
-    } else {
-        NSLog(@"不能识别 imageContent 格式");
-        return;
+        
     }
     
     if (image) {

@@ -82,7 +82,7 @@
         }
         index++;
     }
-    [label appendImageWithContent:@"haha" size:CGSizeMake(15, 15)];
+    [label appendImageWithName:@"haha" size:CGSizeMake(15, 15)];
     
     [label sizeToFit];
 }

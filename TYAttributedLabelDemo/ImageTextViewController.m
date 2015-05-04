@@ -54,7 +54,7 @@
     NSArray *textArray = [text componentsSeparatedByString:@"\n\t"];
     NSArray *colorArray = @[RGB(213, 0, 0, 1),RGB(0, 155, 0, 1),RGB(103, 0, 207, 1),RGB(209, 162, 74, 1),RGB(206, 39, 206, 1)];
     NSInteger index = 0;
-    [label appendImageWithContent:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
+    [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
     for (NSString *text in textArray) {
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
         
@@ -62,17 +62,17 @@
             [attributedString addAttributeTextColor:colorArray[index%5]];
             [attributedString addAttributeFont:[UIFont systemFontOfSize:15+arc4random()%4]];
             [label appendTextAttributedString:attributedString];
-            [label appendImageWithContent:@"haha"];
+            [label appendImageWithName:@"haha"];
             [label appendText:@"\n\t"];
         } else {
-            [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
+            [label appendImageWithName:@"avatar" size:CGSizeMake(60, 60)];
             [label appendText:text];
         }
         index++;
     }
     //两种方法 [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
     TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
-    imageStorage.imageContent = @"haha";
+    imageStorage.imageName = @"haha";
     imageStorage.size = CGSizeMake(15, 15);
     [label appendTextStorage:imageStorage];
     
@@ -95,7 +95,7 @@
         
         if (captureCount > 3) {
             TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-            imageRun.imageContent = capturedStrings[1];
+            imageRun.imageName = capturedStrings[1];
             imageRun.range = capturedRanges[0];
             imageRun.size = CGSizeMake([capturedStrings[2]intValue], [capturedStrings[3]intValue]);
             

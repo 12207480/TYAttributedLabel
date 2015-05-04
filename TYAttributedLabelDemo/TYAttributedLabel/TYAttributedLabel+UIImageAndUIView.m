@@ -12,29 +12,25 @@
 
 @implementation TYAttributedLabel (UIImageAndUIView)
 
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
     TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-    imageRun.imageContent = imageContent;
+    imageRun.imageName = imageName;
     imageRun.drawAlignment = alignment;
     imageRun.range = range;
     imageRun.size = size;
     [self addTextStorage:imageRun];
 }
 
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range size:(CGSize)size
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range size:(CGSize)size
 {
-    [self addImageWithContent:imageContent range:range size:size alignment:TYDrawAlignmentTop];
+    [self addImageWithName:imageName range:range size:size alignment:TYDrawAlignmentTop];
 }
 
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range
 {
-    
-    if ([imageContent isKindOfClass:[UIImage class]]) {
-        [self addImageWithContent:imageContent range:range size:((UIImage *)imageContent).size];
-    } else {
-        [self addImageWithContent:imageContent range:range size:CGSizeMake(self.font.pointSize, self.font.ascender)];
-    }
+    [self addImageWithName:imageName range:range size:CGSizeMake(self.font.pointSize, self.font.ascender)];
+
 }
 
 - (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
@@ -52,28 +48,24 @@
     [self addView:view range:range alignment:TYDrawAlignmentTop];
 }
 
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size alignment:(TYDrawAlignment)alignment
+- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
-    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-    imageRun.drawAlignment = alignment;
-    imageRun.imageContent = imageContent;
-    imageRun.size = size;
+    TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+    imageStorage.drawAlignment = alignment;
+    imageStorage.imageName = imageName;
+    imageStorage.size = size;
     
-    [self appendTextStorage:imageRun];
+    [self appendTextStorage:imageStorage];
 }
 
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size
+- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size
 {
-    [self appendImageWithContent:imageContent size:size alignment:TYDrawAlignmentTop];
+    [self appendImageWithName:imageName size:size alignment:TYDrawAlignmentTop];
 }
 
-- (void)appendImageWithContent:(id)imageContent
+- (void)appendImageWithName:(NSString *)imageName
 {
-    if ([imageContent isKindOfClass:[UIImage class]]) {
-        [self appendImageWithContent:imageContent size:((UIImage *)imageContent).size];
-    } else {
-        [self appendImageWithContent:imageContent size:CGSizeMake(self.font.pointSize, self.font.ascender)];
-    }
+    [self appendImageWithName:imageName size:CGSizeMake(self.font.pointSize, self.font.ascender)];
     
 }
 

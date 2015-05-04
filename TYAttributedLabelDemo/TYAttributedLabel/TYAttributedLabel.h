@@ -133,26 +133,26 @@
 
 #pragma mark - addStorage
 /**
- *  添加 imageStorage (默认size大小: UIImage 按照image.size, 其他按照font大小)
+ *  添加 imageStorage image数据
  */
-- (void)addImageWithContent:(id)imageContent range:(NSRange)range;
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range;
 
 /**
- *  添加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  添加 imageStorage image数据
  */
-- (void)addImageWithContent:(id)imageContent
+- (void)addImageWithName:(NSString *)imageName
                       range:(NSRange)range
                        size:(CGSize)size;
 
 /**
- *  添加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  添加 imageStorage image数据
  *
- *  @param imageContent 格式（NSURL，NSString，UIImage）
+ *  @param imageName    image名
  *  @param range        所在文本位置
  *  @param size         图片大小
  *  @param alignment    图片对齐方式
  */
-- (void)addImageWithContent:(id)imageContent
+- (void)addImageWithName:(NSString *)imageName
                       range:(NSRange)range
                        size:(CGSize)size
                   alignment: (TYDrawAlignment)alignment;
@@ -176,23 +176,23 @@
 #pragma mark - appendStorage
 
 /**
- *  追加 imageStorage （imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageStorage image数据
  */
-- (void)appendImageWithContent:(id)imageContent;
+- (void)appendImageWithName:(NSString *)imageName;
 
 /**
- *  追加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageStorage image数据
  */
-- (void)appendImageWithContent:(id)imageContent size:(CGSize)size ;
+- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size ;
 
 /**
- *  追加 imageStorage（imageContent:NSString - 本地image名, NSURL - image图片网址, UIImage - image数据）
+ *  追加 imageStorage image数据
  *
- *  @param imageContent 格式（NSURL，NSString，UIImage）
+ *  @param imageName    imageName
  *  @param size         图片大小
  *  @param alignment    图片对齐
  */
-- (void)appendImageWithContent:(id)imageContent
+- (void)appendImageWithName:(NSString *)imageName
                           size:(CGSize)size
                      alignment:(TYDrawAlignment)alignment;
 
