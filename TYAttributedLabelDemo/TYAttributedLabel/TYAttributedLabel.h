@@ -132,6 +132,7 @@
 @interface TYAttributedLabel (UIImageAndUIView)
 
 #pragma mark - addStorage
+
 /**
  *  添加 imageStorage image数据
  */

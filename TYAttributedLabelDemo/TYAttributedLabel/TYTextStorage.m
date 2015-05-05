@@ -21,6 +21,7 @@
 
 - (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
+    
     // 颜色
     if (self.textColor) {
         [attributedString addAttributeTextColor:self.textColor range:self.range];

@@ -183,20 +183,20 @@ void TYTextRunDelegateDeallocCallback( void* refCon ){
 //CTRun的回调，获取高度
 CGFloat TYTextRunDelegateGetAscentCallback( void *refCon ){
     
-    TYDrawStorage *textRun = (__bridge TYDrawStorage *)refCon;
-    return [textRun getDrawRunAscentHeight];
+    TYDrawStorage *drawStorage = (__bridge TYDrawStorage *)refCon;
+    return [drawStorage getDrawRunAscentHeight];
 }
 
 CGFloat TYTextRunDelegateGetDescentCallback(void *refCon){
-    TYDrawStorage *textRun = (__bridge TYDrawStorage *)refCon;
-    return [textRun getDrawRunDescentHeight];
+    TYDrawStorage *drawStorage = (__bridge TYDrawStorage *)refCon;
+    return [drawStorage getDrawRunDescentHeight];
 }
 
 //CTRun的回调，获取宽度
 CGFloat TYTextRunDelegateGetWidthCallback(void *refCon){
     
-    TYDrawStorage *textRun = (__bridge TYDrawStorage *)refCon;
-    return [textRun getDrawRunWidth];
+    TYDrawStorage *drawStorage = (__bridge TYDrawStorage *)refCon;
+    return [drawStorage getDrawRunWidth];
 }
 
 @end
