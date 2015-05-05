@@ -50,8 +50,8 @@
         
         // 回到主线程显示图片
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.image = image;
-            [self.ownerView setNeedsDisplay];
+            _image = image;
+            [_ownerView setNeedsDisplay];
         });  
     });
 }
