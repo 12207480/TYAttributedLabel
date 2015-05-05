@@ -136,6 +136,28 @@
 /**
  *  添加 imageStorage image数据
  */
+- (void)addImage:(UIImage *)image range:(NSRange)range;
+
+/**
+ *  添加 imageStorage image数据
+ */
+- (void)addImage:(UIImage *)image range:(NSRange)range size:(CGSize)size;
+
+/**
+ *  添加 imageStorage image数据
+ *
+ *  @param image        image
+ *  @param range        所在文本位置
+ *  @param size         图片大小
+ *  @param alignment    图片对齐方式
+ */
+- (void)addImage:(UIImage *)image range:(NSRange)range
+                                   size:(CGSize)size
+                              alignment: (TYDrawAlignment)alignment;
+
+/**
+ *  添加 imageStorage image数据
+ */
 - (void)addImageWithName:(NSString *)imageName range:(NSRange)range;
 
 /**
@@ -154,9 +176,9 @@
  *  @param alignment    图片对齐方式
  */
 - (void)addImageWithName:(NSString *)imageName
-                      range:(NSRange)range
-                       size:(CGSize)size
-                  alignment: (TYDrawAlignment)alignment;
+                   range:(NSRange)range
+                    size:(CGSize)size
+               alignment:(TYDrawAlignment)alignment;
 
 /**
  *  添加 viewStorage (添加 UI控件 需要设置frame)
@@ -179,12 +201,34 @@
 /**
  *  追加 imageStorage image数据
  */
+- (void)appendImage:(UIImage *)image;
+
+/**
+ *  追加 imageStorage image数据
+ */
+- (void)appendImage:(UIImage *)image
+               size:(CGSize)size;
+
+/**
+ *  追加 imageStorage image数据
+ *
+ *  @param image    image
+ *  @param size         图片大小
+ *  @param alignment    图片对齐
+ */
+- (void)appendImage:(UIImage *)image
+               size:(CGSize)size
+          alignment:(TYDrawAlignment)alignment;
+
+/**
+ *  追加 imageStorage image数据
+ */
 - (void)appendImageWithName:(NSString *)imageName;
 
 /**
  *  追加 imageStorage image数据
  */
-- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size ;
+- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size;
 
 /**
  *  追加 imageStorage image数据
