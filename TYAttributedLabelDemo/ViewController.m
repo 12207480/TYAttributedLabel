@@ -8,8 +8,8 @@
 
 #import "ViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYDrawImageStorage.h"
-#import "TYDrawViewStorage.h"
+#import "TYImageStorage.h"
+#import "TYViewStorage.h"
 #import "SimpleTextViewController.h"
 #import "AttributedTextViewController.h"
 #import "ImageTextViewController.h"

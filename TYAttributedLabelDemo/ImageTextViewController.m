@@ -8,7 +8,7 @@
 
 #import "ImageTextViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYDrawImageStorage.h"
+#import "TYImageStorage.h"
 #import "TYTextStorage.h"
 #import "RegexKitLite.h"
 
@@ -71,7 +71,7 @@
         index++;
     }
     //两种方法 [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
-    TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+    TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
     imageStorage.imageName = @"haha";
     imageStorage.size = CGSizeMake(15, 15);
     [label appendTextStorage:imageStorage];
@@ -94,7 +94,7 @@
     [text enumerateStringsMatchedByRegex:@"\\[(\\w+?),(\\d+?),(\\d+?)\\]" usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
         
         if (captureCount > 3) {
-            TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+            TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
             imageStorage.imageName = capturedStrings[1];
             imageStorage.range = capturedRanges[0];
             imageStorage.size = CGSizeMake([capturedStrings[2]intValue], [capturedStrings[3]intValue]);

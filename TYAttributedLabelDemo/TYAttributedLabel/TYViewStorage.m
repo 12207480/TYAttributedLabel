@@ -6,13 +6,13 @@
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYDrawViewStorage.h"
+#import "TYViewStorage.h"
 
-@interface TYDrawViewStorage ()
+@interface TYViewStorage ()
 @property (nonatomic, weak) UIView *superView;
 @end
 
-@implementation TYDrawViewStorage
+@implementation TYViewStorage
 
 - (void)setView:(UIView *)view
 {

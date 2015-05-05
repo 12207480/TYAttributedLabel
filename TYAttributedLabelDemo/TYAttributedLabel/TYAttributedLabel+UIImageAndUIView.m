@@ -7,19 +7,19 @@
 //
 
 #import "TYAttributedLabel.h"
-#import "TYDrawImageStorage.h"
-#import "TYDrawViewStorage.h"
+#import "TYImageStorage.h"
+#import "TYViewStorage.h"
 
 @implementation TYAttributedLabel (UIImageAndUIView)
 
 - (void)addImageWithName:(NSString *)imageName range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
-    TYDrawImageStorage *imageRun = [[TYDrawImageStorage alloc]init];
-    imageRun.imageName = imageName;
-    imageRun.drawAlignment = alignment;
-    imageRun.range = range;
-    imageRun.size = size;
-    [self addTextStorage:imageRun];
+    TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
+    imageStorage.imageName = imageName;
+    imageStorage.drawAlignment = alignment;
+    imageStorage.range = range;
+    imageStorage.size = size;
+    [self addTextStorage:imageStorage];
 }
 
 - (void)addImageWithName:(NSString *)imageName range:(NSRange)range size:(CGSize)size
@@ -35,12 +35,12 @@
 
 - (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
 {
-    TYDrawViewStorage *viewRun = [[TYDrawViewStorage alloc]init];
-    viewRun.drawAlignment = alignment;
-    viewRun.view = view;
-    viewRun.range = range;
+    TYViewStorage *viewStorage = [[TYViewStorage alloc]init];
+    viewStorage.drawAlignment = alignment;
+    viewStorage.view = view;
+    viewStorage.range = range;
     
-    [self addTextStorage:viewRun];
+    [self addTextStorage:viewStorage];
 }
 
 - (void)addView:(UIView *)view range:(NSRange)range
@@ -50,7 +50,7 @@
 
 - (void)appendImageWithName:(NSString *)imageName size:(CGSize)size alignment:(TYDrawAlignment)alignment
 {
-    TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+    TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
     imageStorage.drawAlignment = alignment;
     imageStorage.imageName = imageName;
     imageStorage.size = size;
@@ -71,11 +71,11 @@
 
 - (void)appendView:(UIView *)view alignment:(TYDrawAlignment)alignment
 {
-    TYDrawViewStorage *viewRun = [[TYDrawViewStorage alloc]init];
-    viewRun.drawAlignment = alignment;
-    viewRun.view = view;
+    TYViewStorage *viewStorage = [[TYViewStorage alloc]init];
+    viewStorage.drawAlignment = alignment;
+    viewStorage.view = view;
     
-    [self appendTextStorage:viewRun];
+    [self appendTextStorage:viewStorage];
 }
 
 - (void)appendView:(UIView *)view

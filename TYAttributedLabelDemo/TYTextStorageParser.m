@@ -8,7 +8,7 @@
 
 #import "TYTextStorageParser.h"
 #import "TYTextStorage.h"
-#import "TYDrawImageStorage.h"
+#import "TYImageStorage.h"
 #import "TYLinkTextStorage.h"
 
 @implementation TYTextStorageParser
@@ -78,7 +78,7 @@
 
 + (id<TYDrawStorageProtocol>)parseImageRunFromDictinary:(NSDictionary *)dic
 {
-    TYDrawImageStorage *imageStorage = [[TYDrawImageStorage alloc]init];
+    TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
     imageStorage.imageName = dic[@"name"];
     imageStorage.size = CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
     

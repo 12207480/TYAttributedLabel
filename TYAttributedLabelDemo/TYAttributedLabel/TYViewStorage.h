@@ -8,7 +8,7 @@
 
 #import "TYDrawStorage.h"
 
-@interface TYDrawViewStorage : TYDrawStorage
+@interface TYViewStorage : TYDrawStorage
 
 @property (nonatomic, strong)   UIView *view;       // 添加view
 

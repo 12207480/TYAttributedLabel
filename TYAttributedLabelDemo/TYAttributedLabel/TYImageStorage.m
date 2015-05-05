@@ -6,13 +6,13 @@
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYDrawImageStorage.h"
+#import "TYImageStorage.h"
 
-@interface TYDrawImageStorage ()
+@interface TYImageStorage ()
 @property (nonatomic, weak) UIView *ownerView;
 @end
 
-@implementation TYDrawImageStorage
+@implementation TYImageStorage
 
 - (void)setOwnerView:(UIView *)ownerView
 {
