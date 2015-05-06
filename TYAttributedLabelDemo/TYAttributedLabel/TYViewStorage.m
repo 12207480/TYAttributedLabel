@@ -14,6 +14,8 @@
 
 @implementation TYViewStorage
 
+#pragma mark - protocol
+
 - (void)setView:(UIView *)view
 {
     _view = view;

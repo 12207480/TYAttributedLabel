@@ -14,6 +14,8 @@
 
 @implementation TYImageStorage
 
+#pragma mark - protocol
+
 - (void)setOwnerView:(UIView *)ownerView
 {
     [super setOwnerView:ownerView];
@@ -40,6 +42,8 @@
         CGContextDrawImage(context, rect, image.CGImage);
     }
 }
+
+#pragma mark - private
 
 // 从网络获取图片
 - (void)imageForUrl:(NSURL *)imageUrl

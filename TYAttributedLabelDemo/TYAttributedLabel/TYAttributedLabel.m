@@ -50,6 +50,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 @implementation TYAttributedLabel
 
+#pragma mark - init
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
@@ -66,6 +68,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return self;
 }
 
+#pragma mark - getter
+
 - (NSMutableArray *)textStorageArray
 {
     if (_textStorageArray == nil) {
@@ -74,11 +78,20 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return _textStorageArray;
 }
 
-#pragma mark - 设置属性
+- (NSString *)text{
+    return _attString.string;
+}
+
+- (NSAttributedString *)attributedText
+{
+    return _attString;
+}
+
+#pragma mark - setter
 - (void)setupProperty
 {
     if (self.backgroundColor == nil) {
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor whiteColor];
     }
     self.userInteractionEnabled = NO;
     _font = [UIFont systemFontOfSize:15];
@@ -97,18 +110,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _longPressShowMenuEnable = longPressShowMenuEnable;
     if (longPressShowMenuEnable) {
         [self addLongPressGestureRecognizer];
+
     }else {
         [self removeLongPressGestureRecognizer];
     }
-}
-
-- (NSString *)text{
-    return _attString.string;
-}
-
-- (NSAttributedString *)attributedText
-{
-    return _attString;
 }
 
 - (void)setText:(NSString *)text
@@ -175,7 +180,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
 }
 
-#pragma mark - add textRun
+#pragma mark - add textStorage
 - (void)addTextStorage:(id<TYTextStorageProtocol>)textStorage
 {
     if (textStorage) {
@@ -204,7 +209,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self setupProperty];
 }
 
-#pragma mark 重置framesetter
+#pragma mark reset framesetter
 - (void)resetFramesetter
 {
     if (_framesetter){
@@ -233,7 +238,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
 }
 
-#pragma mark - 创建属性文本字符串
+#pragma mark - create text attibuteString
 - (NSMutableAttributedString *)createTextAttibuteStringWithText:(NSString *)text
 {
     if (text.length <= 0) {
@@ -275,7 +280,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
 }
 
-#pragma mark -  添加文本Storage属性
+#pragma mark -  add text storage atrributed
 - (void)addTextStoragesWithAtrributedString:(NSMutableAttributedString *)attString
 {
     if (attString && _textStorageArray.count > 0) {
@@ -322,7 +327,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }];
 }
 
-#pragma mark - 绘画drawRect
+#pragma mark - drawRect
 - (void)drawRect:(CGRect)rect {
     
     if (_attString == nil) {
@@ -362,7 +367,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     CFRelease(path);
 }
 
-#pragma mark - drawTextRun
+#pragma mark - drawTextStorage
 - (void)drawTextStorageWithFrame:(CTFrameRef)frame context:(CGContextRef)context
 {
     // 获取每行
@@ -410,7 +415,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         }
     }
     
-    
     if (runRectDictionary.count > 0) {
         // 添加响应点击rect
         [self addRunRectDictionary:[runRectDictionary copy]];
@@ -438,7 +442,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self addSingleTapGesture];
 }
 
-#pragma mark 添加点击手势
+#pragma mark - add tapGesture
 - (void)addSingleTapGesture
 {
     if (_singleTap == nil) {
@@ -462,7 +466,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
 }
 
-#pragma mark 手指点击事件
+#pragma mark - singleTap action
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
@@ -492,7 +496,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
 }
 
-#pragma mark - 获得label最合适的高度
+#pragma mark - get Right Height
 - (int)getHeightWithWidth:(CGFloat)width
 {
     if (_attString == nil) {
@@ -520,7 +524,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return CGSizeMake(width, height);
 }
 
-#pragma mark 调用这个获得合适的Frame
+#pragma mark - set right frame
 - (void)setFrameWithOrign:(CGPoint)orign Width:(CGFloat)width
 {
     // 获得高度
@@ -544,7 +548,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-#pragma mark - 长按出现菜单选择
+#pragma mark - longPress show Menu
 - (void)addLongPressGestureRecognizer{
     if (_longPressRecognizer == nil) {
         _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
@@ -557,6 +561,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
                                                                  action:@selector(userPanGuestureDetected:)];
         [self addGestureRecognizer:_panRecognizer];
     }
+    
+    [self addSingleTapGesture];
     
     self.userInteractionEnabled = YES;
 }
@@ -623,9 +629,14 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         [self setNeedsDisplay];
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         CFIndex index = [self touchContentOffsetInView:self atPoint:point];
-        if (index == -1 || ( _selectionEndPosition != _selectionStartPosition && (index == _selectionEndPosition || index == _selectionStartPosition))) {
+        if (index == -1 ) {
             return;
         }
+        BOOL isNeedDisplay = YES;
+        if ( _selectionEndPosition != _selectionStartPosition && (index == _selectionEndPosition || index == _selectionStartPosition)){
+            isNeedDisplay = NO;
+        }
+
         if (_leftSelectionAnchor.tag == ANCHOR_TARGET_TAG && index < _selectionEndPosition) {
             //NSLog(@"change start position to %ld", index);
             _selectionStartPosition = index;
@@ -637,7 +648,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             self.magnifierView.touchPoint = point;
             [self hideMenuController];
         }
-        [self setNeedsDisplay];
+        
+        if (isNeedDisplay) {
+            [self setNeedsDisplay];
+        }
+        
     } else if (recognizer.state == UIGestureRecognizerStateEnded ||
                recognizer.state == UIGestureRecognizerStateCancelled) {
         //NSLog(@"end move");
@@ -1013,7 +1028,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return returnRange;
 }
 
-#pragma mark - 菜单响应函数
+#pragma mark - menu action
 
 - (BOOL)canBecomeFirstResponder {
     return YES;
@@ -1048,7 +1063,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 @end
 
-#pragma mark - append text textRun
+#pragma mark - append attributedString
 
 @implementation TYAttributedLabel (AppendAttributedString)
 

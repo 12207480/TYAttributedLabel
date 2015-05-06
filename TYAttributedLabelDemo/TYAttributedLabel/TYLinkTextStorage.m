@@ -19,6 +19,8 @@
     return self;
 }
 
+#pragma mark - protocol
+
 - (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     [super addTextStorageWithAttributedString:attributedString];

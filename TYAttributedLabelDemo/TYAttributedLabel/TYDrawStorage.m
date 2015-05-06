@@ -20,6 +20,8 @@
 
 @implementation TYDrawStorage
 
+#pragma mark - protocol
+
 - (void)setOwnerView:(TYAttributedLabel *)ownerView
 {
     [self setTextfontAscent:ownerView.font.ascender descent:ownerView.font.descender];
@@ -68,64 +70,12 @@
     return [attributedString copy];
 }
 
-// 添加文本属性和runDelegate
-- (void)addRunDelegateWithAttributedString:(NSMutableAttributedString *)attributedString range:(NSRange)range
-{
-    // 添加文本属性和runDelegate
-    [attributedString addAttribute:kTYTextRunAttributedName value:self range:range];
-    
-    //为图片设置CTRunDelegate,delegate决定留给显示内容的空间大小
-    CTRunDelegateCallbacks runCallbacks;
-    runCallbacks.version = kCTRunDelegateVersion1;
-    runCallbacks.dealloc = TYTextRunDelegateDeallocCallback;
-    runCallbacks.getAscent = TYTextRunDelegateGetAscentCallback;
-    runCallbacks.getDescent = TYTextRunDelegateGetDescentCallback;
-    runCallbacks.getWidth = TYTextRunDelegateGetWidthCallback;
-    
-    CTRunDelegateRef runDelegate = CTRunDelegateCreate(&runCallbacks, (__bridge void *)(self));
-    [attributedString addAttribute:(__bridge_transfer NSString *)kCTRunDelegateAttributeName value:(__bridge id)runDelegate range:range];
-    CFRelease(runDelegate);
-}
-
-- (NSString *)spaceReplaceString
-{
-    // 替换字符
-    unichar objectReplacementChar           = 0xFFFC;
-    NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
-    return objectReplacementString;
-}
-
-- (void)setAppropriateAlignment
-{
-    // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
-    if (_size.height <= _fontAscent + _fontDescent) {
-        _drawAlignment = TYDrawAlignmentCenter;
-    }
-}
-
-- (NSRange)fixRange:(NSRange)range replaceStringNum:(NSInteger)replaceStringNum
-{
-    NSRange fixRange = range;
-    if (range.length <= 1 || replaceStringNum < 0)
-        return fixRange;
-    
-    NSInteger location = range.location - replaceStringNum;
-    NSInteger length = range.length - replaceStringNum;
-    
-    if (location < 0 && length > 0) {
-        fixRange = NSMakeRange(range.location, length);
-    }else if (location < 0 && length <= 0){
-        fixRange = NSMakeRange(NSNotFound, 0);
-    }else {
-        fixRange = NSMakeRange(range.location - replaceStringNum, range.length);
-    }
-    return fixRange;
-}
-
 - (void)drawStorageWithRect:(CGRect)rect
 {
     
 }
+
+#pragma mark - public
 
 - (CGFloat)getDrawRunAscentHeight
 {
@@ -184,6 +134,62 @@
 - (void)DrawRunDealloc
 {
     
+}
+
+#pragma mark - private
+
+- (NSString *)spaceReplaceString
+{
+    // 替换字符
+    unichar objectReplacementChar           = 0xFFFC;
+    NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
+    return objectReplacementString;
+}
+
+- (void)setAppropriateAlignment
+{
+    // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
+    if (_size.height <= _fontAscent + _fontDescent) {
+        _drawAlignment = TYDrawAlignmentCenter;
+    }
+}
+
+- (NSRange)fixRange:(NSRange)range replaceStringNum:(NSInteger)replaceStringNum
+{
+    NSRange fixRange = range;
+    if (range.length <= 1 || replaceStringNum < 0)
+        return fixRange;
+    
+    NSInteger location = range.location - replaceStringNum;
+    NSInteger length = range.length - replaceStringNum;
+    
+    if (location < 0 && length > 0) {
+        fixRange = NSMakeRange(range.location, length);
+    }else if (location < 0 && length <= 0){
+        fixRange = NSMakeRange(NSNotFound, 0);
+    }else {
+        fixRange = NSMakeRange(range.location - replaceStringNum, range.length);
+    }
+    return fixRange;
+}
+
+// 添加文本属性和runDelegate
+- (void)addRunDelegateWithAttributedString:(NSMutableAttributedString *)attributedString range:(NSRange)range
+{
+    // 添加文本属性和runDelegate
+    [attributedString addAttribute:kTYTextRunAttributedName value:self range:range];
+    
+    //为图片设置CTRunDelegate,delegate决定留给显示内容的空间大小
+    CTRunDelegateCallbacks runCallbacks;
+    runCallbacks.version = kCTRunDelegateVersion1;
+    runCallbacks.dealloc = TYTextRunDelegateDeallocCallback;
+    runCallbacks.getAscent = TYTextRunDelegateGetAscentCallback;
+    runCallbacks.getDescent = TYTextRunDelegateGetDescentCallback;
+    runCallbacks.getWidth = TYTextRunDelegateGetWidthCallback;
+    
+    CTRunDelegateRef runDelegate = CTRunDelegateCreate(&runCallbacks, (__bridge void *)(self));
+    [attributedString addAttribute:(__bridge_transfer NSString *)kCTRunDelegateAttributeName value:(__bridge id)runDelegate range:range];
+    CFRelease(runDelegate);
 }
 
 //CTRun的回调，销毁内存的回调
