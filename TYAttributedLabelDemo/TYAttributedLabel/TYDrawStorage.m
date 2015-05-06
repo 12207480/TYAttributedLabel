@@ -24,7 +24,7 @@
 {
     [self setTextfontAscent:ownerView.font.ascender descent:ownerView.font.descender];
     
-    [self fixRangeWithReplaceStringNum:ownerView.replaceStringNum];
+    _fixRange = [self fixRange:_range replaceStringNum:ownerView.replaceStringNum];
 }
 
 - (void)setTextfontAscent:(CGFloat)ascent descent:(CGFloat)descent;
@@ -33,43 +33,21 @@
     _fontDescent = -descent;
 }
 
-- (void)fixRangeWithReplaceStringNum:(NSInteger )replaceStringNum
-{
-    if (_range.length <= 1 || replaceStringNum < 0)
-        return ;
-    
-    NSInteger location = _range.location - replaceStringNum;
-    NSInteger length = _range.length - replaceStringNum;
-    
-    if (location < 0 && length > 0) {
-        _fixRange = NSMakeRange(_range.location, length);
-    }else if (location < 0 && length <= 0){
-        _fixRange = NSMakeRange(0, 0);
-        return ;
-    }else {
-        _fixRange = NSMakeRange(_range.location - replaceStringNum, _range.length);
-    }
-    //return _range.length - 1;
-}
-
 - (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
     // 判断是不是追加
     NSRange range = _fixRange;
-    
-    if (NSEqualRanges(range, NSMakeRange(0, 0))) {
-        [attributedString appendAttributedString:[[NSAttributedString alloc]initWithString:[self spaceReplaceString]]];
-        range = NSMakeRange(0, 1);
+    if (range.location == NSNotFound) {
+        return;
     }else {
         // 用空白替换
         [attributedString replaceCharactersInRange:range withString:[self spaceReplaceString]];
         // 修正range
         range = NSMakeRange(range.location, 1);
     }
-    // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
-    if (_size.height <= _fontAscent + _fontDescent) {
-        _drawAlignment = TYDrawAlignmentCenter;
-    }
+    
+    // 设置合适的对齐
+    [self setAppropriateAlignment];
     
     // 添加文本属性和runDelegate
     [self addRunDelegateWithAttributedString:attributedString range:range];
@@ -77,18 +55,17 @@
 
 - (NSAttributedString *)appendTextStorageAttributedString
 {
-    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]init];
-    _range = NSMakeRange(0, 0);
-    [self addTextStorageWithAttributedString:attributedString];
+    // 创建空字符属性文本
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:[self spaceReplaceString]];
+    // 修正range
+    NSRange range = NSMakeRange(0, 1);
+    
+    // 设置合适的对齐
+    [self setAppropriateAlignment];
+    
+    // 添加文本属性和runDelegate
+    [self addRunDelegateWithAttributedString:attributedString range:range];
     return [attributedString copy];
-}
-
-- (NSString *)spaceReplaceString
-{
-    // 替换字符
-    unichar objectReplacementChar           = 0xFFFC;
-    NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
-    return objectReplacementString;
 }
 
 // 添加文本属性和runDelegate
@@ -108,6 +85,41 @@
     CTRunDelegateRef runDelegate = CTRunDelegateCreate(&runCallbacks, (__bridge void *)(self));
     [attributedString addAttribute:(__bridge_transfer NSString *)kCTRunDelegateAttributeName value:(__bridge id)runDelegate range:range];
     CFRelease(runDelegate);
+}
+
+- (NSString *)spaceReplaceString
+{
+    // 替换字符
+    unichar objectReplacementChar           = 0xFFFC;
+    NSString *objectReplacementString       = [NSString stringWithCharacters:&objectReplacementChar length:1];
+    return objectReplacementString;
+}
+
+- (void)setAppropriateAlignment
+{
+    // 判断size 大小 小于 _fontAscent 把对齐设为中心 更美观
+    if (_size.height <= _fontAscent + _fontDescent) {
+        _drawAlignment = TYDrawAlignmentCenter;
+    }
+}
+
+- (NSRange)fixRange:(NSRange)range replaceStringNum:(NSInteger)replaceStringNum
+{
+    NSRange fixRange = range;
+    if (range.length <= 1 || replaceStringNum < 0)
+        return fixRange;
+    
+    NSInteger location = range.location - replaceStringNum;
+    NSInteger length = range.length - replaceStringNum;
+    
+    if (location < 0 && length > 0) {
+        fixRange = NSMakeRange(range.location, length);
+    }else if (location < 0 && length <= 0){
+        fixRange = NSMakeRange(NSNotFound, 0);
+    }else {
+        fixRange = NSMakeRange(range.location - replaceStringNum, range.length);
+    }
+    return fixRange;
 }
 
 - (void)drawStorageWithRect:(CGRect)rect

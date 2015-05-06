@@ -19,7 +19,7 @@
 @end
 
 /**
- *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和view（UI控件）
+ *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和UIView，支持自定义排版，支持复制 全选
  */
 @interface TYAttributedLabel : UIView
 
@@ -73,7 +73,7 @@
 /**
  *  添加 textRun数组 （自定义显示内容）
  *
- *  @param textRunArray textRun数组（需遵循协议TYTextRunProtocol,否则不会添加）
+ *  @param textRunArray textRun数组（需遵循协议TYTextStorageProtocol,否则不会添加）
  */
 - (void)addTextStorageArray:(NSArray *)textStorageArray;
 

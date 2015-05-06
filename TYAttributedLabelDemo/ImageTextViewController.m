@@ -87,7 +87,6 @@
     TYAttributedLabel *label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_label1.frame) + 20, CGRectGetWidth(self.view.frame), 0)];
     [_scrollView addSubview:label];
     
-    
     NSString *text = @"[CYLoLi,320,180]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。[avatar,60,60]";
     label.text = text;
     NSMutableArray *tmpArray = [NSMutableArray array];
@@ -109,6 +108,7 @@
     textStorage.textColor = RGB(213, 0, 0, 1);
     textStorage.font = [UIFont systemFontOfSize:16];
     [label addTextStorage:textStorage];
+    
     textStorage = [[TYTextStorage alloc]init];
     textStorage.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"];
     textStorage.textColor = RGB(0, 155, 0, 1);

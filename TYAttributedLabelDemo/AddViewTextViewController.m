@@ -85,6 +85,7 @@
     [label appendImageWithName:@"haha" size:CGSizeMake(15, 15)];
     
     [label sizeToFit];
+    [_scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(_label.frame)+10)];
 }
 
 - (void)buttonClicked
