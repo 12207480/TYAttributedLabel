@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYTextRunProtocol.h"
+#import "TYTextStorageProtocol.h"
 
 @interface TYDrawStorage : NSObject<TYDrawStorageProtocol>
 @property (nonatomic, assign)   NSRange         range;          // 文本范围

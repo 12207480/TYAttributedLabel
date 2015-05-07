@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NSMutableAttributedString+TY.h"
-#import "TYTextRunProtocol.h"
+#import "TYTextStorageProtocol.h"
 
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>

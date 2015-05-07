@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 tanyang. All rights reserved.
 //
 
-#import "TYTextRunProtocol.h"
+#import "TYTextStorageProtocol.h"
 #import <CoreText/CoreText.h>
 
 @interface TYTextStorage : NSObject<TYAppendTextStorageProtocol>

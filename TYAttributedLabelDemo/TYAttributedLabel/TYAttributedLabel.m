@@ -7,7 +7,6 @@
 //
 
 #import "TYAttributedLabel.h"
-#import "MagnifiterView.h"
 #import <CoreText/CoreText.h>
 
 // 文本颜色
@@ -454,7 +453,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
-            NSLog(@"点击了 run ");
+            NSLog(@"点击了 textStorage ");
             // 调用代理
             if (_delegateFlags.textStorageClicked) {
                 [_delegate attributedLabel:weakSelf textStorageClicked:obj];
