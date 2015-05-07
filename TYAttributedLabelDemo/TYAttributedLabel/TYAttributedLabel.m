@@ -28,6 +28,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 @interface TYAttributedLabel ()
 {
+    struct {
+        unsigned int textStorageClicked :1;
+    }_delegateFlags;
+    
     CTFramesetterRef            _framesetter;
     CTFrameRef                  _frameRef;
     NSInteger                   _replaceStringNum;   // 图片替换字符数
@@ -103,6 +107,14 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _state = TYAttributedLabelStateNormal;
     _longPressShowMenuEnable = NO;
     _replaceStringNum = 0;
+}
+
+- (void)setDelegate:(id<TYAttributedLabelDelegate>)delegate
+{
+    if (delegate == _delegate)  return;
+    _delegate = delegate;
+    
+    _delegateFlags.textStorageClicked = [delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)];
 }
 
 - (void)setLongPressShowMenuEnable:(BOOL)longPressShowMenuEnable
@@ -353,7 +365,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         reDraw = YES;
     }
     
-    if (self.state == TYAttributedLabelStateTouching || self.state == TYAttributedLabelStateSelecting) {
+    if (_state == TYAttributedLabelStateTouching || _state == TYAttributedLabelStateSelecting) {
         NSRange selectRange = NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition);
         [self drawSelectionAreaInRange:selectRange bgColor:kSelectAreaColor];
         [self drawAnchorsWithRange:selectRange];
@@ -485,7 +497,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             if(CGRectContainsPoint(rect, point)){
                 NSLog(@"点击了 run ");
                 // 调用代理
-                if ([_delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)]) {
+                if (_delegateFlags.textStorageClicked) {
                     [_delegate attributedLabel:weakSelf textStorageClicked:obj];
                     *stop = YES;
                 }
@@ -544,9 +556,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         CFRelease(_frameRef);
     }
     _attString = nil;
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
+
 
 #pragma mark - longPress show Menu
 - (void)addLongPressGestureRecognizer{
@@ -803,6 +814,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         selectionRect = CGRectApplyAffineTransform(selectionRect, transform);
         
         UIMenuController *theMenu = [UIMenuController sharedMenuController];
+        
         [theMenu setTargetRect:selectionRect inView:self];
         [theMenu setMenuVisible:YES animated:YES];
     }
@@ -814,7 +826,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         [theMenu setMenuVisible:NO animated:YES];
     }
 }
-
 
 // 绘画选择指示箭头
 - (void)drawAnchorsWithRange:(NSRange)selectRange {
@@ -1035,6 +1046,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 }
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    
     if (action == @selector(copy:) || action == @selector(selectAll:)) {
         return YES;
     }
@@ -1062,6 +1074,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 }
 
 @end
+
 
 #pragma mark - append attributedString
 

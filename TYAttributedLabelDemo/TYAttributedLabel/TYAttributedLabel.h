@@ -13,17 +13,16 @@
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
-// 点击代理
+// textStorage点击代理
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage;
-
 @end
 
 /**
- *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和UIView，支持自定义排版，支持复制 全选
+ *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和UIView，支持自定义排版，支持复制全选
  */
 @interface TYAttributedLabel : UIView
 
-@property (nonatomic, assign) id<TYAttributedLabelDelegate> delegate;
+@property (nonatomic, assign) id<TYAttributedLabelDelegate>     delegate;
 
 @property (nonatomic, strong)   NSString        *text;
 @property (nonatomic, strong)   UIColor         *textColor;         // 文字颜色
@@ -36,8 +35,9 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
-@property (nonatomic, assign,readonly)NSInteger replaceStringNum;   // 图片替换字符数
-@property (nonatomic, assign)   BOOL            longPressShowMenuEnable;// 长按出现菜单选择,默认不启用
+@property (nonatomic, assign, readonly)NSInteger replaceStringNum;   // 图片替换字符数
+
+@property (nonatomic, assign)   BOOL             longPressShowMenuEnable;
 
 /**
  *  获取普通文本内容
@@ -94,6 +94,7 @@
 
 @end
 
+
 #pragma mark - 扩展追加内容 (AppendAttributedString)
 // 追加内容 （添加在AttributedString最后）
 @interface TYAttributedLabel (AppendAttributedString)
@@ -127,8 +128,8 @@
 
 @end
 
-#pragma mark - 扩展支持UIImage和UIView
 
+#pragma mark - 扩展支持UIImage和UIView
 @interface TYAttributedLabel (UIImageAndUIView)
 
 #pragma mark - addStorage

@@ -9,7 +9,7 @@
 #import "AttributedTextViewController.h"
 #import "TYAttributedLabel.h"
 
-@interface AttributedTextViewController ()
+@interface AttributedTextViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic, weak) TYAttributedLabel *label1;
 @end
 
