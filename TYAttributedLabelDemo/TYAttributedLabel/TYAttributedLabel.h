@@ -18,7 +18,7 @@
 @end
 
 /**
- *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和UIView，支持自定义排版，支持复制全选
+ *  TYAttributedLabel 属性文本 支持富文本显示，支持添加image和UIView，支持自定义排版
  */
 @interface TYAttributedLabel : UIView
 
