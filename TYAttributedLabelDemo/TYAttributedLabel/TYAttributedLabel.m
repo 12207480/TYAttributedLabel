@@ -187,7 +187,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _textStorageArray = nil;
     _replaceStringNum = 0;
     [self removeSingleTapGesture];
-    [self setupProperty];
 }
 
 #pragma mark reset framesetter
