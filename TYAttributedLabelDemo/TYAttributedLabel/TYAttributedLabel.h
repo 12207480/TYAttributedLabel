@@ -35,9 +35,7 @@
 
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
 
-@property (nonatomic, assign, readonly)NSInteger replaceStringNum;   // 图片替换字符数
-
-@property (nonatomic, assign)   BOOL             longPressShowMenuEnable;
+@property (nonatomic, assign, readonly)NSInteger replaceStringNum;  // 图片替换字符数
 
 /**
  *  获取普通文本内容

@@ -15,15 +15,6 @@
 #define kSelectAreaColor [UIColor colorWithRed:204/255.0 green:211/255.0 blue:236/255.0 alpha:1]
 #define kCursorColor     [UIColor colorWithRed:28/255.0 green:107/255.0 blue:222/255.0 alpha:1]
 
-#define ANCHOR_TARGET_TAG 1
-#define FONT_HEIGHT  40
-
-typedef enum TYAttributedLabelState : NSInteger {
-    TYAttributedLabelStateNormal,       // 普通状态
-    TYAttributedLabelStateTouching,     // 正在按下，需要弹出放大镜
-    TYAttributedLabelStateSelecting     // 选中了一些文本，需要弹出复制菜单
-}TYAttributedLabelState;
-
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 @interface TYAttributedLabel ()
@@ -37,18 +28,9 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     NSInteger                   _replaceStringNum;   // 图片替换字符数
 }
 @property (nonatomic, strong)   NSMutableAttributedString   *attString;         // 文字属性
-@property (nonatomic, strong)   NSMutableArray              *textStorageArray;      // run数组
+@property (nonatomic, strong)   NSMutableArray              *textStorageArray;  // run数组
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         // 点击手势
-
-@property (nonatomic, strong)   UIGestureRecognizer         *longPressRecognizer;
-@property (nonatomic, strong)   UIGestureRecognizer         *panRecognizer;
-@property (nonatomic, assign)   NSInteger                   selectionStartPosition;
-@property (nonatomic, assign)   NSInteger                   selectionEndPosition;
-@property (nonatomic, assign)   TYAttributedLabelState      state;
-@property (strong, nonatomic)   UIImageView                 *leftSelectionAnchor;
-@property (strong, nonatomic)   UIImageView                 *rightSelectionAnchor;
-@property (strong, nonatomic)   MagnifiterView              *magnifierView;
 
 @end
 
@@ -104,8 +86,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
-    _state = TYAttributedLabelStateNormal;
-    _longPressShowMenuEnable = NO;
     _replaceStringNum = 0;
 }
 
@@ -115,17 +95,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _delegate = delegate;
     
     _delegateFlags.textStorageClicked = [delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)];
-}
-
-- (void)setLongPressShowMenuEnable:(BOOL)longPressShowMenuEnable
-{
-    _longPressShowMenuEnable = longPressShowMenuEnable;
-    if (longPressShowMenuEnable) {
-        [self addLongPressGestureRecognizer];
-
-    }else {
-        [self removeLongPressGestureRecognizer];
-    }
 }
 
 - (void)setText:(NSString *)text
@@ -359,16 +328,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     // CTFramesetter 是使用 Core Text 绘制时最重要的类。它管理您的字体引用和文本绘制帧。这里在 framesetter 之后通过一个所选的文本范围（这里我们选择整个文本）与需要绘制到的矩形路径创建一个帧。
     [self updateFramesetterIfNeeded];
     
-    BOOL reDraw = NO;
     if (_frameRef == nil) {
         _frameRef = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, [_attString length]), path, NULL);
-        reDraw = YES;
-    }
-    
-    if (_state == TYAttributedLabelStateTouching || _state == TYAttributedLabelStateSelecting) {
-        NSRange selectRange = NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition);
-        [self drawSelectionAreaInRange:selectRange bgColor:kSelectAreaColor];
-        [self drawAnchorsWithRange:selectRange];
     }
     
     CTFrameDraw(_frameRef, context);	// CTFrameDraw 将 frame 描述到设备上下文
@@ -482,30 +443,26 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
-    if (_state == TYAttributedLabelStateNormal) {
         // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-        CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
+    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
     
-        __typeof (self) __weak weakSelf = self;
-        // 遍历run位置字典
-        [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
+    __typeof (self) __weak weakSelf = self;
+    // 遍历run位置字典
+    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
         
-            CGRect imgRect = [keyRectValue CGRectValue];
-            CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
+        CGRect imgRect = [keyRectValue CGRectValue];
+        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
         
-            // point 是否在rect里
-            if(CGRectContainsPoint(rect, point)){
-                NSLog(@"点击了 run ");
-                // 调用代理
-                if (_delegateFlags.textStorageClicked) {
-                    [_delegate attributedLabel:weakSelf textStorageClicked:obj];
-                    *stop = YES;
-                }
+        // point 是否在rect里
+        if(CGRectContainsPoint(rect, point)){
+            NSLog(@"点击了 run ");
+            // 调用代理
+            if (_delegateFlags.textStorageClicked) {
+                [_delegate attributedLabel:weakSelf textStorageClicked:obj];
+                *stop = YES;
             }
-        }];
-    }else {
-        self.state = TYAttributedLabelStateNormal;
-    }
+        }
+    }];
 }
 
 #pragma mark - get Right Height
@@ -556,521 +513,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         CFRelease(_frameRef);
     }
     _attString = nil;
-}
-
-
-#pragma mark - longPress show Menu
-- (void)addLongPressGestureRecognizer{
-    if (_longPressRecognizer == nil) {
-        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                 action:@selector(userLongPressedGuestureDetected:)];
-        [self addGestureRecognizer:_longPressRecognizer];
-    }
-    
-    if (_panRecognizer == nil) {
-        _panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                                 action:@selector(userPanGuestureDetected:)];
-        [self addGestureRecognizer:_panRecognizer];
-    }
-    
-    [self addSingleTapGesture];
-    
-    self.userInteractionEnabled = YES;
-}
-
-- (void)removeLongPressGestureRecognizer{
-    if (_longPressRecognizer) {
-        [self removeGestureRecognizer:_longPressRecognizer];
-        _longPressRecognizer = nil;
-    }
-    
-    if (_panRecognizer) {
-        [self removeGestureRecognizer:_panRecognizer];
-        _panRecognizer = nil;
-    }
-    
-}
-
-// 长按手势
-- (void)userLongPressedGuestureDetected:(UILongPressGestureRecognizer *)recognizer {
-    CGPoint point = [recognizer locationInView:self];
-    //NSLog(@"state = %d", recognizer.state);
-    //NSLog(@"point = %@", NSStringFromCGPoint(point));
-    if (recognizer.state == UIGestureRecognizerStateBegan ||
-        recognizer.state == UIGestureRecognizerStateChanged) {
-        CFIndex index = [self touchContentOffsetInView:self atPoint:point];
-        if (index != -1 && index < _attString.length) {
-            // 获取智能中文词组
-            NSRange range = [self characterRangeAtIndex:index];
-            _selectionStartPosition = range.location;
-            _selectionEndPosition = range.location + range.length;
-            
-        } else {
-            _selectionStartPosition = -1;
-            _selectionEndPosition = -1;
-        }
-        self.magnifierView.touchPoint = point;
-        self.state = TYAttributedLabelStateTouching;
-    } else {
-        if (_selectionStartPosition >= 0 && _selectionEndPosition <= _attString.length) {
-            self.state = TYAttributedLabelStateSelecting;
-            [self showMenuController];
-        } else {
-            self.state = TYAttributedLabelStateNormal;
-        }
-    }
-}
-
-// 拖动手势
-- (void)userPanGuestureDetected:(UIGestureRecognizer *)recognizer {
-    if (self.state == TYAttributedLabelStateNormal) {
-        return;
-    }
-    CGPoint point = [recognizer locationInView:self];
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        if (_leftSelectionAnchor && CGRectContainsPoint(CGRectInset(_leftSelectionAnchor.frame, -26, -10), point)) {
-            //NSLog(@"try to move left anchor");
-            _leftSelectionAnchor.tag = ANCHOR_TARGET_TAG;
-            [self hideMenuController];
-        } else if (_rightSelectionAnchor && CGRectContainsPoint(CGRectInset(_rightSelectionAnchor.frame, -26, -10), point)) {
-            //NSLog(@"try to move right anchor");
-            _rightSelectionAnchor.tag = ANCHOR_TARGET_TAG;
-            [self hideMenuController];
-        }
-        [self setNeedsDisplay];
-    } else if (recognizer.state == UIGestureRecognizerStateChanged) {
-        CFIndex index = [self touchContentOffsetInView:self atPoint:point];
-        if (index == -1 ) {
-            return;
-        }
-        BOOL isNeedDisplay = YES;
-        if ( _selectionEndPosition != _selectionStartPosition && (index == _selectionEndPosition || index == _selectionStartPosition)){
-            isNeedDisplay = NO;
-        }
-
-        if (_leftSelectionAnchor.tag == ANCHOR_TARGET_TAG && index < _selectionEndPosition) {
-            //NSLog(@"change start position to %ld", index);
-            _selectionStartPosition = index;
-            self.magnifierView.touchPoint = point;
-            [self hideMenuController];
-        } else if (_rightSelectionAnchor.tag == ANCHOR_TARGET_TAG && index > _selectionStartPosition) {
-            //NSLog(@"change end position to %ld", index);
-            _selectionEndPosition = index;
-            self.magnifierView.touchPoint = point;
-            [self hideMenuController];
-        }
-        
-        if (isNeedDisplay) {
-            [self setNeedsDisplay];
-        }
-        
-    } else if (recognizer.state == UIGestureRecognizerStateEnded ||
-               recognizer.state == UIGestureRecognizerStateCancelled) {
-        //NSLog(@"end move");
-        _leftSelectionAnchor.tag = 0;
-        _rightSelectionAnchor.tag = 0;
-        [self removeMaginfierView];
-        [self showMenuController];
-        [self setNeedsDisplay];
-    }
-}
-
-- (void)setupAnchors {
-    if (_selectionStartPosition < 0 && _selectionEndPosition < 0) {
-        return;
-    }
-    _leftSelectionAnchor = [self createSelectionAnchorWithTop:YES];
-    _rightSelectionAnchor = [self createSelectionAnchorWithTop:NO];
-    [self addSubview:_leftSelectionAnchor];
-    [self addSubview:_rightSelectionAnchor];
-}
-
-- (MagnifiterView *)magnifierView {
-    if (_magnifierView == nil) {
-        _magnifierView = [[MagnifiterView alloc] init];
-        _magnifierView.viewToMagnify = self;
-        [self addSubview:_magnifierView];
-    }
-    return _magnifierView;
-}
-
-- (UIImage *)cursorWithFontHeight:(CGFloat)height isTop:(BOOL)top {
-    // 22
-    CGRect rect = CGRectMake(0, 0, 22, height * 2);
-    UIColor *color = kCursorColor;
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    // draw point
-    if (top) {
-        CGContextAddEllipseInRect(context, CGRectMake(0, 0, 22, 22));
-    } else {
-        CGContextAddEllipseInRect(context, CGRectMake(0, height * 2 - 22, 22, 22));
-    }
-    CGContextSetFillColorWithColor(context, color.CGColor);
-    CGContextFillPath(context);
-    // draw line
-    [color set];
-    CGContextSetLineWidth(context, 4);
-    CGContextMoveToPoint(context, 11, 22);
-    CGContextAddLineToPoint(context, 11, height * 2 - 22);
-    CGContextStrokePath(context);
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
-- (UIImageView *)createSelectionAnchorWithTop:(BOOL)isTop {
-    UIImage *image = [self cursorWithFontHeight:FONT_HEIGHT isTop:isTop];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-    imageView.frame = CGRectMake(0, 0, 11, FONT_HEIGHT);
-    return imageView;
-}
-
-- (void)removeSelectionAnchor {
-    if (_leftSelectionAnchor) {
-        [_leftSelectionAnchor removeFromSuperview];
-        _leftSelectionAnchor = nil;
-    }
-    if (_rightSelectionAnchor) {
-        [_rightSelectionAnchor removeFromSuperview];
-        _rightSelectionAnchor = nil;
-    }
-}
-
-- (void)removeMaginfierView {
-    if (_magnifierView) {
-        [_magnifierView removeFromSuperview];
-        _magnifierView = nil;
-    }
-}
-
-- (void)setState:(TYAttributedLabelState)state {
-    if (_state == state) {
-        return;
-    }
-    _state = state;
-    if (_state == TYAttributedLabelStateNormal) {
-        _selectionStartPosition = -1;
-        _selectionEndPosition = -1;
-        [self removeSelectionAnchor];
-        [self removeMaginfierView];
-        [self hideMenuController];
-    } else if (_state == TYAttributedLabelStateTouching) {
-        if (_leftSelectionAnchor == nil && _rightSelectionAnchor == nil) {
-            [self setupAnchors];
-        }
-    } else if (_state == TYAttributedLabelStateSelecting) {
-        if (_leftSelectionAnchor == nil && _rightSelectionAnchor == nil) {
-            [self setupAnchors];
-        }
-        if (_leftSelectionAnchor.tag != ANCHOR_TARGET_TAG && _rightSelectionAnchor.tag != ANCHOR_TARGET_TAG) {
-            [self removeMaginfierView];
-            [self hideMenuController];
-        }
-    }
-    [self setNeedsDisplay];
-}
-
-- (CFIndex)touchContentOffsetInView:(UIView *)view atPoint:(CGPoint)point{
-    
-    CFArrayRef lines = CTFrameGetLines(_frameRef);
-    if (!lines) {
-        return -1;
-    }
-    CFIndex count = CFArrayGetCount(lines);
-    
-    // 获得每一行的origin坐标
-    CFIndex index = -1;
-    if (count != 0) {
-        CGPoint origins[count];
-        CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
-        CGFloat viewHeight = CGRectGetHeight(view.frame);
-        for (int i = 0; i < count; i++){
-            
-            CGPoint baselineOrigin = origins[i];
-            baselineOrigin.y = viewHeight - baselineOrigin.y;
-            
-            CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-            CGFloat ascent, descent;
-            CGFloat lineWidth = CTLineGetTypographicBounds(line, &ascent, &descent, NULL);
-            
-            CGRect lineFrame = CGRectMake(baselineOrigin.x, baselineOrigin.y - ascent, lineWidth, ascent + descent);
-            if (CGRectContainsPoint(lineFrame, point)){
-                index = CTLineGetStringIndexForPosition(line, point);
-                
-            }
-        }
-        
-    }
-    return index;
-}
-
-- (void)showMenuController {
-    if ([self becomeFirstResponder]) {
-        CGRect selectionRect = [self rectForMenuController];
-        // 翻转坐标系
-        CGAffineTransform transform =  CGAffineTransformMakeTranslation(0, self.bounds.size.height);
-        transform = CGAffineTransformScale(transform, 1.f, -1.f);
-        selectionRect = CGRectApplyAffineTransform(selectionRect, transform);
-        
-        UIMenuController *theMenu = [UIMenuController sharedMenuController];
-        
-        [theMenu setTargetRect:selectionRect inView:self];
-        [theMenu setMenuVisible:YES animated:YES];
-    }
-}
-
-- (void)hideMenuController {
-    if ([self resignFirstResponder]) {
-        UIMenuController *theMenu = [UIMenuController sharedMenuController];
-        [theMenu setMenuVisible:NO animated:YES];
-    }
-}
-
-// 绘画选择指示箭头
-- (void)drawAnchorsWithRange:(NSRange)selectRange {
-    
-    NSInteger selectionStartPosition = selectRange.location;
-    NSInteger selectionEndPosition = NSMaxRange(selectRange);
-    if (selectionStartPosition < 0 || selectionEndPosition > _attString.length) {
-        return;
-    }
-    
-    CFArrayRef lines = CTFrameGetLines(_frameRef);
-    if (!lines) {
-        return;
-    }
-    
-    // 翻转坐标系
-    CGAffineTransform transform =  CGAffineTransformMakeTranslation(0, self.bounds.size.height);
-    transform = CGAffineTransformScale(transform, 1.f, -1.f);
-    
-    CFIndex count = CFArrayGetCount(lines);
-    // 获得每一行的origin坐标
-    CGPoint origins[count];
-    CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
-    for (int i = 0; i < count; i++) {
-        CGPoint linePoint = origins[i];
-        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-        CFRange range = CTLineGetStringRange(line);
-        
-        if ([self isPosition:selectionStartPosition inRange:range]) {
-            CGFloat ascent, descent, leading, offset;
-            offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
-            CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGPoint origin = CGPointMake(linePoint.x + offset - 5, linePoint.y + ascent + 11);
-            origin = CGPointApplyAffineTransform(origin, transform);
-            _leftSelectionAnchor.frame = CGRectMake(origin.x, origin.y, CGRectGetWidth(_leftSelectionAnchor.frame), CGRectGetHeight(_leftSelectionAnchor.frame));
-        }
-        if ([self isPosition:selectionEndPosition inRange:range]) {
-            CGFloat ascent, descent, leading, offset;
-            offset = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
-            CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGPoint origin = CGPointMake(linePoint.x + offset - 5, linePoint.y - descent+28);
-            origin = CGPointApplyAffineTransform(origin, transform);
-            _rightSelectionAnchor.frame = CGRectMake(origin.x, origin.y, CGRectGetWidth(_rightSelectionAnchor.frame), CGRectGetHeight(_rightSelectionAnchor.frame));
-            break;
-        }
-    }
-}
-
-// 绘画选择区域
-- (void)drawSelectionAreaInRange:(NSRange)selectRange bgColor:(UIColor *)bgColor{
-    
-    NSInteger selectionStartPosition = selectRange.location;
-    NSInteger selectionEndPosition = NSMaxRange(selectRange);
-    
-    if (selectionStartPosition < 0 || selectionEndPosition > _attString.length) {
-        return;
-    }
-    
-    CFArrayRef lines = CTFrameGetLines(_frameRef);
-    if (!lines) {
-        return;
-    }
-    CFIndex count = CFArrayGetCount(lines);
-    // 获得每一行的origin坐标
-    CGPoint origins[count];
-    CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
-    for (int i = 0; i < count; i++) {
-        CGPoint linePoint = origins[i];
-        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-        CFRange range = CTLineGetStringRange(line);
-        // 1. start和end在一个line,则直接弄完break
-        if ([self isPosition:selectionStartPosition inRange:range] && [self isPosition:selectionEndPosition inRange:range]) {
-            CGFloat ascent, descent, leading, offset, offset2;
-            offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
-            offset2 = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
-            CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, offset2 - offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
-            break;
-        }
-        
-        // 2. start和end不在一个line
-        // 2.1 如果start在line中，则填充Start后面部分区域
-        if ([self isPosition:selectionStartPosition inRange:range]) {
-            CGFloat ascent, descent, leading, width, offset;
-            offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
-            width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, width - offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
-        } // 2.2 如果 start在line前，end在line后，则填充整个区域
-        else if (selectionStartPosition < range.location && selectionEndPosition >= range.location + range.length) {
-            CGFloat ascent, descent, leading, width;
-            width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGRect lineRect = CGRectMake(linePoint.x, linePoint.y - descent, width, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
-        } // 2.3 如果start在line前，end在line中，则填充end前面的区域,break
-        else if (selectionStartPosition < range.location && [self isPosition:selectionEndPosition inRange:range]) {
-            CGFloat ascent, descent, leading, width, offset;
-            offset = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
-            width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGRect lineRect = CGRectMake(linePoint.x, linePoint.y - descent, offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
-        }
-    }
-}
-
-- (CGRect)rectForMenuController {
-    if (_selectionStartPosition < 0 || _selectionEndPosition > _attString.length) {
-        return CGRectZero;
-    }
-    
-    CFArrayRef lines = CTFrameGetLines(_frameRef);
-    if (!lines) {
-        return CGRectZero;
-    }
-    CFIndex count = CFArrayGetCount(lines);
-    // 获得每一行的origin坐标
-    CGPoint origins[count];
-    CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
-    
-    CGRect resultRect = CGRectZero;
-    for (int i = 0; i < count; i++) {
-        CGPoint linePoint = origins[i];
-        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-        CFRange range = CTLineGetStringRange(line);
-        // 1. start和end在一个line,则直接弄完break
-        if ([self isPosition:_selectionStartPosition inRange:range] && [self isPosition:_selectionEndPosition inRange:range]) {
-            CGFloat ascent, descent, leading, offset, offset2;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionStartPosition, NULL);
-            offset2 = CTLineGetOffsetForStringIndex(line, _selectionEndPosition, NULL);
-            CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, offset2 - offset, ascent + descent);
-            resultRect = lineRect;
-            break;
-        }
-    }
-    if (!CGRectIsEmpty(resultRect)) {
-        return resultRect;
-    }
-    
-    // 2. start和end不在一个line
-    for (int i = 0; i < count; i++) {
-        CGPoint linePoint = origins[i];
-        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-        CFRange range = CTLineGetStringRange(line);
-        // 如果start在line中，则记录当前为起始行
-        if ([self isPosition:_selectionStartPosition inRange:range]) {
-            CGFloat ascent, descent, leading, width, offset;
-            offset = CTLineGetOffsetForStringIndex(line, _selectionStartPosition, NULL);
-            width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
-            CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, width - offset, ascent + descent);
-            resultRect = lineRect;
-        }
-    }
-    return resultRect;
-}
-
-- (BOOL)isPosition:(NSInteger)position inRange:(CFRange)range {
-    return (position >= range.location && position < range.location + range.length);
-}
-
-- (void)fillSelectionAreaInRect:(CGRect)rect bgColor:(UIColor *)bgColor {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, bgColor.CGColor);
-    CGContextFillRect(context, rect);
-}
-
-// 中文字典串
-- (NSRange)characterRangeAtIndex:(NSInteger)index
-{
-    __block NSArray *lines = (NSArray*)CTFrameGetLines(_frameRef);
-    NSInteger count = [lines count];
-    __block NSRange returnRange = NSMakeRange(NSNotFound, 0);
-    
-    for (int i=0; i < count; i++) {
-        
-        __block CTLineRef line = (__bridge CTLineRef)[lines objectAtIndex:i];
-        CFRange cfRange = CTLineGetStringRange(line);
-        CFRange cfRange_Next = CFRangeMake(0, 0);
-        if (i < count - 1) {
-            __block CTLineRef line_Next = (__bridge CTLineRef)[lines objectAtIndex:i+1];
-            cfRange_Next = CTLineGetStringRange(line_Next);
-        }
-        
-        NSRange range = NSMakeRange(cfRange.location == kCFNotFound ? NSNotFound : cfRange.location, cfRange.length == kCFNotFound ? 0 : cfRange.length);
-        
-        if (index >= range.location && index <= range.location+range.length) {
-            
-            if (range.length > 1) {
-                NSRange newRange = NSMakeRange(range.location, range.length + cfRange_Next.length);
-                NSInteger textLength = self.text.length;
-                [self.text enumerateSubstringsInRange:newRange options:NSStringEnumerationByWords usingBlock:^(NSString *subString, NSRange subStringRange, NSRange enclosingRange, BOOL *stop){
-                    
-                    if (index - subStringRange.location <= subStringRange.length&&index - subStringRange.location!=0) {
-                        returnRange = subStringRange;
-                        
-                        if (returnRange.length <= 2 && textLength > 1) {//为的是长按选择的文字永远大于或等于2个，方便拖动
-                            returnRange.length = 2;
-                        }
-                        *stop = YES;
-                        
-                    }
-                    
-                }];
-                
-            }
-            
-        }
-    }
-    
-    return returnRange;
-}
-
-#pragma mark - menu action
-
-- (BOOL)canBecomeFirstResponder {
-    return YES;
-}
-
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
-    
-    if (action == @selector(copy:) || action == @selector(selectAll:)) {
-        return YES;
-    }
-    return NO;
-}
-
-- (void)copy:(id)sender
-{
-    if (_selectionStartPosition > -1 && _selectionEndPosition > -1) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        NSString *selectText = [self.text substringWithRange:NSMakeRange(_selectionStartPosition, _selectionEndPosition - _selectionStartPosition)];
-        NSLog(@"%@",selectText);
-        [pasteboard setString:selectText];
-    }
-    self.state = TYAttributedLabelStateNormal;
-}
-
-- (void)selectAll:(id)sender
-{
-    _selectionStartPosition = 0;
-    _selectionEndPosition = self.text.length-1;
-    
-    [self setNeedsDisplay];
-    [self showMenuController];
 }
 
 @end
