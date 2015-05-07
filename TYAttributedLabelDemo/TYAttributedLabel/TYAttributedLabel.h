@@ -97,28 +97,28 @@
 // 追加内容 （添加在AttributedString最后）
 @interface TYAttributedLabel (AppendAttributedString)
 /**
- *  追加 普通文本
+ *  追加(添加到最后) 普通文本
  *
  *  @param text 普通文本
  */
 - (void)appendText:(NSString *)text;
 
 /**
- *  追加 属性文本
+ *  追加(添加到最后) 属性文本
  *
  *  @param attributedText 属性文本
  */
 - (void)appendTextAttributedString: (NSAttributedString *)attributedText;
 
 /**
- *  追加 textStorage （自定义显示内容）
+ *  追加(添加到最后) textStorage （自定义显示内容）
  *
  *  @param textStorage 自定义Storage（自定义显示内容）
  */
 - (void)appendTextStorage:(id<TYAppendTextStorageProtocol>)textStorage;
 
 /**
- *  追加 textStorage 数组
+ *  追加(添加到最后) textStorage 数组
  *
  *  @param textStorageArray 自定义run数组（需遵循协议TYAppendTextStorageProtocol,否则不会添加）
  */

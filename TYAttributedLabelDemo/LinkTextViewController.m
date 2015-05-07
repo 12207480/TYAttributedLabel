@@ -38,9 +38,11 @@
     NSArray *textArray = [text componentsSeparatedByString:@"\n\t"];
     NSArray *colorArray = @[RGB(213, 0, 0, 1),RGB(0, 155, 0, 1),RGB(103, 0, 207, 1),RGB(209, 162, 74, 1),RGB(206, 39, 206, 1)];
     NSInteger index = 0;
+    
     for (NSString *text in textArray) {
         
         if (index == 2) {
+            // 追加链接信息
             TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
             linkTextStorage.text = text;
             linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
@@ -48,6 +50,7 @@
             linkTextStorage.linkStr = @"http://www.baidu.com";
             [label1 appendTextStorage:linkTextStorage];
         }else {
+            // 追加文本属性
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
             [attributedString addAttributeTextColor:colorArray[index%5]];
             [attributedString addAttributeFont:[UIFont systemFontOfSize:15+arc4random()%4]];
@@ -64,10 +67,12 @@
 - (void)addTextAttributedLabel2
 {
     NSString *text = @"\t任何值得去的地方，都没有捷径；\n\t任何值得等待的人，都会迟来一些；\n\t任何值得追逐的梦想，都必须在一路艰辛中备受嘲笑。\n\t所以，不要怕，不要担心你所追逐的有可能是错的。\n\t因为，不被嘲笑的梦想不是梦想。\n";
+    
     NSArray *textArray = [text componentsSeparatedByString:@"\n\t"];
     NSArray *colorArray = @[RGB(213, 0, 0, 1),RGB(0, 155, 0, 1),RGB(103, 0, 207, 1),RGB(209, 162, 74, 1),RGB(206, 39, 206, 1)];
     NSInteger index = 0;
     NSMutableArray *textRunArray = [NSMutableArray array];
+    
     for (NSString *subText in textArray) {
         if (index == 2) {
             TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
@@ -98,9 +103,12 @@
 
 }
 
+#pragma mark - TYAttributedLabelDelegate
+
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextRun
 {
     if ([TextRun isKindOfClass:[TYLinkTextStorage class]]) {
+        
         NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkStr;
         
         if ([linkStr hasPrefix:@"http:"]) {

@@ -51,16 +51,24 @@
     
     NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n\t但这个过程会很痛，会很辛苦，有时候还会觉得灰心。\n\t面对着汹涌而来的现实，觉得自己渺小无力。\n\t但这，也是生命的一部分，做好现在你能做的，然后，一切都会好的。\n\t我们都将孤独地长大，不要害怕。";
     
+    // 分割文本到数组
     NSArray *textArray = [text componentsSeparatedByString:@"\n\t"];
     NSArray *colorArray = @[RGB(213, 0, 0, 1),RGB(0, 155, 0, 1),RGB(103, 0, 207, 1),RGB(209, 162, 74, 1),RGB(206, 39, 206, 1)];
+    
     NSInteger index = 0;
+    
+    // 追加图片
     [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
+    
     for (NSString *text in textArray) {
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
         
         if (index != 4) {
+            // 添加属性
             [attributedString addAttributeTextColor:colorArray[index%5]];
             [attributedString addAttributeFont:[UIFont systemFontOfSize:15+arc4random()%4]];
+            
+            // 追加(添加到最后)文本
             [label appendTextAttributedString:attributedString];
             [label appendImageWithName:@"haha"];
             [label appendText:@"\n\t"];
@@ -70,7 +78,7 @@
         }
         index++;
     }
-    //两种方法 [label appendImageWithContent:@"avatar" size:CGSizeMake(60, 60)];
+    //两种方法 [label appendImageWithName:@"avatar" size:CGSizeMake(60, 60)];
     TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
     imageStorage.imageName = @"haha";
     imageStorage.size = CGSizeMake(15, 15);
@@ -90,9 +98,12 @@
     NSString *text = @"[CYLoLi,320,180]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。[avatar,60,60]";
     label.text = text;
     NSMutableArray *tmpArray = [NSMutableArray array];
+    
+    // 正则匹配图片信息
     [text enumerateStringsMatchedByRegex:@"\\[(\\w+?),(\\d+?),(\\d+?)\\]" usingBlock:^(NSInteger captureCount, NSString *const __unsafe_unretained *capturedStrings, const NSRange *capturedRanges, volatile BOOL *const stop) {
         
         if (captureCount > 3) {
+            // 图片信息储存
             TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
             imageStorage.imageName = capturedStrings[1];
             imageStorage.range = capturedRanges[0];
@@ -102,7 +113,9 @@
         }
     }];
     
+    // 添加图片信息数组到label
     [label addTextStorageArray:tmpArray];
+    
     TYTextStorage *textStorage = [[TYTextStorage alloc]init];
     textStorage.range = [text rangeOfString:@"[CYLoLi,320,180]其实所有漂泊的人，"];
     textStorage.textColor = RGB(213, 0, 0, 1);

@@ -41,15 +41,19 @@
     NSInteger index = 0;
     for (NSString *text in textArray) {
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
-        
+        // 设置当前文本字体
         [attributedString addAttributeTextColor:colorArray[index%5]];
+        // 设置当前文本颜色
         [attributedString addAttributeFont:[UIFont systemFontOfSize:15+arc4random()%4]];
         if (index == 2) {
+            // 当前文本添加下划线
             [attributedString addAttributeUnderlineStyle:kCTUnderlineStyleSingle modifier:kCTUnderlinePatternSolid];
         }
         if (index == 4) {
             [attributedString addAttributeUnderlineStyle:kCTUnderlineStyleSingle modifier:kCTUnderlinePatternDot];
         }
+        
+        // 追加(添加到最后)属性文本
         [label1 appendTextAttributedString:attributedString];
         [label1 appendText:@"\n\t"];
         index++;
@@ -68,6 +72,7 @@
      NSArray *colorArray = @[RGB(213, 0, 0, 1),RGB(0, 155, 0, 1),RGB(103, 0, 207, 1),RGB(209, 162, 74, 1),RGB(206, 39, 206, 1)];
     NSInteger index = 0;
     NSMutableAttributedString *totalAttributedString = [[NSMutableAttributedString alloc]init];
+    
     for (NSString *text in textArray) {
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
         
