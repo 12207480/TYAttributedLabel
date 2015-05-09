@@ -76,7 +76,7 @@
 - (void)addTextStorageArray:(NSArray *)textStorageArray;
 
 /**
- *  调用可以自动计算frame大小
+ *  调用可以自动计算frame大小（请确定label之前设置了宽度）
  */
 - (void)sizeToFit;
 

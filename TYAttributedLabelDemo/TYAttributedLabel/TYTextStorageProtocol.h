@@ -20,7 +20,7 @@ extern NSString *const kTYTextRunAttributedName;
 @required
 
 /**
- *  范围
+ *  范围（如果是appendStorage,range只针对追加的文本）
  */
 @property (nonatomic,assign) NSRange range;
 //- (NSRange)range;

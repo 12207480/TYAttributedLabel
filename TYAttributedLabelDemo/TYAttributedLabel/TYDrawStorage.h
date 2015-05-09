@@ -15,17 +15,17 @@
 @property (nonatomic, assign)   TYDrawAlignment drawAlignment;  // 对齐方式
 
 /**
- *  获取绘画区域高度(上行高度 一般只要改写这个即可)
+ *  获取绘画区域上行高度(默认实现)
  */
 - (CGFloat)getDrawRunAscentHeight;
 
 /**
- *  获取绘画区域下行高度 默认为0 （一般不需要改写）
+ *  获取绘画区域下行高度 默认实现为0（一般不需要改写）
  */
 - (CGFloat)getDrawRunDescentHeight;
 
 /**
- *  获取绘画区域宽度
+ *  获取绘画区域宽度（默认实现）
  */
 - (CGFloat)getDrawRunWidth;
 
