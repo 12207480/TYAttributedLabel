@@ -54,7 +54,6 @@ TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
 [self.view addSubview:label];
 
 NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
-
 [label appendText:text];
 
 NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
@@ -65,8 +64,8 @@ NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]
 [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
 
  UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
-    imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
-    [label appendView:imageView];
+ imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
+ [label appendView:imageView];
 
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
