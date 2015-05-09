@@ -63,15 +63,15 @@ NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]
 
 [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
 
- UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
- imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
- [label appendView:imageView];
+UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
+[label appendView:imageView];
 
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
 ```
 ### Contact
-
+如果你发现bug，please pull reqeust me
 如果你有更好的想法或者建议可以联系我，Email:122074809@qq.com
 
 
