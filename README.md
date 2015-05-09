@@ -7,7 +7,7 @@ TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，�
 ## Requirements
 * Xcode 5 or higher
 * Apple LLVM compiler
-* iOS 6.0(maybe iOS 5) or higher
+* iOS 6.0 or higher
 * ARC
 
 ## Features
