@@ -25,6 +25,8 @@
 {
     [super addTextStorageWithAttributedString:attributedString];
     [attributedString addAttribute:kTYTextRunAttributedName value:self range:self.range];
+    self.text = [attributedString.string substringWithRange:self.range];
+
 }
 
 @end

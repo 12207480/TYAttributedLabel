@@ -46,7 +46,7 @@
             TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
             linkTextStorage.text = text;
             linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
-            linkTextStorage.textColor = colorArray[index%5];
+            //linkTextStorage.textColor = colorArray[index%5];//用label默认 linkColor
             linkTextStorage.linkStr = @"http://www.baidu.com";
             [label1 appendTextStorage:linkTextStorage];
         }else {
@@ -59,6 +59,13 @@
         [label1 appendText:@"\n\t"];
         index++;
     }
+    
+    TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
+    linkTextStorage.text = @"百度一下";
+    linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
+    //linkTextStorage.textColor = colorArray[index%5];//用label默认 linkColor
+    linkTextStorage.linkStr = @"http://www.baidu.com";
+    [label1 appendTextStorage:linkTextStorage];
     
     [label1 sizeToFit];
     _label1 = label1;
