@@ -465,8 +465,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
-        // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    NSLog(@"state %ld",sender.state);
+    
+    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
     CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
     
     __typeof (self) __weak weakSelf = self;
