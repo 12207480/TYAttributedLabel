@@ -1,13 +1,13 @@
 # TYAttributedLabel
 TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，支持富文本，图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示，
 
-## ScreenShoot
+## ScreenShot
 ![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif)
 
 ## Requirements
 * Xcode 5 or higher
 * Apple LLVM compiler
-* iOS 6.0(maybe iOS 5) or higher
+* iOS 6.0 or higher
 * ARC
 
 ## Features
@@ -54,7 +54,6 @@ TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
 [self.view addSubview:label];
 
 NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
-
 [label appendText:text];
 
 NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
@@ -64,15 +63,15 @@ NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]
 
 [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
 
- UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
-    imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
-    [label appendView:imageView];
+UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
+[label appendView:imageView];
 
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
 ```
 ### Contact
-
+如果你发现bug，please pull reqeust me <br>
 如果你有更好的想法或者建议可以联系我，Email:122074809@qq.com
 
 
