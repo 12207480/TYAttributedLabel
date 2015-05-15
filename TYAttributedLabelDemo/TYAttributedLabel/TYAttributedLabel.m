@@ -10,10 +10,11 @@
 #import <CoreText/CoreText.h>
 
 // 文本颜色
+
 #define kTextColor       [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
 #define kLinkColor       [UIColor colorWithRed:0/255.0 green:91/255.0 blue:255/255.0 alpha:1]
 #define kSelectAreaColor [UIColor colorWithRed:204/255.0 green:211/255.0 blue:236/255.0 alpha:1]
-#define kCursorColor     [UIColor colorWithRed:28/255.0 green:107/255.0 blue:222/255.0 alpha:1]
+#define kHighLightLinkColor [UIColor colorWithRed:28/255.0 green:0/255.0 blue:213/255.0 alpha:1]
 
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
@@ -89,7 +90,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
     _linkColor = kLinkColor;
-    _highlightedLinkColor = [UIColor redColor];
+    _highlightedLinkColor = kHighLightLinkColor;
     _highlightedLinkBackgroundColor = kSelectAreaColor;
     _replaceStringNum = 0;
 }
@@ -504,16 +505,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             CGRect imgRect = [keyRectValue CGRectValue];
             CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
             
-            // point 是否在rect里
+            // point 是否在rect里obj.textColor ? obj.textColor:_linkColor;
             if(CGRectContainsPoint(rect, point)){
-                _clickLinkRange = [self.text rangeOfString:obj.text];
-                if (_highlightedLinkColor) {
-                    [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
-                    _saveLinkColor = obj.textColor ? obj.textColor:_linkColor;
-                    [self resetFramesetter];
-                }else {
-                    [self setNeedsDisplay];
-                }
+                NSRange curClickLinkRange = [self.text rangeOfString:obj.text];
+                [self setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:_linkColor) linkRange:curClickLinkRange];
                 return ;
             }
         }];
@@ -557,27 +552,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             if (_saveLinkColor) {
                 [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
             }
-            _clickLinkRange = curClickLinkRange;
-            if (_highlightedLinkColor) {
-                [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
-                _saveLinkColor = saveLinkColor;
-                [self resetFramesetter];
-            }else{
-                [self setNeedsDisplay];
-            }
+            [self setHighlightLinkWithSaveLinkColor:saveLinkColor linkRange:curClickLinkRange];
         }
     } else if(_clickLinkRange.length > 0) {
-        if (_highlightedLinkColor) {
-            if (_saveLinkColor) {
-                [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
-                _saveLinkColor = nil;
-            }
-            _clickLinkRange.length = 0;
-            [self resetFramesetter];
-        }else {
-            _clickLinkRange.length = 0;
-            [self setNeedsDisplay];
-        }
+        [self resetHighLightLink];
     }
 }
 
@@ -585,32 +563,44 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     [super touchesCancelled:touches withEvent:event];
     if (_linkRectDictionary.count > 0 && _clickLinkRange.length > 0) {
-        if (_saveLinkColor) {
-            [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
-            _saveLinkColor = nil;
-        }
-        _clickLinkRange.length = 0;
-        if (_highlightedLinkColor) {
-            [self resetFramesetter];
-        }else {
-            [self setNeedsDisplay];
-        }
+        [self resetHighLightLink];
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    [super touchesEnded:touches withEvent:event];
     if (_linkRectDictionary.count > 0 && _clickLinkRange.length > 0) {
+        [self resetHighLightLink];
+    }
+}
+
+// 设置高亮链接
+- (void)setHighlightLinkWithSaveLinkColor:(UIColor *)saveLinkColor linkRange:(NSRange)linkRange
+{
+    _clickLinkRange = linkRange;
+    if (_highlightedLinkColor) {
+        [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
+        _saveLinkColor = saveLinkColor;
+        [self resetFramesetter];
+    }else{
+        [self setNeedsDisplay];
+    }
+}
+
+// 取消高亮
+- (void)resetHighLightLink
+{
+    if (_highlightedLinkColor) {
         if (_saveLinkColor) {
             [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
             _saveLinkColor = nil;
         }
         _clickLinkRange.length = 0;
-        if (_highlightedLinkColor) {
-            [self resetFramesetter];
-        }else {
-            [self setNeedsDisplay];
-        }
+        [self resetFramesetter];
+    }else {
+        _clickLinkRange.length = 0;
+        [self setNeedsDisplay];
     }
 }
 
