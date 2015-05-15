@@ -101,6 +101,7 @@
     
     TYAttributedLabel *label2 = [[TYAttributedLabel alloc]init];
     label2.delegate = self;
+    label2.highlightedLinkColor = [UIColor redColor];
     label2.text = text;
     [label2 addTextStorageArray:textRunArray];
     

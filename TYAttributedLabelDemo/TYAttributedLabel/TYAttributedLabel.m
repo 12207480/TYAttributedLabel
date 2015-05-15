@@ -90,7 +90,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
     _linkColor = kLinkColor;
-    _highlightedLinkColor = kHighLightLinkColor;
+    _highlightedLinkColor = nil;
     _highlightedLinkBackgroundColor = kSelectAreaColor;
     _replaceStringNum = 0;
 }
