@@ -33,7 +33,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @property (nonatomic, strong)   NSDictionary                *linkRectDictionary;
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         // 点击手势
-
+@property (nonatomic, strong)   UIColor                     *saveLinkColor;
 @end
 
 @implementation TYAttributedLabel
@@ -89,6 +89,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
     _linkColor = kLinkColor;
+    _highlightedLinkColor = [UIColor redColor];
     _highlightedLinkBackgroundColor = kSelectAreaColor;
     _replaceStringNum = 0;
 }
@@ -506,7 +507,13 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             // point 是否在rect里
             if(CGRectContainsPoint(rect, point)){
                 _clickLinkRange = [self.text rangeOfString:obj.text];
-                [self setNeedsDisplay];
+                if (_highlightedLinkColor) {
+                    [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
+                    _saveLinkColor = obj.textColor ? obj.textColor:_linkColor;
+                    [self resetFramesetter];
+                }else {
+                    [self setNeedsDisplay];
+                }
                 return ;
             }
         }];
@@ -530,6 +537,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     
     __block BOOL isUnderClickLink = NO;
     __block NSRange curClickLinkRange;
+    __block UIColor *saveLinkColor = nil;
+    
     [_linkRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYLinkStorageProtocol> obj, BOOL *stop) {
         CGRect imgRect = [keyRectValue CGRectValue];
         CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
@@ -538,18 +547,37 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         if(CGRectContainsPoint(rect, point)){
             curClickLinkRange = [self.text rangeOfString:obj.text];
             isUnderClickLink = YES;
+            saveLinkColor = obj.textColor ? obj.textColor:_linkColor;
             *stop = YES;
         }
     }];
     
     if (isUnderClickLink) {
         if (!NSEqualRanges(curClickLinkRange, _clickLinkRange)) {
+            if (_saveLinkColor) {
+                [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
+            }
             _clickLinkRange = curClickLinkRange;
-            [self setNeedsDisplay];
+            if (_highlightedLinkColor) {
+                [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
+                _saveLinkColor = saveLinkColor;
+                [self resetFramesetter];
+            }else{
+                [self setNeedsDisplay];
+            }
         }
     } else if(_clickLinkRange.length > 0) {
-        _clickLinkRange.length = 0;
-        [self setNeedsDisplay];
+        if (_highlightedLinkColor) {
+            if (_saveLinkColor) {
+                [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
+                _saveLinkColor = nil;
+            }
+            _clickLinkRange.length = 0;
+            [self resetFramesetter];
+        }else {
+            _clickLinkRange.length = 0;
+            [self setNeedsDisplay];
+        }
     }
 }
 
@@ -557,16 +585,32 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     [super touchesCancelled:touches withEvent:event];
     if (_linkRectDictionary.count > 0 && _clickLinkRange.length > 0) {
+        if (_saveLinkColor) {
+            [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
+            _saveLinkColor = nil;
+        }
         _clickLinkRange.length = 0;
-        [self setNeedsDisplay];
+        if (_highlightedLinkColor) {
+            [self resetFramesetter];
+        }else {
+            [self setNeedsDisplay];
+        }
     }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (_linkRectDictionary.count > 0 && _clickLinkRange.length > 0) {
+        if (_saveLinkColor) {
+            [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
+            _saveLinkColor = nil;
+        }
         _clickLinkRange.length = 0;
-        [self setNeedsDisplay];
+        if (_highlightedLinkColor) {
+            [self resetFramesetter];
+        }else {
+            [self setNeedsDisplay];
+        }
     }
 }
 
