@@ -96,7 +96,7 @@
 @end
 
 
-#pragma mark - 扩展追加内容 (AppendAttributedString)
+#pragma mark - 扩展追加内容 (Append)
 // 追加内容 （添加在AttributedString最后）
 @interface TYAttributedLabel (AppendAttributedString)
 /**
@@ -129,11 +129,39 @@
 
 @end
 
+#pragma mark - 扩展支持Link链接
+@interface TYAttributedLabel (Link)
 
-#pragma mark - 扩展支持UIImage和UIView
-@interface TYAttributedLabel (UIImageAndUIView)
+- (void)addLinkWithLinkData:(id)linkData range:(NSRange )range;
 
-#pragma mark - addStorage
+/**
+ *  添加 链接LinkTextStorage
+ *
+ *  @param linkData  链接携带的数据
+ *  @param linkColor 链接颜色
+ *  @param range     范围
+ */
+- (void)addLinkWithLinkData:(id)linkData linkColor:(UIColor *)linkColor range:(NSRange )range;
+
+/**
+ *  追加 链接LinkTextStorage
+ */
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkData:(id)linkData;
+
+/**
+ *  追加 链接LinkTextStorage
+ *
+ *  @param linkText  链接文本
+ *  @param linkData   链接携带的数据
+ */
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkColor:(UIColor *)linkColor linkData:(id)linkData;
+
+@end
+
+#pragma mark - 扩展支持UIImage
+@interface TYAttributedLabel (UIImage)
+
+#pragma mark - addImageStorage
 
 /**
  *  添加 imageStorage image数据
@@ -182,23 +210,7 @@
                     size:(CGSize)size
                alignment:(TYDrawAlignment)alignment;
 
-/**
- *  添加 viewStorage (添加 UI控件 需要设置frame)
- */
-- (void)addView:(UIView *)view range:(NSRange)range;
-
-/**
- *  添加 viewStorage (添加 UI控件 需要设置frame)
- *
- *  @param view         UIView (UI控件)
- *  @param range        所在文本位置
- *  @param alignment    view对齐方式
- */
-- (void)addView:(UIView *)view
-          range:(NSRange)range
-      alignment:(TYDrawAlignment)alignment;
-
-#pragma mark - appendStorage
+#pragma mark - appendImageStorage
 
 /**
  *  追加 imageStorage image数据
@@ -240,8 +252,30 @@
  *  @param alignment    图片对齐
  */
 - (void)appendImageWithName:(NSString *)imageName
-                          size:(CGSize)size
-                     alignment:(TYDrawAlignment)alignment;
+                       size:(CGSize)size
+                  alignment:(TYDrawAlignment)alignment;
+
+
+@end
+
+#pragma mark - 扩展支持UIView
+@interface TYAttributedLabel (UIView)
+
+/**
+ *  添加 viewStorage (添加 UI控件 需要设置frame)
+ */
+- (void)addView:(UIView *)view range:(NSRange)range;
+
+/**
+ *  添加 viewStorage (添加 UI控件 需要设置frame)
+ *
+ *  @param view         UIView (UI控件)
+ *  @param range        所在文本位置
+ *  @param alignment    view对齐方式
+ */
+- (void)addView:(UIView *)view
+          range:(NSRange)range
+      alignment:(TYDrawAlignment)alignment;
 
 /**
  *  追加 viewStorage (添加 UI控件 需要设置frame)

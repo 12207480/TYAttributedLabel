@@ -91,7 +91,7 @@
     linkStorage.text = dic[@"content"];
     linkStorage.font = [UIFont systemFontOfSize:[dic[@"size"] integerValue]];
     linkStorage.textColor = [self colorFromTemplate:dic[@"color"]];
-    linkStorage.linkStr = dic[@"url"];
+    linkStorage.linkData = dic[@"url"];
     
     return linkStorage;
 }

@@ -9,8 +9,44 @@
 #import "TYAttributedLabel.h"
 #import "TYImageStorage.h"
 #import "TYViewStorage.h"
+#import "TYLinkTextStorage.h"
 
-@implementation TYAttributedLabel (UIImageAndUIView)
+@implementation TYAttributedLabel (Link)
+
+#pragma mark - addLink
+- (void)addLinkWithLinkData:(id)linkData range:(NSRange)range
+{
+    [self addLinkWithLinkData:linkData linkColor:nil range:range];
+}
+
+- (void)addLinkWithLinkData:(id)linkData linkColor:(UIColor *)linkColor range:(NSRange )range;
+{
+    TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
+    linkTextStorage.range = range;
+    linkTextStorage.textColor = linkColor;
+    linkTextStorage.linkData = linkData;
+    [self addTextStorage:linkTextStorage];
+}
+
+#pragma mark - appendLink
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkData:(id)linkData
+{
+    [self appendLinkWithText:linkText linkFont:linkFont linkColor:nil linkData:linkData];
+}
+
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkColor:(UIColor *)linkColor linkData:(id)linkData
+{
+    TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
+    linkTextStorage.text = linkText;
+    linkTextStorage.font = linkFont;
+    linkTextStorage.textColor = linkColor;
+    linkTextStorage.linkData = linkData;
+    [self appendTextStorage:linkTextStorage];
+}
+
+@end
+
+@implementation TYAttributedLabel (UIImage)
 
 #pragma mark addImage
 
@@ -62,23 +98,6 @@
 
 }
 
-#pragma mark - addView
-
-- (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
-{
-    TYViewStorage *viewStorage = [[TYViewStorage alloc]init];
-    viewStorage.drawAlignment = alignment;
-    viewStorage.view = view;
-    viewStorage.range = range;
-    
-    [self addTextStorage:viewStorage];
-}
-
-- (void)addView:(UIView *)view range:(NSRange)range
-{
-    [self addView:view range:range alignment:TYDrawAlignmentTop];
-}
-
 #pragma mark - appendImage
 
 - (void)appendImageContent:(id)imageContent size:(CGSize)size alignment:(TYDrawAlignment)alignment
@@ -126,6 +145,27 @@
 {
     [self appendImageWithName:imageName size:CGSizeMake(self.font.pointSize, self.font.ascender)];
     
+}
+
+@end
+
+@implementation TYAttributedLabel (UIView)
+
+#pragma mark - addView
+
+- (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
+{
+    TYViewStorage *viewStorage = [[TYViewStorage alloc]init];
+    viewStorage.drawAlignment = alignment;
+    viewStorage.view = view;
+    viewStorage.range = range;
+    
+    [self addTextStorage:viewStorage];
+}
+
+- (void)addView:(UIView *)view range:(NSRange)range
+{
+    [self addView:view range:range alignment:TYDrawAlignmentTop];
 }
 
 #pragma mark - appendView

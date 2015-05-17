@@ -55,7 +55,7 @@
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextStorage
 {
     if ([TextStorage isKindOfClass:[TYLinkTextStorage class]]) {
-        NSString *linkStr = ((TYLinkTextStorage*)TextStorage).linkStr;
+        NSString *linkStr = ((TYLinkTextStorage*)TextStorage).linkData;
         
         if ([linkStr hasPrefix:@"http"]) {
             [ [ UIApplication sharedApplication] openURL:[ NSURL URLWithString:linkStr]];

@@ -15,6 +15,7 @@
 // underLineStyle   下划线样式（单 双） 默认单
 // modifier         下划线样式 （点 线）（默认线）
 
-@property (nonatomic, strong) NSString *linkStr;    // 链接携带的数据
+@property (nonatomic, strong) NSString *linkStr NS_DEPRECATED_IOS(2_0, 3_0);// 废弃
+@property (nonatomic, strong) id        linkData;    // 链接携带的数据
 
 @end

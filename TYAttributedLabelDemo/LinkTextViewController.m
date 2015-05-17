@@ -44,12 +44,13 @@
         
         if (index == 2) {
             // 追加链接信息
-            TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
-            linkTextStorage.text = text;
-            linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
-            //linkTextStorage.textColor = colorArray[index%5];//用label默认 linkColor
-            linkTextStorage.linkStr = @"http://www.baidu.com";
-            [label1 appendTextStorage:linkTextStorage];
+//            TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
+//            linkTextStorage.text = text;
+//            linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
+//            //linkTextStorage.textColor = colorArray[index%5];//用label默认 linkColor
+//            linkTextStorage.linkData = @"http://www.baidu.com";
+//            [label1 appendTextStorage:linkTextStorage];
+            [label1 appendLinkWithText:text linkFont:[UIFont systemFontOfSize:15+arc4random()%4] linkData:@"http://www.baidu.com"];
         }else {
             // 追加文本属性
             NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
@@ -61,12 +62,7 @@
         index++;
     }
     
-    TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
-    linkTextStorage.text = @"百度一下";
-    linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
-    //linkTextStorage.textColor = colorArray[index%5];//用label默认 linkColor
-    linkTextStorage.linkStr = @"http://www.baidu.com";
-    [label1 appendTextStorage:linkTextStorage];
+    [label1 appendLinkWithText:@"百度一下" linkFont:[UIFont systemFontOfSize:15+arc4random()%4] linkData:@"http://www.baidu.com"];
     
     [label1 sizeToFit];
     _label1 = label1;
@@ -87,7 +83,7 @@
             linkTextStorage.range = [text rangeOfString:subText];
             linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
             linkTextStorage.textColor = colorArray[index%5];
-            linkTextStorage.linkStr = @"我被点中了哦O(∩_∩)O~";
+            linkTextStorage.linkData = @"我被点中了哦O(∩_∩)O~";
             [textRunArray addObject:linkTextStorage];
         } else {
             TYTextStorage *textStorage = [[TYTextStorage alloc]init];
@@ -118,7 +114,7 @@
 {
     if ([TextRun isKindOfClass:[TYLinkTextStorage class]]) {
         
-        NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkStr;
+        NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkData;
         
         if ([linkStr hasPrefix:@"http:"]) {
             [ [ UIApplication sharedApplication] openURL:[ NSURL URLWithString:linkStr]];
