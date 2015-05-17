@@ -136,7 +136,7 @@
 
 #pragma mark - deleagte
 
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point
 {
     NSLog(@"textStorageClickedAtPoint");
 }
