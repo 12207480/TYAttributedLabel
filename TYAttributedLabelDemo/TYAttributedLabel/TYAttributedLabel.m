@@ -84,7 +84,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if (self.backgroundColor == nil) {
         self.backgroundColor = [UIColor whiteColor];
     }
-    self.userInteractionEnabled = NO;
+    self.userInteractionEnabled = YES;
     _font = [UIFont systemFontOfSize:15];
     _characterSpacing = 1;
     _linesSpacing = 5;
@@ -455,7 +455,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)addSingleTapGesture
 {
     if (_singleTapGuesture == nil) {
-        self.userInteractionEnabled = YES;
         // 单指单击
         _singleTapGuesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         // 增加事件者响应者
@@ -474,7 +473,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)addLongPressGesture
 {
     if (_longPressGuesture == nil) {
-        self.userInteractionEnabled = YES;
         // 长按
         _longPressGuesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
         [self addGestureRecognizer:_longPressGuesture];

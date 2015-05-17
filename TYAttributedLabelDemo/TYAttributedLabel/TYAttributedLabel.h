@@ -14,9 +14,6 @@
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
 
-// 这个代理 已废弃
-//- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage NS_DEPRECATED_IOS(2_0, 2_0);
-
 // 点击代理
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
 
