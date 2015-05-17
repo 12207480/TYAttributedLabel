@@ -16,6 +16,10 @@ TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，�
 * 支持添加属性文本，自定义链接，新增高亮效果显示（文字和背景）
 * 支持添加UIImage和UIView控件
 
+## Update
+   
+v1.1  添加链接便利方法和长按手势代理，优化代码
+
 ## Demo
 运行demo可以查看效果，而且在demo中有详细的例子，针对各种文本和图文的实现，这里简单的介绍下用法
  
@@ -45,6 +49,18 @@ TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，�
 |TYViewStorage|自定义UIView控件，继承TYDrawStorage|
 
 如果需要更加详细的内容，请看各个头文件，有详细的注释
+
+### Delegate
+
+``` objective-c
+
+// 点击代理
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
+
+// 长按代理 有多个状态 begin, changes, end 都会调用,所以需要判断状态
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
+
+```
 
 ### Examples
 
