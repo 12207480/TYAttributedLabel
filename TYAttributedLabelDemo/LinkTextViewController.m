@@ -110,9 +110,9 @@
 
 #pragma mark - TYAttributedLabelDelegate
 
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextRun
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextRun atPoint:(CGPoint)point
 {
-    NSLog(@"textStorageClicked");
+    NSLog(@"textStorageClickedAtPoint");
     if ([TextRun isKindOfClass:[TYLinkTextStorage class]]) {
         
         NSString *linkStr = ((TYLinkTextStorage*)TextRun).linkData;

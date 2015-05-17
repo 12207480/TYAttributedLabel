@@ -13,8 +13,12 @@
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
+
+// 这个代理 已废弃
+//- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage NS_DEPRECATED_IOS(2_0, 2_0);
+
 // 点击代理
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage;
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
 
 // 长按代理 有多个状态 begin, changes, end 都会调用,所以需要判断状态
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;

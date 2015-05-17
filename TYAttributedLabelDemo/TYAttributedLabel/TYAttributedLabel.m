@@ -21,8 +21,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @interface TYAttributedLabel ()
 {
     struct {
-        unsigned int textStorageClicked :1;
-        unsigned int textStorageLongPressed :1;
+        unsigned int textStorageClickedAtPoint :1;
+        unsigned int textStorageLongPressedOnStateAtPoint :1;
     }_delegateFlags;
     
     CTFramesetterRef            _framesetter;
@@ -102,8 +102,12 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if (delegate == _delegate)  return;
     _delegate = delegate;
     
-    _delegateFlags.textStorageClicked = [delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)];
-    _delegateFlags.textStorageLongPressed = [delegate respondsToSelector:@selector(attributedLabel:textStorageLongPressed:onState:atPoint:)];
+    if ([delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)]) {
+        NSLog(@"attributedLabel:textStorageClicked: 已经废弃，请使用attributedLabel:textStorageClicked:atPoint:");
+    }
+    
+    _delegateFlags.textStorageClickedAtPoint = [delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:atPoint:)];
+    _delegateFlags.textStorageLongPressedOnStateAtPoint = [delegate respondsToSelector:@selector(attributedLabel:textStorageLongPressed:onState:atPoint:)];
 }
 
 - (void)setText:(NSString *)text
@@ -439,10 +443,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     
     _runRectDictionary = runRectDictionary;
     
-    if (_delegateFlags.textStorageClicked) {
+    if (_delegateFlags.textStorageClickedAtPoint) {
         [self addSingleTapGesture];
     }
-    if (_delegateFlags.textStorageLongPressed) {
+    if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
         [self addLongPressGesture];
     }
 }
@@ -504,8 +508,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         if(CGRectContainsPoint(rect, point)){
             //NSLog(@"点击了 textStorage ");
             // 调用代理
-            if (_delegateFlags.textStorageClicked) {
-                [_delegate attributedLabel:weakSelf textStorageClicked:obj];
+            if (_delegateFlags.textStorageClickedAtPoint) {
+                [_delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
                 *stop = YES;
             }
         }
@@ -531,7 +535,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         if(CGRectContainsPoint(rect, point)){
             //NSLog(@"长按了 textStorage ");
             // 调用代理
-            if (_delegateFlags.textStorageLongPressed) {
+            if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
                 [_delegate attributedLabel:weakSelf textStorageLongPressed:obj onState:sender.state atPoint:point];
                 *stop = YES;
             }

@@ -138,7 +138,7 @@
 
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage
 {
-    NSLog(@"textStorageClicked");
+    NSLog(@"textStorageClickedAtPoint");
 }
 
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point
