@@ -4,7 +4,7 @@
 //
 //  Created by tanyang on 15/4/8.
 //  Copyright (c) 2015年 tanyang. All rights reserved.
-//  TYAttributedLabel v1.0 verson 
+//  TYAttributedLabel v1.1 verson 
 
 #import <UIKit/UIKit.h>
 #import "NSMutableAttributedString+TY.h"
@@ -13,8 +13,11 @@
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
-// textStorage点击代理
+// 点击代理
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage;
+
+// 长按代理 有多个状态 begin, changes, end 都会调用,所以需要判断状态
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
 @end
 
 /**

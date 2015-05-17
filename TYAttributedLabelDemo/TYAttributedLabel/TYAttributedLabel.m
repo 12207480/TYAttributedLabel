@@ -18,10 +18,11 @@
 
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
-@interface TYAttributedLabel ()<UIGestureRecognizerDelegate>
+@interface TYAttributedLabel ()
 {
     struct {
         unsigned int textStorageClicked :1;
+        unsigned int textStorageLongPressed :1;
     }_delegateFlags;
     
     CTFramesetterRef            _framesetter;
@@ -33,7 +34,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @property (nonatomic, strong)   NSMutableArray              *textStorageArray;  // run数组
 @property (nonatomic, strong)   NSDictionary                *linkRectDictionary;
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
-@property (nonatomic, strong)   UITapGestureRecognizer      *singleTap;         // 点击手势
+@property (nonatomic, strong)   UITapGestureRecognizer      *singleTapGuesture;         // 点击手势
+@property (nonatomic, strong)   UILongPressGestureRecognizer *longPressGuesture;// 长按手势
 @property (nonatomic, strong)   UIColor                     *saveLinkColor;
 @end
 
@@ -101,6 +103,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _delegate = delegate;
     
     _delegateFlags.textStorageClicked = [delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)];
+    _delegateFlags.textStorageLongPressed = [delegate respondsToSelector:@selector(attributedLabel:textStorageLongPressed:onState:atPoint:)];
 }
 
 - (void)setText:(NSString *)text
@@ -435,35 +438,54 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
     
     _runRectDictionary = runRectDictionary;
-    [self addSingleTapGesture];
+    
+    if (_delegateFlags.textStorageClicked) {
+        [self addSingleTapGesture];
+    }
+    if (_delegateFlags.textStorageLongPressed) {
+        [self addLongPressGesture];
+    }
 }
 
-#pragma mark - add tapGesture
+#pragma mark - add Gesture
 - (void)addSingleTapGesture
 {
-    if (_singleTap == nil) {
+    if (_singleTapGuesture == nil) {
         self.userInteractionEnabled = YES;
-        //单指单击
-        _singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
-        _singleTap.delegate = self;
-        //手指数
-        _singleTap.numberOfTouchesRequired = 1;
-        //点击次数
-        _singleTap.numberOfTapsRequired = 1;
-        //增加事件者响应者，
-        [self addGestureRecognizer:_singleTap];
+        // 单指单击
+        _singleTapGuesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+        // 增加事件者响应者
+        [self addGestureRecognizer:_singleTapGuesture];
     }
 }
 
 - (void)removeSingleTapGesture
 {
-    if (_singleTap) {
-        [self removeGestureRecognizer:_singleTap];
-        _singleTap = nil;
+    if (_singleTapGuesture) {
+        [self removeGestureRecognizer:_singleTapGuesture];
+        _singleTapGuesture = nil;
     }
 }
 
-#pragma mark - singleTap action
+- (void)addLongPressGesture
+{
+    if (_longPressGuesture == nil) {
+        self.userInteractionEnabled = YES;
+        // 长按
+        _longPressGuesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+        [self addGestureRecognizer:_longPressGuesture];
+    }
+}
+
+- (void)removeLongPressGesture
+{
+    if (_longPressGuesture) {
+        [self removeGestureRecognizer:_longPressGuesture];
+        _longPressGuesture = nil;
+    }
+}
+
+#pragma mark - Gesture action
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
@@ -480,10 +502,37 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
-            NSLog(@"点击了 textStorage ");
+            //NSLog(@"点击了 textStorage ");
             // 调用代理
             if (_delegateFlags.textStorageClicked) {
                 [_delegate attributedLabel:weakSelf textStorageClicked:obj];
+                *stop = YES;
+            }
+        }
+    }];
+}
+
+- (void)longPress:(UILongPressGestureRecognizer *)sender
+{
+    CGPoint point = [sender locationInView:self];
+    
+    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
+    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
+    
+    __typeof (self) __weak weakSelf = self;
+    
+    // 遍历run位置字典
+    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
+        
+        CGRect imgRect = [keyRectValue CGRectValue];
+        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
+        
+        // point 是否在rect里
+        if(CGRectContainsPoint(rect, point)){
+            //NSLog(@"长按了 textStorage ");
+            // 调用代理
+            if (_delegateFlags.textStorageLongPressed) {
+                [_delegate attributedLabel:weakSelf textStorageLongPressed:obj onState:sender.state atPoint:point];
                 *stop = YES;
             }
         }

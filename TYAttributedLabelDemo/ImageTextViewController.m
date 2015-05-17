@@ -12,7 +12,7 @@
 #import "TYTextStorage.h"
 #import "RegexKitLite.h"
 
-@interface ImageTextViewController ()
+@interface ImageTextViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic,weak) TYAttributedLabel *label1;
 @property (nonatomic, weak) UIScrollView *scrollView;
 @end
@@ -46,6 +46,7 @@
 - (void)addTextAttributedLabel1
 {
     TYAttributedLabel *label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 0)];
+    label.delegate = self;
     [_scrollView addSubview:label];
     _label1 = label;
     
@@ -94,7 +95,7 @@
     //其实所有漂泊的人，不过是为了有一天能够不再漂泊，能用自己的力量撑起身后的家人和自己爱的人。
     TYAttributedLabel *label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_label1.frame) + 20, CGRectGetWidth(self.view.frame), 0)];
     [_scrollView addSubview:label];
-    
+    label.delegate = self;
     NSString *text = @"[CYLoLi,320,180]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。[avatar,60,60]";
     label.text = text;
     NSMutableArray *tmpArray = [NSMutableArray array];
@@ -131,6 +132,18 @@
     [label sizeToFit];
     
     [_scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(label.frame)+10)];
+}
+
+#pragma mark - deleagte
+
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage
+{
+    NSLog(@"textStorageClicked");
+}
+
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point
+{
+    NSLog(@"textStorageLongPressed");
 }
 
 - (void)didReceiveMemoryWarning {

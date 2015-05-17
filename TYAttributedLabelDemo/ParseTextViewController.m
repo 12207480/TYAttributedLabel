@@ -54,6 +54,7 @@
 
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextStorage
 {
+    NSLog(@"textStorageClicked");
     if ([TextStorage isKindOfClass:[TYLinkTextStorage class]]) {
         NSString *linkStr = ((TYLinkTextStorage*)TextStorage).linkData;
         
@@ -64,6 +65,11 @@
             [alertView show];
         }
     }
+}
+
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point
+{
+    NSLog(@"textStorageLongPressed");
 }
 
 - (void)didReceiveMemoryWarning {
