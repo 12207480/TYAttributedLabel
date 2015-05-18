@@ -102,10 +102,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if (delegate == _delegate)  return;
     _delegate = delegate;
     
-    if ([delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:)]) {
-        NSLog(@"attributedLabel:textStorageClicked: 已经废弃，请使用attributedLabel:textStorageClicked:atPoint:");
-    }
-    
     _delegateFlags.textStorageClickedAtPoint = [delegate respondsToSelector:@selector(attributedLabel:textStorageClicked:atPoint:)];
     _delegateFlags.textStorageLongPressedOnStateAtPoint = [delegate respondsToSelector:@selector(attributedLabel:textStorageLongPressed:onState:atPoint:)];
 }

@@ -136,6 +136,9 @@
 #pragma mark - 扩展支持Link链接
 @interface TYAttributedLabel (Link)
 
+/**
+ *  添加 链接LinkTextStorage
+ */
 - (void)addLinkWithLinkData:(id)linkData range:(NSRange )range;
 
 /**

@@ -11,14 +11,6 @@
 
 @implementation TYTextStorage
 
-- (instancetype)init
-{
-    if (self = [super init]) {
-        _font = [UIFont systemFontOfSize:15];
-    }
-    return self;
-}
-
 #pragma mark - protocol
 
 - (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
