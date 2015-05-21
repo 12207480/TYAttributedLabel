@@ -64,7 +64,7 @@ v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优�
 
 ### Examples
 
- -- appendStorage demo
+* appendStorage demo
  
 ``` objective-c
 
@@ -93,7 +93,7 @@ imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
 ```
- -- addStorage demo
+* addStorage demo
 
 ``` objective-c
 
