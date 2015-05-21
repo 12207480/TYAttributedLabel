@@ -18,8 +18,12 @@
 
 - (void)setOwnerView:(UIView *)ownerView
 {
-    [super setOwnerView:ownerView];
     _ownerView = ownerView;
+}
+
+- (void)didNotDrawRun
+{
+    
 }
 
 - (void)drawStorageWithRect:(CGRect)rect
@@ -55,7 +59,9 @@
         // 回到主线程显示图片
         dispatch_async(dispatch_get_main_queue(), ^{
             _image = image;
-            [_ownerView setNeedsDisplay];
+            if (_ownerView) {
+                [_ownerView setNeedsDisplay];
+            }
         });  
     });
 }

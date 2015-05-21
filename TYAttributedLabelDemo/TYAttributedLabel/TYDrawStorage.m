@@ -22,11 +22,9 @@
 
 #pragma mark - protocol
 
-- (void)setOwnerView:(TYAttributedLabel *)ownerView
+- (void)currentReplacedStringNum:(NSInteger)replacedStringNum
 {
-    [self setTextfontAscent:ownerView.font.ascender descent:ownerView.font.descender];
-    
-    _fixRange = [self fixRange:_range replaceStringNum:ownerView.replaceStringNum];
+    _fixRange = [self fixRange:_range replaceStringNum:replacedStringNum];
 }
 
 - (void)setTextfontAscent:(CGFloat)ascent descent:(CGFloat)descent;

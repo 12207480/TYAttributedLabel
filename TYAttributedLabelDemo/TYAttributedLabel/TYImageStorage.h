@@ -8,7 +8,7 @@
 
 #import "TYDrawStorage.h"
 
-@interface TYImageStorage : TYDrawStorage
+@interface TYImageStorage : TYDrawStorage<TYViewStorageProtocol>
 
 @property (nonatomic, strong) UIImage   *image;
 

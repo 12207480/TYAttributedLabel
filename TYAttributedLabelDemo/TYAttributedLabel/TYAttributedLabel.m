@@ -32,6 +32,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 }
 @property (nonatomic, strong)   NSMutableAttributedString   *attString;         // 文字属性
 @property (nonatomic, strong)   NSMutableArray              *textStorageArray;  // run数组
+@property (nonatomic, strong)   NSMutableArray              *viewStorageArray;
 @property (nonatomic, strong)   NSDictionary                *linkRectDictionary;
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTapGuesture;         // 点击手势
@@ -303,7 +304,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         
         for (id<TYDrawStorageProtocol> drawStorage in drawStorageArray) {
             NSInteger currentLenght = _attString.length;
-            [drawStorage setOwnerView:self];
+            [drawStorage setTextfontAscent:self.font.ascender descent:self.font.descender];
+            [drawStorage currentReplacedStringNum:_replaceStringNum];
             [drawStorage addTextStorageWithAttributedString:attString];
             _replaceStringNum += currentLenght - _attString.length;
         }
@@ -398,16 +400,16 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
                 CGRect runRect = CGRectMake(lineOrigin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL), lineOrigin.y - runDescent, runWidth, runAscent + runDescent);
                 
                 if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+                    if ([textStorage conformsToProtocol:@protocol(TYViewStorageProtocol) ]) {
+                        [(id<TYViewStorageProtocol>)textStorage setOwnerView:self];
+                    }
                     [(id<TYDrawStorageProtocol>)textStorage drawStorageWithRect:runRect];
-                }
-                if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
+                } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
                     [linkRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
                 }
                 
                 [runRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
-                
             }
-
         }
     }
     
@@ -430,13 +432,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         
         // 遍历不会画出来的
         for (id<TYTextStorageProtocol>drawStorage in drawStorageArray) {
-            if ([drawStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]
-                && [drawStorage respondsToSelector:@selector(didNotDrawRun)]) {
-                [(id<TYDrawStorageProtocol>)drawStorage didNotDrawRun];
+            if ([drawStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+                [(id<TYViewStorageProtocol>)drawStorage didNotDrawRun];
             }
         }
     }
-    
     _runRectDictionary = runRectDictionary;
     
     if (_delegateFlags.textStorageClickedAtPoint) {
@@ -797,9 +797,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     if (textStorage) {
         if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
-            [(id<TYDrawStorageProtocol>)textStorage setOwnerView:self];
-        }
-        if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
+            [(id<TYDrawStorageProtocol>)textStorage setTextfontAscent:self.font.ascender descent:self.font.descender];
+        } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
             if (!((id<TYLinkStorageProtocol>)textStorage).textColor) {
                 ((id<TYLinkStorageProtocol>)textStorage).textColor = self.linkColor;
             }

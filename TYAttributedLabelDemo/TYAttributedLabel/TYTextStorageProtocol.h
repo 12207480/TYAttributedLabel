@@ -62,13 +62,21 @@ extern NSString *const kTYTextRunAttributedName;
 - (void)drawStorageWithRect:(CGRect)rect;
 
 /**
+ *  设置字体高度 当前字符串替换数
+ */
+- (void)setTextfontAscent:(CGFloat)ascent descent:(CGFloat)descent;
+
+// 当前替换字符数
+- (void)currentReplacedStringNum:(NSInteger)replacedStringNum;
+
+@end
+
+@protocol TYViewStorageProtocol <NSObject>
+
+/**
  *  设置所属的view
- *
- *  @param ownerView ownerView
  */
 - (void)setOwnerView:(UIView *)ownerView;
-
-@optional
 
 /**
  *  不会把你绘画出来
