@@ -27,6 +27,8 @@
 
 - (void)setOwnerView:(UIView *)ownerView
 {
+    [super setOwnerView:ownerView];
+    
     if (_view.superview) {
         [_view removeFromSuperview];
     }
