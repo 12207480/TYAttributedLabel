@@ -72,9 +72,9 @@ TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
 [self.view addSubview:label];
 
 // 文字间隙
-label1.characterSpacing = 2;
+label.characterSpacing = 2;
 // 文本行间隙
-label1.linesSpacing = 6;
+label.linesSpacing = 6;
 
 NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 [label appendText:text];
@@ -104,9 +104,9 @@ NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待�
 [label setText:text];
 
 // 文字间隙
-label1.characterSpacing = 2;
+label.characterSpacing = 2;
 // 文本行间隙
-label1.linesSpacing = 6;
+label.linesSpacing = 6;
 
 textStorage = [[TYTextStorage alloc]init];
 textStorage.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"]; 
@@ -114,13 +114,13 @@ textStorage.textColor = RGB(0, 155, 0, 1);
 textStorage.font = [UIFont systemFontOfSize:18];
 [label addTextStorage:textStorage];
 
-[label1 addLinkWithLinkData:@"www.baidu.com" range:NSMakeRange(5, 8)];
+[label addLinkWithLinkData:@"www.baidu.com" range:NSMakeRange(5, 8)];
 
-[label1 addImageWithName:@"haha" range:NSMakeRange(2, 1)];
+[label addImageWithName:@"haha" range:NSMakeRange(2, 1)];
 
 UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
 imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
-[label1 addView:imageView range:NSMakeRange(16, 1)];
+[label addView:imageView range:NSMakeRange(16, 1)];
 
 [label sizeToFit];
 
