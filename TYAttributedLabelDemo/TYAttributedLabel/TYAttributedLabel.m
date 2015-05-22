@@ -15,8 +15,40 @@
 #define kLinkColor       [UIColor colorWithRed:0/255.0 green:91/255.0 blue:255/255.0 alpha:1]
 #define kSelectAreaColor [UIColor colorWithRed:204/255.0 green:211/255.0 blue:236/255.0 alpha:1]
 #define kHighLightLinkColor [UIColor colorWithRed:28/255.0 green:0/255.0 blue:213/255.0 alpha:1]
-
+static NSString* const kEllipsesCharacter = @"\u2026";
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
+
+static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(CTFramesetterRef framesetter, NSAttributedString *attributedString, CGSize size, NSUInteger numberOfLines) {
+    CFRange rangeToSize = CFRangeMake(0, (CFIndex)[attributedString length]);
+    CGSize constraints = CGSizeMake(size.width, MAXFLOAT);
+    
+    if (numberOfLines == 1) {
+        // If there is one line, the size that fits is the full width of the line
+        constraints = CGSizeMake(MAXFLOAT, MAXFLOAT);
+    } else if (numberOfLines > 0) {
+        // If the line count of the label more than 1, limit the range to size to the number of lines that have been set
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, MAXFLOAT));
+        CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
+        CFArrayRef lines = CTFrameGetLines(frame);
+        
+        if (CFArrayGetCount(lines) > 0) {
+            NSInteger lastVisibleLineIndex = MIN((CFIndex)numberOfLines, CFArrayGetCount(lines)) - 1;
+            CTLineRef lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex);
+            
+            CFRange rangeToLayout = CTLineGetStringRange(lastVisibleLine);
+            rangeToSize = CFRangeMake(0, rangeToLayout.location + rangeToLayout.length);
+        }
+        
+        CFRelease(frame);
+        CFRelease(path);
+    }
+    
+    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
+    
+    return CGSizeMake(ceil(suggestedSize.width), ceil(suggestedSize.height));
+}
+
 
 @interface TYAttributedLabel ()
 {
@@ -90,7 +122,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _characterSpacing = 1;
     _linesSpacing = 5;
     _textAlignment = kCTLeftTextAlignment;
-    _lineBreakMode = kCTLineBreakByCharWrapping;
+    _lineBreakMode = kCTLineBreakByWordWrapping;
     _textColor = kTextColor;
     _linkColor = kLinkColor;
     _highlightedLinkColor = nil;
@@ -353,13 +385,100 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         [self drawSelectionAreaInRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
     }
     
-    CTFrameDraw(_frameRef, context);	// CTFrameDraw 将 frame 描述到设备上下文
-
+    //CTFrameDraw(_frameRef, context);	// CTFrameDraw 将 frame 描述到设备上下文
+    [self drawText:_attString frame:_frameRef rect:rect context:context];
+    
     // 画其他元素
     [self drawTextStorageWithFrame:_frameRef context:context];
     
     CFRelease(path);
 }
+
+// this code quote M80AttributedLabel
+- (void)drawText: (NSAttributedString *)attributedString
+            frame:(CTFrameRef)frame
+            rect: (CGRect)rect
+         context: (CGContextRef)context
+{
+    if (frame)
+    {
+        if (_numberOfLines > 0)
+        {
+            CFArrayRef lines = CTFrameGetLines(frame);
+            NSInteger numberOfLines = [self numberOfDisplayedLines:_numberOfLines frame:frame];
+            
+            CGPoint lineOrigins[numberOfLines];
+            CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
+            
+            for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++)
+            {
+                CGPoint lineOrigin = lineOrigins[lineIndex];
+                CGContextSetTextPosition(context, lineOrigin.x, lineOrigin.y);
+                CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
+                
+                BOOL shouldDrawLine = YES;
+                if (lineIndex == numberOfLines - 1 &&
+                    _lineBreakMode == kCTLineBreakByTruncatingTail)
+                {
+                    // Does the last line need truncation?
+                    CFRange lastLineRange = CTLineGetStringRange(line);
+                    if (lastLineRange.location + lastLineRange.length < attributedString.length)
+                    {
+                        CTLineTruncationType truncationType = kCTLineTruncationEnd;
+                        NSUInteger truncationAttributePosition = lastLineRange.location + lastLineRange.length - 1;
+                        
+                        NSDictionary *tokenAttributes = [attributedString attributesAtIndex:truncationAttributePosition
+                                                                             effectiveRange:NULL];
+                        NSAttributedString *tokenString = [[NSAttributedString alloc] initWithString:kEllipsesCharacter
+                                                                                          attributes:tokenAttributes];
+                        CTLineRef truncationToken = CTLineCreateWithAttributedString((CFAttributedStringRef)tokenString);
+                        
+                        NSMutableAttributedString *truncationString = [[attributedString attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)] mutableCopy];
+                        
+                        if (lastLineRange.length > 0)
+                        {
+                            // Remove last token
+                            [truncationString deleteCharactersInRange:NSMakeRange(lastLineRange.length - 1, 1)];
+                        }
+                        [truncationString appendAttributedString:tokenString];
+                        
+                        
+                        CTLineRef truncationLine = CTLineCreateWithAttributedString((CFAttributedStringRef)truncationString);
+                        CTLineRef truncatedLine = CTLineCreateTruncatedLine(truncationLine, rect.size.width, truncationType, truncationToken);
+                        if (!truncatedLine)
+                        {
+                            // If the line is not as wide as the truncationToken, truncatedLine is NULL
+                            truncatedLine = CFRetain(truncationToken);
+                        }
+                        CFRelease(truncationLine);
+                        CFRelease(truncationToken);
+                        
+                        CTLineDraw(truncatedLine, context);
+                        CFRelease(truncatedLine);
+                        
+                        
+                        shouldDrawLine = NO;
+                    }
+                }
+                if(shouldDrawLine)
+                {
+                    CTLineDraw(line, context);
+                }
+            }
+        }
+        else
+        {
+            CTFrameDraw(frame,context);
+        }
+    }
+}
+
+- (NSInteger)numberOfDisplayedLines:(NSInteger)numberOfLines frame:(CTFrameRef)frame
+{
+    CFArrayRef lines = CTFrameGetLines(frame);
+    return numberOfLines > 0 ? MIN(CFArrayGetCount(lines), numberOfLines) : CFArrayGetCount(lines);
+}
+
 
 #pragma mark - drawTextStorage
 - (void)drawTextStorageWithFrame:(CTFrameRef)frame context:(CGContextRef)context
@@ -369,11 +488,12 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     CGPoint lineOrigins[CFArrayGetCount(lines)];
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
     CGFloat viewWidth = CGRectGetWidth(self.frame);
+    NSInteger numberOfLines = [self numberOfDisplayedLines:_numberOfLines frame:frame];
     
     NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
     NSMutableDictionary *linkRectDictionary = [NSMutableDictionary dictionary];
     // 获取每行有多少run
-    for (int i = 0; i < CFArrayGetCount(lines); i++) {
+    for (int i = 0; i < numberOfLines; i++) {
         CTLineRef line = CFArrayGetValueAtIndex(lines, i);
         CGFloat lineAscent;
         CGFloat lineDescent;
@@ -731,9 +851,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self updateFramesetterIfNeeded];
     
     // 获得建议的size
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(width,MAXFLOAT), NULL);
+    CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(_framesetter, _attString, CGSizeMake(width,MAXFLOAT), _numberOfLines);
+    //CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(width,MAXFLOAT), NULL);
     
-    return ceilf(suggestedSize.height)+1;
+    return suggestedSize.height+1;
 }
 
 - (void)sizeToFit

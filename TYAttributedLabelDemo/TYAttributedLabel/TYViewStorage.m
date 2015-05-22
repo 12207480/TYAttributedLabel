@@ -19,7 +19,7 @@
 - (void)setView:(UIView *)view
 {
     _view = view;
-    
+
     if (CGSizeEqualToSize(self.size, CGSizeZero)) {
         self.size = view.frame.size;
     }
