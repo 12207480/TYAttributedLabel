@@ -28,8 +28,8 @@
     // 文本行间隙
     label1.linesSpacing = 6;
     
-    //label1.lineBreakMode = kCTLineBreakByTruncatingTail;
-    //label1.numberOfLines = 4;
+    label1.lineBreakMode = kCTLineBreakByTruncatingTail;
+    label1.numberOfLines = 1;
     // 文本字体
     label1.font = [UIFont systemFontOfSize:17];
     

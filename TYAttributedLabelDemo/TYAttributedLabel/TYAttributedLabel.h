@@ -31,11 +31,12 @@
 @property (nonatomic, strong)   NSString    *text;
 @property (nonatomic, strong)   UIColor     *textColor;         // 文字颜色
 @property (nonatomic, strong)   UIFont      *font;              // 文字大小
+@property (nonatomic,assign)    NSInteger   numberOfLines;      //行数
 
 @property (nonatomic, strong)   UIColor     *linkColor;           //链接颜色
 @property (nonatomic, strong)   UIColor     *highlightedLinkColor;//默认nil高亮链接颜色
 @property (nonatomic, strong)   UIColor     *highlightedLinkBackgroundColor;//链接高亮背景颜色
-@property (nonatomic,assign)    NSInteger   numberOfLines;      //行数
+
 @property (nonatomic, assign)   unichar     characterSpacing;   // 字距
 @property (nonatomic, assign)   CGFloat     linesSpacing;       // 行距
 
