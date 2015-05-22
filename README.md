@@ -64,10 +64,17 @@ v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优�
 
 ### Examples
 
+* **appendStorage demo**
+ 
 ``` objective-c
 
 TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
 [self.view addSubview:label];
+
+// 文字间隙
+label.characterSpacing = 2;
+// 文本行间隙
+label.linesSpacing = 6;
 
 NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 [label appendText:text];
@@ -86,6 +93,39 @@ imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
 ```
+* **addStorage demo**
+
+``` objective-c
+
+TYAttributedLabel *label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 0)];
+[self.view addSubview:label];
+
+NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+[label setText:text];
+
+// 文字间隙
+label.characterSpacing = 2;
+// 文本行间隙
+label.linesSpacing = 6;
+
+textStorage = [[TYTextStorage alloc]init];
+textStorage.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"]; 
+textStorage.textColor = RGB(0, 155, 0, 1);
+textStorage.font = [UIFont systemFontOfSize:18];
+[label addTextStorage:textStorage];
+
+[label addLinkWithLinkData:@"www.baidu.com" range:NSMakeRange(5, 8)];
+
+[label addImageWithName:@"haha" range:NSMakeRange(2, 1)];
+
+UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
+[label addView:imageView range:NSMakeRange(16, 1)];
+
+[label sizeToFit];
+
+```
+
 ### Contact
 如果你发现bug，please pull reqeust me <br>
 如果你有更好的想法或者建议可以联系我，Email:122074809@qq.com
