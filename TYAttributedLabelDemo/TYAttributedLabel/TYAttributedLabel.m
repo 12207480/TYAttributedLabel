@@ -407,7 +407,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         if (_numberOfLines > 0)
         {
             CFArrayRef lines = CTFrameGetLines(frame);
-            NSInteger numberOfLines = [self numberOfDisplayedLines:_numberOfLines frame:frame];
+            NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
             
             CGPoint lineOrigins[numberOfLines];
             CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
@@ -418,9 +418,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                 CGContextSetTextPosition(context, lineOrigin.x, lineOrigin.y);
                 CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
                 
+                BOOL truncateLastLine = (_lineBreakMode == kCTLineBreakByTruncatingHead || _lineBreakMode == kCTLineBreakByTruncatingMiddle || _lineBreakMode == kCTLineBreakByTruncatingTail);
                 BOOL shouldDrawLine = YES;
-                if (lineIndex == numberOfLines - 1 &&
-                    _lineBreakMode == kCTLineBreakByTruncatingTail)
+                if (lineIndex == numberOfLines - 1 && truncateLastLine)
                 {
                     // Does the last line need truncation?
                     CFRange lastLineRange = CTLineGetStringRange(line);
@@ -429,10 +429,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                         CTLineTruncationType truncationType = kCTLineTruncationEnd;
                         NSUInteger truncationAttributePosition = lastLineRange.location + lastLineRange.length - 1;
                         
-                        NSDictionary *tokenAttributes = [attributedString attributesAtIndex:truncationAttributePosition
-                                                                             effectiveRange:NULL];
-                        NSAttributedString *tokenString = [[NSAttributedString alloc] initWithString:kEllipsesCharacter
-                                                                                          attributes:tokenAttributes];
+                        NSDictionary *tokenAttributes = [attributedString attributesAtIndex:truncationAttributePosition effectiveRange:NULL];
+                        NSAttributedString *tokenString = [[NSAttributedString alloc] initWithString:kEllipsesCharacter attributes:tokenAttributes];
                         CTLineRef truncationToken = CTLineCreateWithAttributedString((CFAttributedStringRef)tokenString);
                         
                         NSMutableAttributedString *truncationString = [[attributedString attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)] mutableCopy];
@@ -457,7 +455,6 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                         
                         CTLineDraw(truncatedLine, context);
                         CFRelease(truncatedLine);
-                        
                         
                         shouldDrawLine = NO;
                     }
