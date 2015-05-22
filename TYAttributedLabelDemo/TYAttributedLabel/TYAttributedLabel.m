@@ -64,11 +64,13 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 }
 @property (nonatomic, strong)   NSMutableAttributedString   *attString;         // 文字属性
 @property (nonatomic, strong)   NSMutableArray              *textStorageArray;  // run数组
-@property (nonatomic, strong)   NSMutableArray              *viewStorageArray;
+
 @property (nonatomic, strong)   NSDictionary                *linkRectDictionary;
 @property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
+
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTapGuesture;         // 点击手势
 @property (nonatomic, strong)   UILongPressGestureRecognizer *longPressGuesture;// 长按手势
+
 @property (nonatomic, strong)   UIColor                     *saveLinkColor;
 @end
 
