@@ -399,82 +399,71 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             rect: (CGRect)rect
          context: (CGContextRef)context
 {
-    if (frame)
+    if (_numberOfLines > 0)
     {
-        if (_numberOfLines > 0)
+        CFArrayRef lines = CTFrameGetLines(frame);
+        NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
+        
+        CGPoint lineOrigins[numberOfLines];
+        CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
+        
+        for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++)
         {
-            CFArrayRef lines = CTFrameGetLines(frame);
-            NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
+            CGPoint lineOrigin = lineOrigins[lineIndex];
+            CGContextSetTextPosition(context, lineOrigin.x, lineOrigin.y);
+            CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
             
-            CGPoint lineOrigins[numberOfLines];
-            CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
-            
-            for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++)
+            BOOL truncateLastLine = (_lineBreakMode == kCTLineBreakByTruncatingHead || _lineBreakMode == kCTLineBreakByTruncatingMiddle || _lineBreakMode == kCTLineBreakByTruncatingTail);
+            BOOL shouldDrawLine = YES;
+            if (lineIndex == numberOfLines - 1 && truncateLastLine)
             {
-                CGPoint lineOrigin = lineOrigins[lineIndex];
-                CGContextSetTextPosition(context, lineOrigin.x, lineOrigin.y);
-                CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
-                
-                BOOL truncateLastLine = (_lineBreakMode == kCTLineBreakByTruncatingHead || _lineBreakMode == kCTLineBreakByTruncatingMiddle || _lineBreakMode == kCTLineBreakByTruncatingTail);
-                BOOL shouldDrawLine = YES;
-                if (lineIndex == numberOfLines - 1 && truncateLastLine)
+                // Does the last line need truncation?
+                CFRange lastLineRange = CTLineGetStringRange(line);
+                if (lastLineRange.location + lastLineRange.length < attributedString.length)
                 {
-                    // Does the last line need truncation?
-                    CFRange lastLineRange = CTLineGetStringRange(line);
-                    if (lastLineRange.location + lastLineRange.length < attributedString.length)
+                    CTLineTruncationType truncationType = kCTLineTruncationEnd;
+                    NSUInteger truncationAttributePosition = lastLineRange.location + lastLineRange.length - 1;
+                    
+                    NSDictionary *tokenAttributes = [attributedString attributesAtIndex:truncationAttributePosition effectiveRange:NULL];
+                    NSAttributedString *tokenString = [[NSAttributedString alloc] initWithString:kEllipsesCharacter attributes:tokenAttributes];
+                    CTLineRef truncationToken = CTLineCreateWithAttributedString((CFAttributedStringRef)tokenString);
+                    
+                    NSMutableAttributedString *truncationString = [[attributedString attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)] mutableCopy];
+                    
+                    if (lastLineRange.length > 0)
                     {
-                        CTLineTruncationType truncationType = kCTLineTruncationEnd;
-                        NSUInteger truncationAttributePosition = lastLineRange.location + lastLineRange.length - 1;
-                        
-                        NSDictionary *tokenAttributes = [attributedString attributesAtIndex:truncationAttributePosition effectiveRange:NULL];
-                        NSAttributedString *tokenString = [[NSAttributedString alloc] initWithString:kEllipsesCharacter attributes:tokenAttributes];
-                        CTLineRef truncationToken = CTLineCreateWithAttributedString((CFAttributedStringRef)tokenString);
-                        
-                        NSMutableAttributedString *truncationString = [[attributedString attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)] mutableCopy];
-                        
-                        if (lastLineRange.length > 0)
-                        {
-                            // Remove last token
-                            [truncationString deleteCharactersInRange:NSMakeRange(lastLineRange.length - 1, 1)];
-                        }
-                        [truncationString appendAttributedString:tokenString];
-                        
-                        
-                        CTLineRef truncationLine = CTLineCreateWithAttributedString((CFAttributedStringRef)truncationString);
-                        CTLineRef truncatedLine = CTLineCreateTruncatedLine(truncationLine, rect.size.width, truncationType, truncationToken);
-                        if (!truncatedLine)
-                        {
-                            // If the line is not as wide as the truncationToken, truncatedLine is NULL
-                            truncatedLine = CFRetain(truncationToken);
-                        }
-                        CFRelease(truncationLine);
-                        CFRelease(truncationToken);
-                        
-                        CTLineDraw(truncatedLine, context);
-                        CFRelease(truncatedLine);
-                        
-                        shouldDrawLine = NO;
+                        // Remove last token
+                        [truncationString deleteCharactersInRange:NSMakeRange(lastLineRange.length - 1, 1)];
                     }
-                }
-                if(shouldDrawLine)
-                {
-                    CTLineDraw(line, context);
+                    [truncationString appendAttributedString:tokenString];
+                    
+                    
+                    CTLineRef truncationLine = CTLineCreateWithAttributedString((CFAttributedStringRef)truncationString);
+                    CTLineRef truncatedLine = CTLineCreateTruncatedLine(truncationLine, rect.size.width, truncationType, truncationToken);
+                    if (!truncatedLine)
+                    {
+                        // If the line is not as wide as the truncationToken, truncatedLine is NULL
+                        truncatedLine = CFRetain(truncationToken);
+                    }
+                    CFRelease(truncationLine);
+                    CFRelease(truncationToken);
+                    CTLineDraw(truncatedLine, context);
+                    CFRelease(truncatedLine);
+                    
+                    shouldDrawLine = NO;
                 }
             }
-        }
-        else
-        {
-            CTFrameDraw(frame,context);
+            if(shouldDrawLine)
+            {
+                CTLineDraw(line, context);
+            }
         }
     }
+    else
+    {
+        CTFrameDraw(frame,context);
+    }
 }
-
-- (NSInteger)numberOfDisplayedLines:(NSInteger)numberOfLines frame:(CTFrameRef)frame
-{
-    CFArrayRef lines = CTFrameGetLines(frame);
-    return numberOfLines > 0 ? MIN(CFArrayGetCount(lines), numberOfLines) : CFArrayGetCount(lines);
-}
-
 
 #pragma mark - drawTextStorage
 - (void)drawTextStorageWithFrame:(CTFrameRef)frame context:(CGContextRef)context
@@ -484,7 +473,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CGPoint lineOrigins[CFArrayGetCount(lines)];
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
     CGFloat viewWidth = CGRectGetWidth(self.frame);
-    NSInteger numberOfLines = [self numberOfDisplayedLines:_numberOfLines frame:frame];
+    
+    NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
     
     NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
     NSMutableDictionary *linkRectDictionary = [NSMutableDictionary dictionary];
