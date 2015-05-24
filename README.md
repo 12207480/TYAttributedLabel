@@ -109,7 +109,7 @@ label.characterSpacing = 2;
 label.linesSpacing = 6;
 
 textStorage = [[TYTextStorage alloc]init];
-textStorage.range = [text rangeOfString:@"不过是为了有一天能够不再漂泊，"]; 
+textStorage.range = [text rangeOfString:@"总有一天你将破蛹而出"]; 
 textStorage.textColor = RGB(0, 155, 0, 1);
 textStorage.font = [UIFont systemFontOfSize:18];
 [label addTextStorage:textStorage];
