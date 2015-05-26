@@ -228,6 +228,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     _linkRectDictionary = nil;
     _textStorageArray = nil;
     _replaceStringNum = 0;
+    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self removeSingleTapGesture];
 }
 
