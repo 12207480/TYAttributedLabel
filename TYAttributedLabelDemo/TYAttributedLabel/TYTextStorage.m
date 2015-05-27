@@ -39,6 +39,7 @@
     if (NSEqualRanges(_range, NSMakeRange(0, 0))) {
         _range = NSMakeRange(0, attributedString.length);
     }
+    
     [self addTextStorageWithAttributedString:attributedString];
     return [attributedString copy];
 }

@@ -24,6 +24,8 @@ extern NSString *const kTYTextRunAttributedName;
  */
 @property (nonatomic,assign) NSRange range;
 
+@property (nonatomic,assign) NSRange realRange;
+
 /**
  *  添加属性到全文attributedString addTextStorage调用
  *
@@ -36,6 +38,7 @@ extern NSString *const kTYTextRunAttributedName;
 @protocol TYAppendTextStorageProtocol <TYTextStorageProtocol>
 
 @required
+
 /**
  *  追加attributedString属性 appendTextStorage调用
  *
@@ -47,7 +50,8 @@ extern NSString *const kTYTextRunAttributedName;
 
 @protocol TYLinkStorageProtocol <TYAppendTextStorageProtocol>
 
-@property (nonatomic, strong) NSString  *text;
+@property (nonatomic, strong,readonly)  NSString    *text;
+
 @property (nonatomic, strong) UIColor   *textColor;     // 文本颜色
 
 @end

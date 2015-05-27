@@ -10,6 +10,7 @@
 
 @interface TYDrawStorage : NSObject<TYDrawStorageProtocol>
 @property (nonatomic, assign)   NSRange         range;          // 文本范围
+@property (nonatomic, assign)   NSRange         realRange;
 @property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距
 @property (nonatomic, assign)   CGSize          size;           // 绘画物大小
 @property (nonatomic, assign)   TYDrawAlignment drawAlignment;  // 对齐方式

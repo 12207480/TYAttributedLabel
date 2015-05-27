@@ -15,6 +15,7 @@
 #define kLinkColor       [UIColor colorWithRed:0/255.0 green:91/255.0 blue:255/255.0 alpha:1]
 #define kSelectAreaColor [UIColor colorWithRed:204/255.0 green:211/255.0 blue:236/255.0 alpha:1]
 #define kHighLightLinkColor [UIColor colorWithRed:28/255.0 green:0/255.0 blue:213/255.0 alpha:1]
+
 static NSString* const kEllipsesCharacter = @"\u2026";
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
@@ -311,12 +312,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         // 排序range
         [self sortTextStorageArray:_textStorageArray];
         
-        NSMutableArray *drawStorageArray = [NSMutableArray array];
         for (id<TYTextStorageProtocol> textStorage in _textStorageArray) {
             
             // 修正图片替换字符来的误差
             if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol) ]) {
-                [drawStorageArray addObject:textStorage];
+                //[drawStorageArray addObject:textStorage];
                 continue;
             }
             
@@ -332,14 +332,17 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             }
             
         }
-        [_textStorageArray removeAllObjects];
         
-        for (id<TYDrawStorageProtocol> drawStorage in drawStorageArray) {
-            NSInteger currentLenght = _attString.length;
-            [drawStorage setTextfontAscent:self.font.ascender descent:self.font.descender];
-            [drawStorage currentReplacedStringNum:_replaceStringNum];
-            [drawStorage addTextStorageWithAttributedString:attString];
-            _replaceStringNum += currentLenght - _attString.length;
+        for (id<TYTextStorageProtocol> textStorage in _textStorageArray) {
+            textStorage.realRange = NSMakeRange(textStorage.range.location-_replaceStringNum, textStorage.range.length);
+            if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+                id<TYDrawStorageProtocol> drawStorage = (id<TYDrawStorageProtocol>)textStorage;
+                NSInteger currentLenght = _attString.length;
+                [drawStorage setTextfontAscent:self.font.ascender descent:self.font.descender];
+                [drawStorage currentReplacedStringNum:_replaceStringNum];
+                [drawStorage addTextStorageWithAttributedString:attString];
+                _replaceStringNum += currentLenght - _attString.length;
+            }
         }
     }
 }
@@ -659,10 +662,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             CGRect imgRect = [keyRectValue CGRectValue];
             CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
             
-            // point 是否在rect里obj.textColor ? obj.textColor:_linkColor;
+            // point 是否在rect里
             if(CGRectContainsPoint(rect, point)){
-                NSRange curClickLinkRange = [self.text rangeOfString:obj.text];
-                [self setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:_linkColor) linkRange:curClickLinkRange];
+                NSRange curClickLinkRange = obj.realRange;
+            [self setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:_linkColor) linkRange:curClickLinkRange];
                 return ;
             }
         }];
@@ -694,7 +697,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
-            curClickLinkRange = [self.text rangeOfString:obj.text];
+            NSInteger location = obj.range.location - _replaceStringNum;
+            if (location < 0) {
+                location = 0;
+            }
+            curClickLinkRange = obj.realRange;;
             isUnderClickLink = YES;
             saveLinkColor = obj.textColor ? obj.textColor:_linkColor;
             *stop = YES;
@@ -732,8 +739,13 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 // 设置高亮链接
 - (void)setHighlightLinkWithSaveLinkColor:(UIColor *)saveLinkColor linkRange:(NSRange)linkRange
 {
+    if (NSMaxRange(linkRange) > _attString.length) {
+        _clickLinkRange.length = 0;
+        return;
+    }
     _clickLinkRange = linkRange;
-    if (_highlightedLinkColor) {
+    if (_highlightedLinkColor)
+    {
         [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
         _saveLinkColor = saveLinkColor;
         [self resetFramesetter];
@@ -911,7 +923,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                 ((id<TYLinkStorageProtocol>)textStorage).textColor = self.linkColor;
             }
         }
-        [self appendTextAttributedString:[textStorage appendTextStorageAttributedString]];
+        
+        NSAttributedString *attAppendString = [textStorage appendTextStorageAttributedString];
+        textStorage.realRange = NSMakeRange(_attString.length, attAppendString.length);
+        [self appendTextAttributedString:attAppendString];
     }
 }
 

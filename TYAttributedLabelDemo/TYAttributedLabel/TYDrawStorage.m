@@ -35,7 +35,6 @@
 
 - (void)addTextStorageWithAttributedString:(NSMutableAttributedString *)attributedString
 {
-    // 判断是不是追加
     NSRange range = _fixRange;
     if (range.location == NSNotFound) {
         return;
@@ -58,13 +57,13 @@
     // 创建空字符属性文本
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:[self spaceReplaceString]];
     // 修正range
-    NSRange range = NSMakeRange(0, 1);
+    _range = NSMakeRange(0, 1);
     
     // 设置合适的对齐
     [self setAppropriateAlignment];
     
     // 添加文本属性和runDelegate
-    [self addRunDelegateWithAttributedString:attributedString range:range];
+    [self addRunDelegateWithAttributedString:attributedString range:_range];
     return [attributedString copy];
 }
 
