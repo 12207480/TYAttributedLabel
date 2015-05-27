@@ -5,7 +5,7 @@ TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，�
 
 ![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif)
 
-添加weibo demo 使用TYAttributedLabel 截图
+weibo demo 使用TYAttributedLabel 截图
 
 ![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/weibo.gif)
 ## Requirements
