@@ -24,6 +24,9 @@ extern NSString *const kTYTextRunAttributedName;
  */
 @property (nonatomic,assign) NSRange range;
 
+/**
+ *  文本中实际位置,因为某些文本被替换，会导致位置偏移
+ */
 @property (nonatomic,assign) NSRange realRange;
 
 /**
@@ -49,8 +52,6 @@ extern NSString *const kTYTextRunAttributedName;
 @end
 
 @protocol TYLinkStorageProtocol <TYAppendTextStorageProtocol>
-
-@property (nonatomic, strong,readonly)  NSString    *text;
 
 @property (nonatomic, strong) UIColor   *textColor;     // 文本颜色
 
