@@ -4,6 +4,8 @@ TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，�
 ## ScreenShot
 ![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif)
 
+添加weibo demo 使用TYAttributedLabel 截图
+![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/weibo.gif)
 ## Requirements
 * Xcode 5 or higher
 * Apple LLVM compiler
