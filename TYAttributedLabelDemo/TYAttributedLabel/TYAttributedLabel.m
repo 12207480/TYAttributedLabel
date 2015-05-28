@@ -378,9 +378,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CGPathAddRect(path, NULL, self.bounds);
     
     // CTFramesetter 是使用 Core Text 绘制时最重要的类。它管理您的字体引用和文本绘制帧。这里在 framesetter 之后通过一个所选的文本范围（这里我们选择整个文本）与需要绘制到的矩形路径创建一个帧。
-    [self updateFramesetterIfNeeded];
     
     if (_frameRef == nil) {
+        
+        [self updateFramesetterIfNeeded];
+        
         _frameRef = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, [_attString length]), path, NULL);
     }
     
@@ -542,7 +544,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         
         // 遍历不会画出来的
         for (id<TYTextStorageProtocol>drawStorage in drawStorageArray) {
-            if ([drawStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+            if ([drawStorage conformsToProtocol:@protocol(TYViewStorageProtocol)]) {
                 [(id<TYViewStorageProtocol>)drawStorage didNotDrawRun];
             }
         }

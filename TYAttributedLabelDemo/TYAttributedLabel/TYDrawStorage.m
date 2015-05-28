@@ -8,7 +8,6 @@
 
 #import "TYDrawStorage.h"
 #import <CoreText/CoreText.h>
-#import "TYAttributedLabel.h"
 
 @interface TYDrawStorage (){
     CGFloat         _fontAscent;

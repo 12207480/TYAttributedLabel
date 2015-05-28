@@ -21,11 +21,6 @@
     _ownerView = ownerView;
 }
 
-- (void)didNotDrawRun
-{
-    
-}
-
 - (void)drawStorageWithRect:(CGRect)rect
 {
     UIImage *image = nil;
@@ -45,6 +40,11 @@
         CGContextRef context = UIGraphicsGetCurrentContext();
         CGContextDrawImage(context, rect, image.CGImage);
     }
+}
+
+- (void)didNotDrawRun
+{
+    
 }
 
 #pragma mark - private
