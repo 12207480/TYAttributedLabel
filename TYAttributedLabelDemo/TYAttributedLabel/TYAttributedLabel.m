@@ -19,6 +19,7 @@
 static NSString* const kEllipsesCharacter = @"\u2026";
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
+// this code quote M80AttributedLabel
 static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(CTFramesetterRef framesetter, NSAttributedString *attributedString, CGSize size, NSUInteger numberOfLines) {
     CFRange rangeToSize = CFRangeMake(0, (CFIndex)[attributedString length]);
     CGSize constraints = CGSizeMake(size.width, MAXFLOAT);
@@ -413,13 +414,14 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         CGPoint lineOrigins[numberOfLines];
         CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
         
+        BOOL truncateLastLine = (_lineBreakMode == kCTLineBreakByTruncatingHead || _lineBreakMode == kCTLineBreakByTruncatingMiddle || _lineBreakMode == kCTLineBreakByTruncatingTail);
+        
         for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++)
         {
             CGPoint lineOrigin = lineOrigins[lineIndex];
             CGContextSetTextPosition(context, lineOrigin.x, lineOrigin.y);
             CTLineRef line = CFArrayGetValueAtIndex(lines, lineIndex);
             
-            BOOL truncateLastLine = (_lineBreakMode == kCTLineBreakByTruncatingHead || _lineBreakMode == kCTLineBreakByTruncatingMiddle || _lineBreakMode == kCTLineBreakByTruncatingTail);
             BOOL shouldDrawLine = YES;
             if (lineIndex == numberOfLines - 1 && truncateLastLine)
             {
