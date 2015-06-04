@@ -19,7 +19,7 @@
 static NSString* const kEllipsesCharacter = @"\u2026";
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
-// this code quote M80AttributedLabel
+// this code quote TTTAttributedLabel
 static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(CTFramesetterRef framesetter, NSAttributedString *attributedString, CGSize size, NSUInteger numberOfLines) {
     CFRange rangeToSize = CFRangeMake(0, (CFIndex)[attributedString length]);
     CGSize constraints = CGSizeMake(size.width, MAXFLOAT);
@@ -387,7 +387,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         _frameRef = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, [_attString length]), path, NULL);
     }
     
-    if (_highlightedLinkBackgroundColor) {
+    if (_highlightedLinkBackgroundColor && _linkRectDictionary) {
         [self drawSelectionAreaInRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
     }
     
