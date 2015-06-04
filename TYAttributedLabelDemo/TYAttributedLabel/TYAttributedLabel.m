@@ -317,13 +317,12 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             
             // 修正图片替换字符来的误差
             if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol) ]) {
-                //[drawStorageArray addObject:textStorage];
                 continue;
             }
             
             if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
                 if (!((id<TYLinkStorageProtocol>)textStorage).textColor) {
-                    ((id<TYLinkStorageProtocol>)textStorage).textColor = self.linkColor;
+                    ((id<TYLinkStorageProtocol>)textStorage).textColor = _linkColor;
                 }
             }
             
@@ -338,11 +337,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             textStorage.realRange = NSMakeRange(textStorage.range.location-_replaceStringNum, textStorage.range.length);
             if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
                 id<TYDrawStorageProtocol> drawStorage = (id<TYDrawStorageProtocol>)textStorage;
-                NSInteger currentLenght = _attString.length;
-                [drawStorage setTextfontAscent:self.font.ascender descent:self.font.descender];
+                NSInteger currentLenght = attString.length;
+                [drawStorage setTextfontAscent:_font.ascender descent:_font.descender];
                 [drawStorage currentReplacedStringNum:_replaceStringNum];
                 [drawStorage addTextStorageWithAttributedString:attString];
-                _replaceStringNum += currentLenght - _attString.length;
+                _replaceStringNum += currentLenght - attString.length;
             }
         }
         [_textStorageArray removeAllObjects];
@@ -534,6 +533,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }
     if (linkRectDictionary.count > 0) {
         _linkRectDictionary = [linkRectDictionary copy];
+    }else {
+        _linkRectDictionary = nil;
     }
 }
 
@@ -618,7 +619,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             //NSLog(@"点击了 textStorage ");
             // 调用代理
             if (_delegateFlags.textStorageClickedAtPoint) {
-                [_delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
+                [weakSelf.delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
                 *stop = YES;
             }
         }
@@ -645,7 +646,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             //NSLog(@"长按了 textStorage ");
             // 调用代理
             if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
-                [_delegate attributedLabel:weakSelf textStorageLongPressed:obj onState:sender.state atPoint:point];
+                [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:obj onState:sender.state atPoint:point];
                 *stop = YES;
             }
         }
@@ -663,6 +664,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         // CoreText context coordinates are the opposite to UIKit so we flip the bounds
         CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
         
+        __typeof (self) __weak weakSelf = self;
         [_linkRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYLinkStorageProtocol> obj, BOOL *stop) {
             CGRect imgRect = [keyRectValue CGRectValue];
             CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
@@ -670,7 +672,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             // point 是否在rect里
             if(CGRectContainsPoint(rect, point)){
                 NSRange curClickLinkRange = obj.realRange;
-            [self setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:_linkColor) linkRange:curClickLinkRange];
+            [self setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:weakSelf.linkColor) linkRange:curClickLinkRange];
                 return ;
             }
         }];
@@ -696,19 +698,16 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     __block NSRange curClickLinkRange;
     __block UIColor *saveLinkColor = nil;
     
+    __typeof (self) __weak weakSelf = self;
     [_linkRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYLinkStorageProtocol> obj, BOOL *stop) {
         CGRect imgRect = [keyRectValue CGRectValue];
         CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
         
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
-            NSInteger location = obj.range.location - _replaceStringNum;
-            if (location < 0) {
-                location = 0;
-            }
             curClickLinkRange = obj.realRange;;
             isUnderClickLink = YES;
-            saveLinkColor = obj.textColor ? obj.textColor:_linkColor;
+            saveLinkColor = obj.textColor ? obj.textColor:weakSelf.linkColor;
             *stop = YES;
         }
     }];
