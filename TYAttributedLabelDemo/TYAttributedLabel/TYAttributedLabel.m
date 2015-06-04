@@ -345,6 +345,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                 _replaceStringNum += currentLenght - _attString.length;
             }
         }
+        [_textStorageArray removeAllObjects];
     }
 }
 
