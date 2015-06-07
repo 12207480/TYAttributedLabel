@@ -26,8 +26,8 @@ v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优�
 v1.2  添加设置行数，修复bug，增强稳定性
 
 更新预告<br>
-v2.0 重构代码 分离出TYTextContainer ，携带CTFrameRef，NSAttributedString，可以提前生成，显著提升cell场景流畅度，不会卡顿
-<br> 微博demo测试中 敬请期待
+v2.0 重构代码 分离出TYTextContainer ，携带CTFrameRef，NSAttributedString，可以提前生成，显著提升cell场景流畅度
+<br> 微博demo测试中 和微博一样流畅 敬请期待
 
 ## Demo
 运行demo可以查看效果，而且在demo中有详细的例子，针对各种文本和图文的实现，这里简单的介绍下用法
