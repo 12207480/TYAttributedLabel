@@ -73,9 +73,9 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 
 * **appendStorage demo**
 	 
-\`\`\` objective-c
+```objc
 
-TYAttributedLabel \*label = [[TYAttributedLabel alloc]init];
+TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
 [self.view addSubview:label];
 
 // 文字间隙
@@ -83,31 +83,31 @@ label.characterSpacing = 2;
 // 文本行间隙
 label.linesSpacing = 6;
 
-NSString \*text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 [label appendText:text];
 
-NSMutableAttributedString \*attributedString = [[NSMutableAttributedString alloc]initWithString:text];
+NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
 [attributedString addAttributeTextColor:[UIColor blueColor]];
 [attributedString addAttributeFont:[UIFont systemFontOfSize:15]];
 [label appendTextAttributedString:attributedString];
 
 [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
 
-UIImageView \*imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
 imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [label appendView:imageView];
 
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
-\`\`\`
+```
 * **addStorage demo**
 
-\`\`\` objective-c
+```objc
 
-TYAttributedLabel \*label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 0)];
+TYAttributedLabel *label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 0)];
 [self.view addSubview:label];
 
-NSString \*text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 [label setText:text];
 
 // 文字间隙
@@ -125,17 +125,17 @@ textStorage.font = [UIFont systemFontOfSize:18];
 
 [label addImageWithName:@"haha" range:NSMakeRange(2, 1)];
 
-UIImageView \*imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
 imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [label addView:imageView range:NSMakeRange(16, 1)];
 
 [label sizeToFit];
 
-\`\`\`
+```
 
 * **TextContainer demo**
-\`\`\` objective-c
-NSString \*text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+```objc
+NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 TYTextContainer *textContainer = [[TYTextContainer alloc]init];
     textContainer.text = text;
     // 文字间隙
@@ -153,12 +153,10 @@ textStorage.font = [UIFont systemFontOfSize:18];
 
 [textContainer addImageWithName:@"haha" range:NSMakeRange(2, 1)];
 
-UIImageView \*imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
 imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [textContainer addView:imageView range:NSMakeRange(16, 1)];
 
-// 生成NSAttributedString 属性文本
-//NSAttributedString *attString = [textContainer createAttributedString];
 
 // 生成 textContainer 文本容器
 [textContainer createTextContainerWithTextWidth:CGRectGetWidth(self.view.frame)];
@@ -166,13 +164,14 @@ imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
 label.textContainer = textContainer;
 
-// 生成NSAttributedString 属性文本
-NSAttributedString *attString = [textContainer createAttributedString];
-label.attributedText = attString;
+
+// 也可以 生成NSAttributedString 属性文本
+//NSAttributedString *attString = [textContainer createAttributedString];
+//label.attributedText = attString;
 
 [label setFrameWithOrign:CGPointZero Width:CGRectGetWidth(self.view.frame)];
 [self.view addSubView:label];
-\`\`\`
+```
 
 ### Contact
 如果你发现bug，please pull reqeust me <br>
