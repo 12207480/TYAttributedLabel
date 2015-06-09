@@ -9,45 +9,20 @@
 #import "TYAttributedLabel.h"
 #import <CoreText/CoreText.h>
 
-// 文本颜色
-
-#define kTextColor       [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1]
-#define kLinkColor       [UIColor colorWithRed:0/255.0 green:91/255.0 blue:255/255.0 alpha:1]
 #define kSelectAreaColor [UIColor colorWithRed:204/255.0 green:211/255.0 blue:236/255.0 alpha:1]
 #define kHighLightLinkColor [UIColor colorWithRed:28/255.0 green:0/255.0 blue:213/255.0 alpha:1]
 
 static NSString* const kEllipsesCharacter = @"\u2026";
 NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
-// this code quote TTTAttributedLabel
-static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(CTFramesetterRef framesetter, NSAttributedString *attributedString, CGSize size, NSUInteger numberOfLines) {
-    CFRange rangeToSize = CFRangeMake(0, (CFIndex)[attributedString length]);
-    CGSize constraints = CGSizeMake(size.width, MAXFLOAT);
-    
-    if (numberOfLines > 0) {
-        // If the line count of the label more than 1, limit the range to size to the number of lines that have been set
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddRect(path, NULL, CGRectMake(0.0f, 0.0f, constraints.width, MAXFLOAT));
-        CTFrameRef frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, 0), path, NULL);
-        CFArrayRef lines = CTFrameGetLines(frame);
-        
-        if (CFArrayGetCount(lines) > 0) {
-            NSInteger lastVisibleLineIndex = MIN((CFIndex)numberOfLines, CFArrayGetCount(lines)) - 1;
-            CTLineRef lastVisibleLine = CFArrayGetValueAtIndex(lines, lastVisibleLineIndex);
-            
-            CFRange rangeToLayout = CTLineGetStringRange(lastVisibleLine);
-            rangeToSize = CFRangeMake(0, rangeToLayout.location + rangeToLayout.length);
-        }
-        
-        CFRelease(frame);
-        CFRelease(path);
-    }
-    
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeWithConstraints(framesetter, rangeToSize, NULL, constraints, NULL);
-    
-    return CGSizeMake(ceil(suggestedSize.width), ceil(suggestedSize.height));
-}
+@interface TYTextContainer ()
+@property (nonatomic, strong) NSMutableAttributedString *attString;
+@property (nonatomic, assign,readonly) CTFrameRef  frameRef;
+@property (nonatomic, assign,readonly) CGFloat     textHeight;
+@property (nonatomic, assign,readonly) CGFloat     textWidth;
 
+- (void)resetFrameRef;
+@end
 
 @interface TYAttributedLabel ()
 {
@@ -56,16 +31,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         unsigned int textStorageLongPressedOnStateAtPoint :1;
     }_delegateFlags;
     
-    CTFramesetterRef            _framesetter;
-    CTFrameRef                  _frameRef;
-    NSInteger                   _replaceStringNum;   // 图片替换字符数
     NSRange                     _clickLinkRange;     // 点击的link的范围
 }
-@property (nonatomic, strong)   NSMutableAttributedString   *attString;         // 文字属性
-@property (nonatomic, strong)   NSMutableArray              *textStorageArray;  // run数组
 
+@property (nonatomic, strong)   NSDictionary                *runRectDictionary; // runRect字典
 @property (nonatomic, strong)   NSDictionary                *linkRectDictionary;
-@property (nonatomic,strong)    NSDictionary                *runRectDictionary; // runRect字典
 
 @property (nonatomic, strong)   UITapGestureRecognizer      *singleTapGuesture;         // 点击手势
 @property (nonatomic, strong)   UILongPressGestureRecognizer *longPressGuesture;// 长按手势
@@ -81,6 +51,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     if (self = [super initWithFrame:frame]) {
         [self setupProperty];
+        _textContainer = [[TYTextContainer alloc]init];
     }
     return self;
 }
@@ -89,46 +60,35 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     if (self = [super initWithCoder:aDecoder]) {
         [self setupProperty];
+        _textContainer = [[TYTextContainer alloc]init];
     }
     return self;
 }
 
-#pragma mark - getter
-
-- (NSMutableArray *)textStorageArray
+- (instancetype)initWithTextContainer:(TYTextContainer *)textContainer
 {
-    if (_textStorageArray == nil) {
-        _textStorageArray = [NSMutableArray array];
+    if (self = [super init]) {
+        [self setupProperty];
+        _textContainer = textContainer;
     }
-    return _textStorageArray;
+    return self;
 }
 
-- (NSString *)text{
-    return _attString.string;
-}
-
-- (NSAttributedString *)attributedText
-{
-    return _attString;
-}
-
-#pragma mark - setter
 - (void)setupProperty
 {
     if (self.backgroundColor == nil) {
         self.backgroundColor = [UIColor whiteColor];
     }
     self.userInteractionEnabled = YES;
-    _font = [UIFont systemFontOfSize:15];
-    _characterSpacing = 1;
-    _linesSpacing = 5;
-    _textAlignment = kCTLeftTextAlignment;
-    _lineBreakMode = kCTLineBreakByWordWrapping;
-    _textColor = kTextColor;
-    _linkColor = kLinkColor;
     _highlightedLinkColor = nil;
     _highlightedLinkBackgroundColor = kSelectAreaColor;
-    _replaceStringNum = 0;
+}
+
+- (void)setTextContainer:(TYTextContainer *)attStringCreater
+{
+    _textContainer = attStringCreater;
+    [self resetAllAttributed];
+    [self setNeedsDisplay];
 }
 
 - (void)setDelegate:(id<TYAttributedLabelDelegate>)delegate
@@ -140,87 +100,17 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     _delegateFlags.textStorageLongPressedOnStateAtPoint = [delegate respondsToSelector:@selector(attributedLabel:textStorageLongPressed:onState:atPoint:)];
 }
 
-- (void)setText:(NSString *)text
-{
-    _attString = [self createTextAttibuteStringWithText:text];
-    [self resetAllAttributed];
-    [self resetFramesetter];
-}
-
-- (void)setAttributedText:(NSAttributedString *)attributedText
-{
-    _attString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedText];
-    [self resetAllAttributed];
-    [self resetFramesetter];
-}
-
-- (void)setTextColor:(UIColor *)textColor
-{
-    if (textColor && _textColor != textColor){
-        _textColor = textColor;
-        
-        [_attString addAttributeTextColor:textColor];
-        [self resetFramesetter];
-    }
-}
-
-- (void)setFont:(UIFont *)font
-{
-    if (font && _font != font){
-        _font = font;
-        
-        [_attString addAttributeFont:font];
-        [self resetFramesetter];
-    }
-}
-
-- (void)setCharacterSpacing:(unichar)characterSpacing
-{
-    if (characterSpacing && _characterSpacing != characterSpacing) {
-        _characterSpacing = characterSpacing;
-        
-        [_attString addAttributeCharacterSpacing:characterSpacing];
-        [self resetFramesetter];
-    }
-}
-
-- (void)setLinesSpacing:(CGFloat)linesSpacing
-{
-    if (linesSpacing > 0 && _linesSpacing != linesSpacing) {
-        _linesSpacing = linesSpacing;
-        
-        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:linesSpacing lineBreakStyle:_lineBreakMode];
-        [self resetFramesetter];
-    }
-}
-
-- (void)setTextAlignment:(CTTextAlignment)textAlignment
-{
-    if (_textAlignment != textAlignment) {
-        _textAlignment = textAlignment;
-        
-        [_attString addAttributeAlignmentStyle:textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
-        [self resetFramesetter];
-    }
-}
-
 #pragma mark - add textStorage
 - (void)addTextStorage:(id<TYTextStorageProtocol>)textStorage
 {
-    if (textStorage) {
-        [self.textStorageArray addObject:textStorage];
-    }
+    [_textContainer addTextStorage:textStorage];
 }
 
 - (void)addTextStorageArray:(NSArray *)textStorageArray
 {
     if (textStorageArray) {
-        for (id<TYTextStorageProtocol> textStorage in textStorageArray) {
-            if ([textStorage conformsToProtocol:@protocol(TYTextStorageProtocol)]) {
-                [self addTextStorage:textStorage];
-            }
-        }
-        [self resetFramesetter];
+        [_textContainer addTextStorageArray:textStorageArray];
+        [self setNeedsDisplay];
     }
 }
 
@@ -228,8 +118,6 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     _runRectDictionary = nil;
     _linkRectDictionary = nil;
-    _textStorageArray = nil;
-    _replaceStringNum = 0;
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self removeSingleTapGesture];
 }
@@ -237,134 +125,14 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 #pragma mark reset framesetter
 - (void)resetFramesetter
 {
-    if (_framesetter){
-        CFRelease(_framesetter);
-        _framesetter = nil;
-    }
-    
-    if (_frameRef) {
-        CFRelease(_frameRef);
-        _frameRef = nil;
-    }
-    
+    [_textContainer resetFrameRef];
     [self setNeedsDisplay];
-}
-
-- (void)updateFramesetterIfNeeded
-{
-    // 是否更新了内容
-    if (_framesetter == nil) {
-        
-        // 添加文本run属性
-        [self addTextStoragesWithAtrributedString:_attString];
-        
-        _framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)_attString);
-        
-    }
-}
-
-#pragma mark - create text attibuteString
-- (NSMutableAttributedString *)createTextAttibuteStringWithText:(NSString *)text
-{
-    if (text.length <= 0) {
-        return [[NSMutableAttributedString alloc]init];
-    }
-    // 创建属性文本
-    NSMutableAttributedString *attString = [[NSMutableAttributedString alloc]initWithString:text];
-    
-    // 添加文本颜色 字体属性
-    [self addTextColorAndFontWithAtrributedString:attString];
-    
-    // 添加文本段落样式
-    [self addTextParaphStyleWithAtrributedString:attString];
-    
-    return attString;
-}
-
-// 添加文本颜色 字体属性
-- (void)addTextColorAndFontWithAtrributedString:(NSMutableAttributedString *)attString
-{
-    // 添加文本字体
-    [attString addAttributeFont:_font];
-    
-    // 添加文本颜色
-    [attString addAttributeTextColor:_textColor];
-    
-}
-
-// 添加文本段落样式
-- (void)addTextParaphStyleWithAtrributedString:(NSMutableAttributedString *)attString
-{
-    // 字体间距
-    if (_characterSpacing)
-    {
-        [attString addAttributeCharacterSpacing:_characterSpacing];
-    }
-    
-    // 添加文本段落样式
-    [attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
-}
-
-#pragma mark -  add text storage atrributed
-- (void)addTextStoragesWithAtrributedString:(NSMutableAttributedString *)attString
-{
-    if (attString && _textStorageArray.count > 0) {
-        
-        // 排序range
-        [self sortTextStorageArray:_textStorageArray];
-        
-        for (id<TYTextStorageProtocol> textStorage in _textStorageArray) {
-            
-            // 修正图片替换字符来的误差
-            if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol) ]) {
-                continue;
-            }
-            
-            if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
-                if (!((id<TYLinkStorageProtocol>)textStorage).textColor) {
-                    ((id<TYLinkStorageProtocol>)textStorage).textColor = _linkColor;
-                }
-            }
-            
-            // 验证范围
-            if (NSMaxRange(textStorage.range) <= attString.length) {
-                [textStorage addTextStorageWithAttributedString:attString];
-            }
-            
-        }
-        
-        for (id<TYTextStorageProtocol> textStorage in _textStorageArray) {
-            textStorage.realRange = NSMakeRange(textStorage.range.location-_replaceStringNum, textStorage.range.length);
-            if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
-                id<TYDrawStorageProtocol> drawStorage = (id<TYDrawStorageProtocol>)textStorage;
-                NSInteger currentLenght = attString.length;
-                [drawStorage setTextfontAscent:_font.ascender descent:_font.descender];
-                [drawStorage currentReplacedStringNum:_replaceStringNum];
-                [drawStorage addTextStorageWithAttributedString:attString];
-                _replaceStringNum += currentLenght - attString.length;
-            }
-        }
-        [_textStorageArray removeAllObjects];
-    }
-}
-
-- (void)sortTextStorageArray:(NSMutableArray *)textStorageArray
-{
-    [textStorageArray sortUsingComparator:^NSComparisonResult(id<TYTextStorageProtocol> obj1, id<TYTextStorageProtocol> obj2) {
-        if (obj1.range.location < obj2.range.location) {
-            return NSOrderedAscending;
-        } else if (obj1.range.location > obj2.range.location){
-            return NSOrderedDescending;
-        }else {
-            return obj1.range.length > obj2.range.length ? NSOrderedAscending:NSOrderedDescending;
-        }
-    }];
 }
 
 #pragma mark - drawRect
 - (void)drawRect:(CGRect)rect {
     
-    if (_attString == nil) {
+    if (_textContainer == nil ||  _textContainer.attString == nil) {
         return;
     }
 
@@ -373,43 +141,30 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
+
+    [_textContainer createTextContainerWithTextWidth:CGRectGetWidth(self.frame)];
     
-    // 这里你需要创建一个用于绘制文本的路径区域,通过 self.bounds 使用整个视图矩形区域创建 CGPath 引用。
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, self.bounds);
-    
-    // CTFramesetter 是使用 Core Text 绘制时最重要的类。它管理您的字体引用和文本绘制帧。这里在 framesetter 之后通过一个所选的文本范围（这里我们选择整个文本）与需要绘制到的矩形路径创建一个帧。
-    
-    if (_frameRef == nil) {
-        
-        [self updateFramesetterIfNeeded];
-        
-        _frameRef = CTFramesetterCreateFrame(_framesetter, CFRangeMake(0, [_attString length]), path, NULL);
+    if (_highlightedLinkBackgroundColor && _linkRectDictionary.count > 0) {
+        [self drawSelectionAreaFrame:_textContainer.frameRef InRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
     }
     
-    if (_highlightedLinkBackgroundColor && _linkRectDictionary) {
-        [self drawSelectionAreaInRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
-    }
-    
-    //CTFrameDraw(_frameRef, context);	// CTFrameDraw 将 frame 描述到设备上下文
-    [self drawText:_attString frame:_frameRef rect:rect context:context];
+    // CTFrameDraw 将 frame 描述到设备上下文
+    [self drawText:_textContainer.attString frame:_textContainer.frameRef rect:rect context:context];
     
     // 画其他元素
-    [self drawTextStorageWithFrame:_frameRef context:context];
-    
-    CFRelease(path);
+    [self drawTextStorageWithFrame:_textContainer.frameRef context:context];
 }
 
-// this code quote M80AttributedLabel
+// this code quote TTTAttributedLabel
 - (void)drawText: (NSAttributedString *)attributedString
             frame:(CTFrameRef)frame
             rect: (CGRect)rect
          context: (CGContextRef)context
 {
-    if (_numberOfLines > 0)
+    if (_textContainer.numberOfLines > 0)
     {
         CFArrayRef lines = CTFrameGetLines(frame);
-        NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
+        NSInteger numberOfLines = MIN(_textContainer.numberOfLines, CFArrayGetCount(lines));
         
         CGPoint lineOrigins[numberOfLines];
         CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
@@ -482,7 +237,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
     CGFloat viewWidth = CGRectGetWidth(self.frame);
     
-    NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
+    NSInteger numberOfLines = _textContainer.numberOfLines > 0 ? MIN(_textContainer.numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
     
     NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
     NSMutableDictionary *linkRectDictionary = [NSMutableDictionary dictionary];
@@ -518,7 +273,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                         [(id<TYViewStorageProtocol>)textStorage setOwnerView:self];
                     }
                     [(id<TYDrawStorageProtocol>)textStorage drawStorageWithRect:runRect];
-                } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
+                } else if (_delegateFlags.textStorageLongPressedOnStateAtPoint && [textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
                     [linkRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
                 }
                 
@@ -619,7 +374,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             //NSLog(@"点击了 textStorage ");
             // 调用代理
             if (_delegateFlags.textStorageClickedAtPoint) {
-                [weakSelf.delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
+                [_delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
                 *stop = YES;
             }
         }
@@ -657,7 +412,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (_linkRectDictionary.count > 0) {
+    if (_linkRectDictionary) {
         UITouch *touch = [touches anyObject];
         CGPoint point = [touch locationInView:self];
         
@@ -672,7 +427,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             // point 是否在rect里
             if(CGRectContainsPoint(rect, point)){
                 NSRange curClickLinkRange = obj.realRange;
-            [self setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:weakSelf.linkColor) linkRange:curClickLinkRange];
+            [weakSelf setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:weakSelf.textContainer.linkColor) linkRange:curClickLinkRange];
                 return ;
             }
         }];
@@ -684,7 +439,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesMoved:touches withEvent:event];
-    if (_linkRectDictionary.count <= 0) {
+    if (!_linkRectDictionary) {
         return;
     }
     
@@ -707,7 +462,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         if(CGRectContainsPoint(rect, point)){
             curClickLinkRange = obj.realRange;;
             isUnderClickLink = YES;
-            saveLinkColor = obj.textColor ? obj.textColor:weakSelf.linkColor;
+            saveLinkColor = obj.textColor ? obj.textColor:weakSelf.textContainer.linkColor;
             *stop = YES;
         }
     }];
@@ -715,7 +470,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (isUnderClickLink) {
         if (!NSEqualRanges(curClickLinkRange, _clickLinkRange)) {
             if (_saveLinkColor) {
-                [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
+                [_textContainer.attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
             }
             [self setHighlightLinkWithSaveLinkColor:saveLinkColor linkRange:curClickLinkRange];
         }
@@ -727,7 +482,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesCancelled:touches withEvent:event];
-    if (_linkRectDictionary.count > 0 && _clickLinkRange.length > 0) {
+    if (_linkRectDictionary && _clickLinkRange.length > 0) {
         [self resetHighLightLink];
     }
 }
@@ -735,7 +490,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
-    if (_linkRectDictionary.count > 0 && _clickLinkRange.length > 0) {
+    if (_linkRectDictionary && _clickLinkRange.length > 0) {
         [self resetHighLightLink];
     }
 }
@@ -743,14 +498,14 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 // 设置高亮链接
 - (void)setHighlightLinkWithSaveLinkColor:(UIColor *)saveLinkColor linkRange:(NSRange)linkRange
 {
-    if (NSMaxRange(linkRange) > _attString.length) {
+    if (NSMaxRange(linkRange) > _textContainer.attString.length) {
         _clickLinkRange.length = 0;
         return;
     }
     _clickLinkRange = linkRange;
     if (_highlightedLinkColor)
     {
-        [_attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
+        [_textContainer.attString addAttributeTextColor:_highlightedLinkColor range:_clickLinkRange];
         _saveLinkColor = saveLinkColor;
         [self resetFramesetter];
     }else{
@@ -763,7 +518,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     if (_highlightedLinkColor) {
         if (_saveLinkColor) {
-            [_attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
+            [_textContainer.attString addAttributeTextColor:_saveLinkColor range:_clickLinkRange];
             _saveLinkColor = nil;
         }
         _clickLinkRange.length = 0;
@@ -776,23 +531,23 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 #pragma mark - draw Rect
 // 绘画选择区域
-- (void)drawSelectionAreaInRange:(NSRange)selectRange bgColor:(UIColor *)bgColor{
+- (void)drawSelectionAreaFrame:(CTFrameRef)frameRef InRange:(NSRange)selectRange bgColor:(UIColor *)bgColor{
     
     NSInteger selectionStartPosition = selectRange.location;
     NSInteger selectionEndPosition = NSMaxRange(selectRange);
     
-    if (selectionStartPosition < 0 || selectRange.length <= 0 || selectionEndPosition > _attString.length) {
+    if (selectionStartPosition < 0 || selectRange.length <= 0 || selectionEndPosition > _textContainer.attString.length) {
         return;
     }
     
-    CFArrayRef lines = CTFrameGetLines(_frameRef);
+    CFArrayRef lines = CTFrameGetLines(frameRef);
     if (!lines) {
         return;
     }
     CFIndex count = CFArrayGetCount(lines);
     // 获得每一行的origin坐标
     CGPoint origins[count];
-    CTFrameGetLineOrigins(_frameRef, CFRangeMake(0,0), origins);
+    CTFrameGetLineOrigins(frameRef, CFRangeMake(0,0), origins);
     for (int i = 0; i < count; i++) {
         CGPoint linePoint = origins[i];
         CTLineRef line = CFArrayGetValueAtIndex(lines, i);
@@ -846,18 +601,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 #pragma mark - get Right Height
 - (int)getHeightWithWidth:(CGFloat)width
 {
-    if (_attString == nil) {
-        return 0;
-    }
-    
     // 是否需要更新frame
-    [self updateFramesetterIfNeeded];
-    
-    // 获得建议的size
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(_framesetter, _attString, CGSizeMake(width,MAXFLOAT), _numberOfLines);
-    //CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(width,MAXFLOAT), NULL);
-    
-    return suggestedSize.height+1;
+    return [_textContainer getHeightWithFramesetter:nil Width:width];
 }
 
 - (void)sizeToFit
@@ -884,19 +629,112 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)dealloc
 {
-    if (_framesetter != nil) {
-        CFRelease(_framesetter);
-    }
-    
-    if (_frameRef != nil) {
-        CFRelease(_frameRef);
-    }
-    _attString = nil;
-    
+    _textContainer = nil;
+}
+
+#pragma mark - getter
+
+- (NSString *)text{
+    return _textContainer.text;
+}
+
+- (NSAttributedString *)attributedText
+{
+    return _textContainer.attributedText;
+}
+
+- (NSInteger)numberOfLines
+{
+    return _textContainer.numberOfLines;
+}
+
+- (UIColor *)textColor
+{
+    return _textContainer.textColor;
+}
+
+- (UIFont *)font
+{
+    return _textContainer.font;
+}
+
+- (unichar)characterSpacing
+{
+    return _textContainer.characterSpacing;
+}
+
+- (CGFloat)linesSpacing
+{
+    return _textContainer.linesSpacing;
+}
+
+- (CTTextAlignment)textAlignment
+{
+    return _textContainer.textAlignment;
+}
+
+- (UIColor *)linkColor
+{
+    return _textContainer.linkColor;
+}
+
+#pragma mark - setter
+
+- (void)setText:(NSString *)text
+{
+    [_textContainer setText:text];
+    [self resetAllAttributed];
+    [self setNeedsDisplay];
+}
+
+- (void)setAttributedText:(NSAttributedString *)attributedText
+{
+    [_textContainer setAttributedText:attributedText];
+    [self resetAllAttributed];
+    [self setNeedsDisplay];
+}
+
+- (void)setNumberOfLines:(NSInteger)numberOfLines
+{
+    [_textContainer setNumberOfLines:numberOfLines];
+}
+
+- (void)setTextColor:(UIColor *)textColor
+{
+    [_textContainer setTextColor:textColor];
+    [self setNeedsDisplay];
+}
+
+- (void)setFont:(UIFont *)font
+{
+    [_textContainer setFont:font];
+    [self setNeedsDisplay];
+}
+
+- (void)setCharacterSpacing:(unichar)characterSpacing
+{
+    [_textContainer setCharacterSpacing:characterSpacing];
+    [self setNeedsDisplay];
+}
+
+- (void)setLinesSpacing:(CGFloat)linesSpacing
+{
+    [_textContainer setLinesSpacing:linesSpacing];
+    [self setNeedsDisplay];
+}
+
+- (void)setTextAlignment:(CTTextAlignment)textAlignment
+{
+    [_textContainer setTextAlignment:textAlignment];
+    [self setNeedsDisplay];
+}
+
+- (void)setLinkColor:(UIColor *)linkColor
+{
+    [_textContainer setLinkColor:linkColor];
 }
 
 @end
-
 
 #pragma mark - append attributedString
 
@@ -904,48 +742,169 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)appendText:(NSString *)text
 {
-    NSAttributedString *attributedText = [self createTextAttibuteStringWithText:text];
-    [self appendTextAttributedString:attributedText];
+    [_textContainer appendText:text];
+    [self setNeedsDisplay];
 }
 
 - (void)appendTextAttributedString:(NSAttributedString *)attributedText
 {
-    if (_attString == nil) {
-        _attString = [[NSMutableAttributedString alloc]init];
-    }
-    [_attString appendAttributedString:attributedText];
-    [self resetFramesetter];
+    [_textContainer appendTextAttributedString:attributedText];
+    [self setNeedsDisplay];
 }
 
 - (void)appendTextStorage:(id<TYAppendTextStorageProtocol>)textStorage
 {
     if (textStorage) {
-        if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
-            [(id<TYDrawStorageProtocol>)textStorage setTextfontAscent:self.font.ascender descent:self.font.descender];
-        } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
-            if (!((id<TYLinkStorageProtocol>)textStorage).textColor) {
-                ((id<TYLinkStorageProtocol>)textStorage).textColor = self.linkColor;
-            }
-        }
-        
-        NSAttributedString *attAppendString = [textStorage appendTextStorageAttributedString];
-        textStorage.realRange = NSMakeRange(_attString.length, attAppendString.length);
-        [self appendTextAttributedString:attAppendString];
+        [_textContainer appendTextStorage:textStorage];
+        [self setNeedsDisplay];
     }
 }
 
 - (void)appendTextStorageArray:(NSArray *)textStorageArray
 {
     if (textStorageArray) {
-        for (id<TYAppendTextStorageProtocol> textStorage in textStorageArray) {
-            if ([textStorage conformsToProtocol:@protocol(TYAppendTextStorageProtocol)]) {
-                
-                [self appendTextStorage:textStorage];
-            }
-        }
-        [self resetFramesetter];
+        [_textContainer appendTextStorageArray:textStorageArray];
+        [self setNeedsDisplay];
     }
 }
 
 @end
+
+@implementation TYAttributedLabel (Link)
+
+#pragma mark - addLink
+- (void)addLinkWithLinkData:(id)linkData range:(NSRange)range
+{
+    [self addLinkWithLinkData:linkData linkColor:nil range:range];
+}
+
+- (void)addLinkWithLinkData:(id)linkData linkColor:(UIColor *)linkColor range:(NSRange )range;
+{
+    [self addLinkWithLinkData:linkData linkColor:linkColor underLineStyle:kCTUnderlineStyleSingle range:range];
+}
+
+- (void)addLinkWithLinkData:(id)linkData linkColor:(UIColor *)linkColor underLineStyle:(CTUnderlineStyle)underLineStyle range:(NSRange )range
+{
+    [_textContainer addLinkWithLinkData:linkData linkColor:linkColor underLineStyle:underLineStyle range:range];
+    [self setNeedsDisplay];
+}
+
+#pragma mark - appendLink
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkData:(id)linkData
+{
+    [self appendLinkWithText:linkText linkFont:linkFont linkColor:nil linkData:linkData];
+}
+
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkColor:(UIColor *)linkColor linkData:(id)linkData
+{
+    [self appendLinkWithText:linkText linkFont:linkFont linkColor:linkColor underLineStyle:kCTUnderlineStyleSingle linkData:linkData];
+}
+
+- (void)appendLinkWithText:(NSString *)linkText linkFont:(UIFont *)linkFont linkColor:(UIColor *)linkColor underLineStyle:(CTUnderlineStyle)underLineStyle linkData:(id)linkData
+{
+    [_textContainer appendLinkWithText:linkText linkFont:linkFont linkColor:linkColor underLineStyle:underLineStyle linkData:linkData];
+    [self setNeedsDisplay];
+}
+
+@end
+
+@implementation TYAttributedLabel (UIImage)
+
+#pragma mark addImage
+
+- (void)addImage:(UIImage *)image range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
+{
+    [_textContainer addImage:image range:range size:size alignment:alignment];
+}
+
+- (void)addImage:(UIImage *)image range:(NSRange)range size:(CGSize)size
+{
+    [self addImage:image range:range size:size alignment:TYDrawAlignmentTop];
+}
+
+- (void)addImage:(UIImage *)image range:(NSRange)range
+{
+    [self addImage:image range:range size:image.size];
+}
+
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range size:(CGSize)size alignment:(TYDrawAlignment)alignment
+{
+    [_textContainer addImageWithName:imageName range:range size:size alignment:alignment];
+}
+
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range size:(CGSize)size
+{
+    [self addImageWithName:imageName range:range size:size alignment:TYDrawAlignmentTop];
+}
+
+- (void)addImageWithName:(NSString *)imageName range:(NSRange)range
+{
+    [self addImageWithName:imageName range:range size:CGSizeMake(self.font.pointSize, self.font.ascender)];
+    
+}
+
+#pragma mark - appendImage
+
+- (void)appendImage:(UIImage *)image size:(CGSize)size alignment:(TYDrawAlignment)alignment
+{
+    [_textContainer appendImage:image size:size alignment:alignment];
+}
+
+- (void)appendImage:(UIImage *)image size:(CGSize)size
+{
+    [self appendImage:image size:size alignment:TYDrawAlignmentTop];
+}
+
+- (void)appendImage:(UIImage *)image
+{
+    [self appendImage:image size:image.size];
+}
+
+- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size alignment:(TYDrawAlignment)alignment
+{
+    [_textContainer appendImageWithName:imageName size:size alignment:alignment];
+}
+
+- (void)appendImageWithName:(NSString *)imageName size:(CGSize)size
+{
+    [self appendImageWithName:imageName size:size alignment:TYDrawAlignmentTop];
+}
+
+- (void)appendImageWithName:(NSString *)imageName
+{
+    [self appendImageWithName:imageName size:CGSizeMake(self.font.pointSize, self.font.ascender)];
+    
+}
+
+@end
+
+@implementation TYAttributedLabel (UIView)
+
+#pragma mark - addView
+
+- (void)addView:(UIView *)view range:(NSRange)range alignment:(TYDrawAlignment)alignment
+{
+    [_textContainer addView:view range:range alignment:alignment];
+}
+
+- (void)addView:(UIView *)view range:(NSRange)range
+{
+    [self addView:view range:range alignment:TYDrawAlignmentTop];
+}
+
+#pragma mark - appendView
+
+- (void)appendView:(UIView *)view alignment:(TYDrawAlignment)alignment
+{
+    [_textContainer appendView:view alignment:alignment];
+}
+
+- (void)appendView:(UIView *)view
+{
+    [self appendView:view alignment:TYDrawAlignmentTop];
+}
+
+
+@end
+
 

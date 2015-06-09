@@ -44,12 +44,6 @@
         
         if (index == 2) {
             // 追加链接信息
-//            TYLinkTextStorage *linkTextStorage = [[TYLinkTextStorage alloc]init];
-//            linkTextStorage.text = text;
-//            linkTextStorage.font = [UIFont systemFontOfSize:15+arc4random()%4];
-//            //linkTextStorage.textColor = colorArray[index%5];//用label默认 linkColor
-//            linkTextStorage.linkData = @"http://www.baidu.com";
-//            [label1 appendTextStorage:linkTextStorage];
             [label1 appendLinkWithText:text linkFont:[UIFont systemFontOfSize:15+arc4random()%4] linkData:@"http://www.baidu.com"];
         }else {
             // 追加文本属性
@@ -130,6 +124,7 @@
 {
     NSLog(@"textStorageLongPressed");
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -7,8 +7,7 @@
 //  TYAttributedLabel v1.1 verson 
 
 #import <UIKit/UIKit.h>
-#import "NSMutableAttributedString+TY.h"
-#import "TYTextStorageProtocol.h"
+#import "TYTextContainer.h"
 
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>
@@ -41,8 +40,9 @@
 @property (nonatomic, assign)   CGFloat     linesSpacing;       // 行距
 
 @property (nonatomic, assign)   CTTextAlignment textAlignment;      // 文本对齐方式
-
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
+
+@property (nonatomic, strong)   TYTextContainer *textContainer;
 
 /**
  *  获取普通文本内容

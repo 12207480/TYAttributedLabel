@@ -16,6 +16,7 @@
 #import "LinkTextViewController.h"
 #import "ParseTextViewController.h"
 #import "AddViewTextViewController.h"
+#import "TextContainerViewController.h"
 
 @interface tableViewItem : NSObject
 
@@ -84,7 +85,11 @@
     
     [self addTableItemWithTitle:@"AddViewText" detailText:@"属性文本和UIView混排显示" destVcClass:[AddViewTextViewController class]];
     
-    [self addTableItemWithTitle:@"parseText" detailText:@"自定义排版解析图文混排显示" destVcClass:[ParseTextViewController class]];
+    [self addTableItemWithTitle:@"TextContainer" detailText:@"文本容器提前生成" destVcClass:[TextContainerViewController class]];
+    
+    [self addTableItemWithTitle:@"ParseText" detailText:@"自定义排版解析图文混排显示" destVcClass:[ParseTextViewController class]];
+    
+    
 }
 
 - (void)addTableItemWithTitle:(NSString *)title detailText:(NSString *)detailText destVcClass:(Class)destVcClass
