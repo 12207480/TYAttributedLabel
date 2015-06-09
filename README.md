@@ -3,11 +3,11 @@ TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，�
 
 ## ScreenShot
 
-![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif)
+![image][image-1]
 
 weibo demo 使用TYAttributedLabel 截图
 
-![image](https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/weibo.gif)
+![image][image-2]
 ## Requirements
 * Xcode 5 or higher
 * Apple LLVM compiler
@@ -21,13 +21,9 @@ weibo demo 使用TYAttributedLabel 截图
 * 支持添加UIImage和UIView控件
 
 ## Update
-   
 v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优化代码<br>
-v1.2  添加设置行数，修复bug，增强稳定性
-
-更新预告<br>
-v2.0 重构代码 分离出TYTextContainer ，携带CTFrameRef，NSAttributedString，可以提前生成，显著提升cell场景流畅度
-<br> 微博demo测试中 和微博一样流畅 敬请期待
+v1.2  添加设置行数，修复bug，增强稳定性<br>
+v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升cell滑动流畅度
 
 ## Demo
 运行demo可以查看效果，而且在demo中有详细的例子，针对各种文本和图文的实现，这里简单的介绍下用法
@@ -42,6 +38,7 @@ v2.0 重构代码 分离出TYTextContainer ，携带CTFrameRef，NSAttributedStr
 |NSMutableAttributedString (TY) |category提供便利color,font CharacterSpacing,UnderlineStyle,ParagraphStyle的属性添加，无需了解复杂的CoreText|
 |TYTextStorageProtocol|自定义文本属性 遵守最基本的协议 即可 addTextStorage 添加进去|
 |TYAppendTextStorageProtocol|自定义文本属性协议 遵守即可appendTextStorage 添加进去|
+|TYLinkStorageProtocol|自定义文本链接属性 |
 |TYDrawStorageProtocol|自定义显示内容协议 如 UIImage UIView|
 
 下层协议继承上层的协议，如果觉得复杂，其实我已经实现了常用的自定义属性，拿来就可以用，或者继承，添加你想要的
@@ -51,6 +48,7 @@ v2.0 重构代码 分离出TYTextContainer ，携带CTFrameRef，NSAttributedStr
 |Class |Function |
 |--------|---------|
 |TYAttributedLabel|简单易用的属性文本,富文本的显示控件,<br>addTextStorage在已经设置文本的基础上添加属性，image或者view,<br>appendTextStorage(无需事先设置文本)直接添加属性，image或者view到最后|
+|TYTextContainer|文本容器，可以提前生成，还可以生成attributedString，显著提升cell滚动流畅度|
 |TYTextStorage|自定义文本属性,支持textColor,font,underLineStyle|
 |TYLinkTextStorage|自定义链接属性，继承TYTextStorage，支持点击代理|
 |TYDrawStorage|自定义显示内容属性，如UIImage，UIView，支持点击代理|
@@ -61,23 +59,23 @@ v2.0 重构代码 分离出TYTextContainer ，携带CTFrameRef，NSAttributedStr
 
 ### Delegate
 
-``` objective-c
+\`\`\` objective-c
 
 // 点击代理
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
+- (void)attributedLabel:(TYAttributedLabel \*)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
 
 // 长按代理 有多个状态 begin, changes, end 都会调用,所以需要判断状态
-- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
+- (void)attributedLabel:(TYAttributedLabel \*)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
 
-```
+\`\`\`
 
 ### Examples
 
 * **appendStorage demo**
- 
-``` objective-c
+	 
+\`\`\` objective-c
 
-TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
+TYAttributedLabel \*label = [[TYAttributedLabel alloc]init];
 [self.view addSubview:label];
 
 // 文字间隙
@@ -85,31 +83,31 @@ label.characterSpacing = 2;
 // 文本行间隙
 label.linesSpacing = 6;
 
-NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+NSString \*text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 [label appendText:text];
 
-NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];
+NSMutableAttributedString \*attributedString = [[NSMutableAttributedString alloc]initWithString:text];
 [attributedString addAttributeTextColor:[UIColor blueColor]];
 [attributedString addAttributeFont:[UIFont systemFontOfSize:15]];
 [label appendTextAttributedString:attributedString];
 
 [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
 
-UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+UIImageView \*imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
 imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [label appendView:imageView];
 
 [label setFrameWithOrign:CGPointMake(0,0） Width:CGRectGetWidth(self.view.frame)];
 
-```
+\`\`\`
 * **addStorage demo**
 
-``` objective-c
+\`\`\` objective-c
 
-TYAttributedLabel *label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 0)];
+TYAttributedLabel \*label = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 0)];
 [self.view addSubview:label];
 
-NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+NSString \*text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
 [label setText:text];
 
 // 文字间隙
@@ -127,13 +125,54 @@ textStorage.font = [UIFont systemFontOfSize:18];
 
 [label addImageWithName:@"haha" range:NSMakeRange(2, 1)];
 
-UIImageView *imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+UIImageView \*imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
 imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
 [label addView:imageView range:NSMakeRange(16, 1)];
 
 [label sizeToFit];
 
-```
+\`\`\`
+
+* **TextContainer demo**
+\`\`\` objective-c
+NSString \*text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n";
+TYTextContainer *textContainer = [[TYTextContainer alloc]init];
+    textContainer.text = text;
+    // 文字间隙
+textContainer.characterSpacing = 2;
+// 文本行间隙
+textContainer.linesSpacing = 5;
+
+textStorage = [[TYTextStorage alloc]init];
+textStorage.range = [text rangeOfString:@"总有一天你将破蛹而出"]; 
+textStorage.textColor = RGB(0, 155, 0, 1);
+textStorage.font = [UIFont systemFontOfSize:18];
+[textContainer addTextStorage:textStorage];
+
+[textContainer addLinkWithLinkData:@"www.baidu.com" range:NSMakeRange(5, 8)];
+
+[textContainer addImageWithName:@"haha" range:NSMakeRange(2, 1)];
+
+UIImageView \*imageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"CYLoLi"]];
+imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
+[textContainer addView:imageView range:NSMakeRange(16, 1)];
+
+// 生成NSAttributedString 属性文本
+//NSAttributedString *attString = [textContainer createAttributedString];
+
+// 生成 textContainer 文本容器
+[textContainer createTextContainerWithTextWidth:CGRectGetWidth(self.view.frame)];
+
+TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
+label.textContainer = textContainer;
+
+// 生成NSAttributedString 属性文本
+NSAttributedString *attString = [textContainer createAttributedString];
+label.attributedText = attString;
+
+[label setFrameWithOrign:CGPointZero Width:CGRectGetWidth(self.view.frame)];
+[self.view addSubView:label];
+\`\`\`
 
 ### Contact
 如果你发现bug，please pull reqeust me <br>
@@ -161,3 +200,6 @@ imageView.frame = CGRectMake(0, 0, CGRectGetWidth(label.frame), 180);
  
  
  
+
+[image-1]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif
+[image-2]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/weibo.gif
