@@ -48,7 +48,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 |Class |Function |
 |--------|---------|
 |TYAttributedLabel|简单易用的属性文本,富文本的显示控件,<br>addTextStorage在已经设置文本的基础上添加属性，image或者view,<br>appendTextStorage(无需事先设置文本)直接添加属性，image或者view到最后|
-|TYTextContainer|文本容器，可以提前生成，还可以生成attributedString，显著提升cell滚动流畅度|
+|TYTextContainer|文本容器，可以提前生成，也可以生成attributedString，显著提升cell滚动流畅度|
 |TYTextStorage|自定义文本属性,支持textColor,font,underLineStyle|
 |TYLinkTextStorage|自定义链接属性，继承TYTextStorage，支持点击代理|
 |TYDrawStorage|自定义显示内容属性，如UIImage，UIView，支持点击代理|
@@ -59,7 +59,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 
 ### Delegate
 
-\`\`\` objective-c
+```objc
 
 // 点击代理
 - (void)attributedLabel:(TYAttributedLabel \*)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
@@ -67,7 +67,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 // 长按代理 有多个状态 begin, changes, end 都会调用,所以需要判断状态
 - (void)attributedLabel:(TYAttributedLabel \*)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
 
-\`\`\`
+```
 
 ### Examples
 
