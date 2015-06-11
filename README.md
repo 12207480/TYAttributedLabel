@@ -1,5 +1,5 @@
 # TYAttributedLabel v2.0
-TYAttributedLabel 简单易用的属性文本的控件(无需了解CoreText)，支持富文本，图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
+TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持富文本，图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
 
 **重大更新:**
 <br>v2.0 重构优化代码，性能提升，稳定（已在项目中使用）, 分离出TYTextContainer ，可以提前生成，也可以生成attributedString，显著提升cell滑动场景流畅度，可以和微博一样流畅
@@ -65,10 +65,10 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 ```objc
 
 // 点击代理
-- (void)attributedLabel:(TYAttributedLabel \*)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)textStorage atPoint:(CGPoint)point;
 
 // 长按代理 有多个状态 begin, changes, end 都会调用,所以需要判断状态
-- (void)attributedLabel:(TYAttributedLabel \*)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
+- (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
 
 ```
 
