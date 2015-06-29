@@ -169,7 +169,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         CGPoint lineOrigins[numberOfLines];
         CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
         
-        BOOL truncateLastLine = (_lineBreakMode == kCTLineBreakByTruncatingHead || _lineBreakMode == kCTLineBreakByTruncatingMiddle || _lineBreakMode == kCTLineBreakByTruncatingTail);
+        BOOL truncateLastLine = (_textContainer.lineBreakMode == kCTLineBreakByTruncatingHead || _textContainer.lineBreakMode == kCTLineBreakByTruncatingMiddle || _textContainer.lineBreakMode == kCTLineBreakByTruncatingTail);
         
         for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++)
         {
@@ -668,6 +668,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return _textContainer.linesSpacing;
 }
 
+- (CTLineBreakMode)lineBreakMode
+{
+    return _textContainer.lineBreakMode;
+}
+
 - (CTTextAlignment)textAlignment
 {
     return _textContainer.textAlignment;
@@ -720,6 +725,12 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)setLinesSpacing:(CGFloat)linesSpacing
 {
     [_textContainer setLinesSpacing:linesSpacing];
+    [self setNeedsDisplay];
+}
+
+- (void)setLineBreakMode:(CTLineBreakMode)lineBreakMode
+{
+    [_textContainer setLineBreakMode:lineBreakMode];
     [self setNeedsDisplay];
 }
 
