@@ -122,7 +122,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)setAttributedText:(NSAttributedString *)attributedText
 {
-    if ([attributedText isKindOfClass:[NSMutableAttributedString class]]) {
+    if (attributedText == nil) {
+        _attString = [[NSMutableAttributedString alloc]init];
+    }else if ([attributedText isKindOfClass:[NSMutableAttributedString class]]) {
         _attString = (NSMutableAttributedString *)attributedText;
     }else {
         _attString = [[NSMutableAttributedString alloc]initWithAttributedString:attributedText];
@@ -153,7 +155,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)setCharacterSpacing:(unichar)characterSpacing
 {
-    if (characterSpacing && _characterSpacing != characterSpacing) {
+    if (characterSpacing >= 0 && _characterSpacing != characterSpacing) {
         _characterSpacing = characterSpacing;
         
         [_attString addAttributeCharacterSpacing:characterSpacing];
@@ -163,7 +165,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)setLinesSpacing:(CGFloat)linesSpacing
 {
-    if (linesSpacing > 0 && _linesSpacing != linesSpacing) {
+    if (linesSpacing >= 0 && _linesSpacing != linesSpacing) {
         _linesSpacing = linesSpacing;
         
         [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:linesSpacing lineBreakStyle:_lineBreakMode];
@@ -379,6 +381,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)appendTextAttributedString:(NSAttributedString *)attributedText
 {
+    if (attributedText == nil) {
+        return;
+    }
     if (_attString == nil) {
         _attString = [[NSMutableAttributedString alloc]init];
     }
