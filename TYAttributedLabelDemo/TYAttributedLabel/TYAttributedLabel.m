@@ -273,7 +273,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
                         [(id<TYViewStorageProtocol>)textStorage setOwnerView:self];
                     }
                     [(id<TYDrawStorageProtocol>)textStorage drawStorageWithRect:runRect];
-                } else if (_delegateFlags.textStorageLongPressedOnStateAtPoint && [textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
+                } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
                     [linkRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
                 }
                 
