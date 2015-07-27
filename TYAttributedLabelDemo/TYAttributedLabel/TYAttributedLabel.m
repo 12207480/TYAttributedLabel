@@ -24,7 +24,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)resetFrameRef;
 @end
 
-@interface TYAttributedLabel ()
+@interface TYAttributedLabel ()<UIGestureRecognizerDelegate>
 {
     struct {
         unsigned int textStorageClickedAtPoint :1;
@@ -324,6 +324,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if (_singleTapGuesture == nil) {
         // 单指单击
         _singleTapGuesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
+        _singleTapGuesture.delegate = self;
         // 增加事件者响应者
         [self addGestureRecognizer:_singleTapGuesture];
     }
@@ -355,6 +356,30 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 }
 
 #pragma mark - Gesture action
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint point = [touch locationInView:self];
+    
+    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
+    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
+    
+    __block BOOL find = NO;
+    // 遍历run位置字典
+    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
+        
+        CGRect imgRect = [keyRectValue CGRectValue];
+        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
+        
+        // point 是否在rect里
+        if(CGRectContainsPoint(rect, point)){
+            find = YES;
+            *stop = YES;
+        }
+    }];
+    return find;
+}
+
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];

@@ -120,7 +120,6 @@
     }
 }
 
-
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point
 {
     NSLog(@"textStorageLongPressed");
