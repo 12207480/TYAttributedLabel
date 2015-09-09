@@ -17,6 +17,7 @@
 #import "ParseTextViewController.h"
 #import "AddViewTextViewController.h"
 #import "TextContainerViewController.h"
+#import "TextTableViewController.h"
 
 @interface tableViewItem : NSObject
 
@@ -89,6 +90,7 @@
     
     [self addTableItemWithTitle:@"ParseText" detailText:@"自定义排版解析图文混排显示" destVcClass:[ParseTextViewController class]];
     
+    [self addTableItemWithTitle:@"AttributedTextCell" detailText:@"tableViewCell显示图文混排" destVcClass:[TextTableViewController class]];
     
 }
 

@@ -26,6 +26,8 @@
 @property (nonatomic, assign)   CTTextAlignment textAlignment;  // 文本对齐方式
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;  // 换行模式
 
+@property (nonatomic, assign, readonly) CGFloat     textHeight; // after createTextContainer, have value
+
 /**
  *  生成文本容器textContainer
  */

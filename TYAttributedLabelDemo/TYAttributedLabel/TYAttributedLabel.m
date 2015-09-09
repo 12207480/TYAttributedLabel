@@ -18,7 +18,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @interface TYTextContainer ()
 @property (nonatomic, strong) NSMutableAttributedString *attString;
 @property (nonatomic, assign,readonly) CTFrameRef  frameRef;
-@property (nonatomic, assign,readonly) CGFloat     textHeight;
 @property (nonatomic, assign,readonly) CGFloat     textWidth;
 
 - (void)resetFrameRef;
@@ -701,6 +700,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (CTTextAlignment)textAlignment
 {
     return _textContainer.textAlignment;
+}
+
+- (CGFloat)textHeight{
+    return _textContainer.textHeight;
 }
 
 - (UIColor *)linkColor

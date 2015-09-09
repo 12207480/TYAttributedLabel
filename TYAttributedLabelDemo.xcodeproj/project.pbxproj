@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		B00F2C6C1B24666500EECDCE /* TYTextContainer+Extended.m in Sources */ = {isa = PBXBuildFile; fileRef = B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */; };
 		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
+		B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03135741BA05FCB00D17041 /* AttributedLabelCell.m */; };
 		B03407411B27049300DCEACB /* TextContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B03407401B27049300DCEACB /* TextContainerViewController.m */; };
+		B0E11A6D1BA05A3A0044523D /* TextTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */; };
 		D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextStorage.m */; };
 		D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */; };
 		D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */; };
@@ -52,8 +54,12 @@
 /* Begin PBXFileReference section */
 		B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TYTextContainer+Extended.m"; sourceTree = "<group>"; };
 		B0165EF71AE157FA0003D580 /* CYLoLi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CYLoLi.png; sourceTree = "<group>"; };
+		B03135731BA05FCB00D17041 /* AttributedLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributedLabelCell.h; sourceTree = "<group>"; };
+		B03135741BA05FCB00D17041 /* AttributedLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributedLabelCell.m; sourceTree = "<group>"; };
 		B034073F1B27049300DCEACB /* TextContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextContainerViewController.h; sourceTree = "<group>"; };
 		B03407401B27049300DCEACB /* TextContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextContainerViewController.m; sourceTree = "<group>"; };
+		B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableViewController.h; sourceTree = "<group>"; };
+		B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableViewController.m; sourceTree = "<group>"; };
 		D34A49851AD4D5510036B7EF /* TYTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextStorage.h; sourceTree = "<group>"; };
 		D34A49861AD4D5510036B7EF /* TYTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
 		D34A498C1AD4FA760036B7EF /* TYDrawStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawStorage.h; sourceTree = "<group>"; };
@@ -166,6 +172,10 @@
 				D3553BD41AE79106005D8F31 /* AddViewTextViewController.m */,
 				B034073F1B27049300DCEACB /* TextContainerViewController.h */,
 				B03407401B27049300DCEACB /* TextContainerViewController.m */,
+				B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */,
+				B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */,
+				B03135731BA05FCB00D17041 /* AttributedLabelCell.h */,
+				B03135741BA05FCB00D17041 /* AttributedLabelCell.m */,
 				D35F47D21AE0DBE30048B58A /* ParseTextViewController.h */,
 				D35F47D31AE0DBE30048B58A /* ParseTextViewController.m */,
 				D3553BD01AE778DB005D8F31 /* TYTextStorageParser.h */,
@@ -353,10 +363,12 @@
 				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,
 				D35F47D41AE0DBE30048B58A /* ParseTextViewController.m in Sources */,
 				D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */,
+				B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */,
 				D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */,
 				D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */,
 				D3709F361AD3A60800145EC6 /* TYAttributedLabel.m in Sources */,
 				D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */,
+				B0E11A6D1BA05A3A0044523D /* TextTableViewController.m in Sources */,
 				D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
