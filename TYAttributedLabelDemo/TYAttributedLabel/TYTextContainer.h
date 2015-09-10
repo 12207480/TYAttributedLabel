@@ -33,7 +33,6 @@
  */
 - (instancetype)createTextContainerWithTextWidth:(CGFloat)textWidth;
 
-// 
 - (instancetype)createTextContainerWithContentSize:(CGSize)contentSize;
 
 /**
