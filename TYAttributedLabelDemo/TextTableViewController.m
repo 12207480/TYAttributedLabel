@@ -12,6 +12,7 @@
 #import "TYTextStorage.h"
 #import "TYImageStorage.h"
 #import "TYLinkTextStorage.h"
+#import "TYViewStorage.h"
 
 @interface TextTableViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic, strong) NSArray *textContainers;
@@ -48,7 +49,7 @@ static NSString *cellId = @"AttributedLabelCell";
 - (TYTextContainer *)creatTextContainer
 {
     //NSString *text = [NSString stringWithFormat:@"[CYLoLi,%d,180]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。[avatar,60,60]",(int)CGRectGetWidth(self.view.frame)];
-    NSString *text = @"@青春励志: [haha,15,15]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15][avatar,15,15]能用自己的力量撑起身后的家人和自己爱的人。 [avatar,15,15]#青春励志#";
+    NSString *text = @"@青春励志: [haha,15,15]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15][avatar,15,15]能用自己的力量撑起身后的家人和自己爱的人。 [avatar,15,15]#青春励志#[button]";
     
     // 属性文本生成器
     TYTextContainer *textContainer = [[TYTextContainer alloc]init];
@@ -88,10 +89,25 @@ static NSString *cellId = @"AttributedLabelCell";
     textStorage.font = [UIFont systemFontOfSize:18];
     [textContainer addTextStorage:textStorage];
     
-    textContainer.linesSpacing = 2;
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.layer.cornerRadius = 2;
+    [button setBackgroundColor:[UIColor redColor]];
+    button.titleLabel.font = [UIFont systemFontOfSize:12];
+    [button setTitle:@"UIButton" forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    button.frame = CGRectMake(0, 0, 60, 15);
+    [textContainer addView:button range:[text rangeOfString:@"[button]"]];
     
     textContainer = [textContainer createTextContainerWithTextWidth:CGRectGetWidth(self.view.frame)];
     return textContainer;
+}
+
+#pragma mark - action
+
+- (void)buttonClicked:(UIButton *)button
+{
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"点击提示" message:@"我是UIButton哦" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
+    [alertView show];
 }
 
 #pragma mark - Table view data source
@@ -114,7 +130,7 @@ static NSString *cellId = @"AttributedLabelCell";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TYTextContainer *textContaner = _textContainers[indexPath.row];
-    return textContaner.textHeight;// after createTextContainer, have value
+    return textContaner.textHeight+30;// after createTextContainer, have value
 }
 
 #pragma mark - TYAttributedLabelDelegate

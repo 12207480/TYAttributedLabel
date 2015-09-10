@@ -33,6 +33,9 @@
  */
 - (instancetype)createTextContainerWithTextWidth:(CGFloat)textWidth;
 
+
+- (instancetype)createTextContainerWithContentSize:(CGSize)contentSize;
+
 /**
  *  生成属性字符串
  */
@@ -41,7 +44,7 @@
 /**
  *  获取文本高度
  */
-- (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter Width:(CGFloat)width;
+- (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;
 
 @end
 

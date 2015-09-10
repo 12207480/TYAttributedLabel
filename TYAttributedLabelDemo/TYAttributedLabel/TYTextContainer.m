@@ -281,7 +281,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }];
 }
 
-- (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter Width:(CGFloat)width
+- (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
 {
     if (_attString == nil || width <= 0) {
         return 0;
@@ -301,8 +301,6 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     // 获得建议的size
     CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(framesetter, _attString, CGSizeMake(width,MAXFLOAT), _numberOfLines);
     
-    //CTFramesetterSuggestFrameSizeWithConstraints(_framesetter, CFRangeMake(0, 0), NULL, CGSizeMake(width,MAXFLOAT), NULL);
-    
     CFRelease(framesetter);
     
     return suggestedSize.height+1;
@@ -321,19 +319,24 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (instancetype)createTextContainerWithTextWidth:(CGFloat)textWidth
 {
+    return [self createTextContainerWithContentSize:CGSizeMake(textWidth, 0)];
+}
+
+- (instancetype)createTextContainerWithContentSize:(CGSize)contentSize
+{
     if (_frameRef) {
         return self;
     }
-    _textWidth = textWidth;
+    _textWidth = contentSize.width;
     
     // 创建CTFramesetter
     CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)[self createAttributedString]);
     
     // 获得建议的size
-    CGFloat textHeight = [self getHeightWithFramesetter:framesetter Width:_textWidth];
+    CGFloat textHeight = [self getHeightWithFramesetter:framesetter width:_textWidth];
     
     // 创建CTFrameRef
-    _frameRef = [self createFrameRefWithFramesetter:framesetter textHeight:textHeight];
+    _frameRef = [self createFrameRefWithFramesetter:framesetter textHeight: contentSize.height > textHeight ?contentSize.height : textHeight];
     _textHeight = textHeight;
     // 释放内存
     CFRelease(framesetter);

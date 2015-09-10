@@ -141,7 +141,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     CGContextTranslateCTM(context, 0, self.bounds.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
 
-    [_textContainer createTextContainerWithTextWidth:CGRectGetWidth(self.frame)];
+    [_textContainer createTextContainerWithContentSize:self.bounds.size];
     
     if (_highlightedLinkBackgroundColor && _linkRectDictionary.count > 0) {
         [self drawSelectionAreaFrame:_textContainer.frameRef InRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
@@ -626,7 +626,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (int)getHeightWithWidth:(CGFloat)width
 {
     // 是否需要更新frame
-    return [_textContainer getHeightWithFramesetter:nil Width:width];
+    return [_textContainer getHeightWithFramesetter:nil width:width];
 }
 
 - (void)sizeToFit
