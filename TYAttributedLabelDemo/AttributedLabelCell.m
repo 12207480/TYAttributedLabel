@@ -46,7 +46,11 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    _label.frame = CGRectMake(0, 15, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame) - 30);
+    _label.frame = CGRectMake(0, 15, CGRectGetWidth(self.frame), 0);
+    [_label sizeToFit];
+    
+    // or this
+    //_label.frame = CGRectMake(0, 15, CGRectGetWidth(self.frame),CGRectGetHeight(self.frame) - 30);
 }
 
 @end

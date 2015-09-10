@@ -123,7 +123,6 @@ static NSString *cellId = @"AttributedLabelCell";
     // Configure the cell...
     cell.label.delegate = self;
     cell.label.textContainer = _textContainers[indexPath.row];
-    
     return cell;
 }
 
