@@ -336,7 +336,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     CGFloat textHeight = [self getHeightWithFramesetter:framesetter width:_textWidth];
     
     // 创建CTFrameRef
-    _frameRef = [self createFrameRefWithFramesetter:framesetter textHeight: contentSize.height > textHeight ?contentSize.height : textHeight];
+    _frameRef = [self createFrameRefWithFramesetter:framesetter textHeight: contentSize.height > 0 ?contentSize.height : textHeight];
     _textHeight = textHeight;
     // 释放内存
     CFRelease(framesetter);
