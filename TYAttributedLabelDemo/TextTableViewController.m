@@ -97,7 +97,7 @@ static NSString *cellId = @"AttributedLabelCell";
     [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 0, 60, 15);
     [textContainer addView:button range:[text rangeOfString:@"[button]"]];
-    
+    textContainer.linesSpacing = 2;
     textContainer = [textContainer createTextContainerWithTextWidth:CGRectGetWidth(self.view.frame)];
     return textContainer;
 }
