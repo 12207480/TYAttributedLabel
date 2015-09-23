@@ -111,9 +111,10 @@
     
     // 创建文本行间距
     CTParagraphStyleSetting lineSpaceStyle;
-    lineSpaceStyle.spec = kCTParagraphStyleSpecifierLineSpacing;//指定为行间距属性
+    lineSpaceStyle.spec = kCTParagraphStyleSpecifierLineSpacingAdjustment;
     lineSpaceStyle.valueSize = sizeof(linesSpacing);
     lineSpaceStyle.value = &linesSpacing;
+    
     
     //换行模式
     CTParagraphStyleSetting lineBreakStyle;
@@ -122,7 +123,7 @@
     lineBreakStyle.valueSize = sizeof(lineBreakMode);
     
     // 创建样式数组
-    CTParagraphStyleSetting settings[] = {alignmentStyle,lineSpaceStyle ,lineBreakStyle};
+    CTParagraphStyleSetting settings[] = {alignmentStyle ,lineSpaceStyle ,lineBreakStyle};
     CTParagraphStyleRef paragraphStyle = CTParagraphStyleCreate(settings, sizeof(settings) / sizeof(settings[0]));	// 设置样式
     
     // 设置段落属性

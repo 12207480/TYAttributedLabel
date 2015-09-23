@@ -26,7 +26,7 @@
     // 文字间隙
     label1.characterSpacing = 2;
     // 文本行间隙
-    label1.linesSpacing = 6;
+    label1.linesSpacing = 2;
     
     label1.lineBreakMode = kCTLineBreakByTruncatingTail;
     label1.numberOfLines = 4;
