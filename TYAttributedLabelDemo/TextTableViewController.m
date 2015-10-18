@@ -62,6 +62,7 @@ static NSString *cellId = @"AttributedLabelCell";
         if (captureCount > 3) {
             // 图片信息储存
             TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
+            imageStorage.cacheImageOnMemory = YES;
             imageStorage.imageName = capturedStrings[1];
             imageStorage.range = capturedRanges[0];
             imageStorage.size = CGSizeMake([capturedStrings[2]intValue], [capturedStrings[3]intValue]);

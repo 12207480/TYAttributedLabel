@@ -18,5 +18,5 @@
 
 @property (nonatomic, strong) NSString  *placeholdImageName;
 
-@property (nonatomic, assign) BOOL cacheImageOnMemory; // default YES ,内存换时间
+@property (nonatomic, assign) BOOL cacheImageOnMemory; // default NO ,if YES can improve performance，but increase memory
 @end

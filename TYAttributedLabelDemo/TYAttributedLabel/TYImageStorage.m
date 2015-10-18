@@ -19,7 +19,7 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        _cacheImageOnMemory = YES;
+        _cacheImageOnMemory = NO;
     }
     return self;
 }
