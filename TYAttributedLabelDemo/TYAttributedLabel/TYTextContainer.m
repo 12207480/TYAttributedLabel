@@ -42,6 +42,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 @interface TYTextContainer()
 @property (nonatomic, strong) NSMutableArray    *textStorageArray;  // run数组
+@property (nonatomic, strong) NSArray *textStorages; // run array copy
 @property (nonatomic, assign) NSInteger         replaceStringNum;   // 图片替换字符数
 @property (nonatomic, strong) NSMutableAttributedString *attString;
 @property (nonatomic, assign) CTFrameRef  frameRef;
@@ -101,6 +102,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (void)resetAllAttributed
 {
     _textStorageArray = nil;
+    _textStorages = nil;
     _replaceStringNum = 0;
 }
 
@@ -264,6 +266,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
                 _replaceStringNum += currentLenght - attString.length;
             }
         }
+        _textStorages = [_textStorageArray copy];
         [_textStorageArray removeAllObjects];
     }
 }
