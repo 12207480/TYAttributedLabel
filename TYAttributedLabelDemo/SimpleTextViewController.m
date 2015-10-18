@@ -44,7 +44,7 @@
     [self.view addSubview:label2];
     
     // 追加(添加到最后)文本
-    [label2 appendText:@"\t任何值得去的地方，都没有捷径；\n"];
+    [label2 appendText:@"\t任何值得去的地方，”都没“有捷径；\n"];
     [label2 appendText:@"\t任何值得等待的人，都会迟来一些；\n"];
     [label2 appendText:@"\t任何值得追逐的梦想，都必须在一路艰辛中备受嘲笑。\n"];
     [label2 appendText:@"\t所以，不要怕，不要担心你所追逐的有可能是错的。\n"];

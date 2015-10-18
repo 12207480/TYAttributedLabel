@@ -82,7 +82,7 @@
     
     [self addTableItemWithTitle:@"LinkText" detailText:@"属性链接文本显示" destVcClass:[LinkTextViewController class]];
     
-    [self addTableItemWithTitle:@"ImageText" detailText:@"属性文本和Image混排显示" destVcClass:[ImageTextViewController class]];
+    [self addTableItemWithTitle:@"ImageText" detailText:@"属性文本和Image(URL)混排显示" destVcClass:[ImageTextViewController class]];
     
     [self addTableItemWithTitle:@"AddViewText" detailText:@"属性文本和UIView混排显示" destVcClass:[AddViewTextViewController class]];
     

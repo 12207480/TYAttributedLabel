@@ -11,7 +11,7 @@
 typedef enum : NSUInteger {
     TYDrawAlignmentTop,     // 底部齐平 向上伸展
     TYDrawAlignmentCenter,  // 中心齐平
-    TYDrawAlignmentButtom,  // 顶部齐平 向下伸展
+    TYDrawAlignmentBottom,  // 顶部齐平 向下伸展
 } TYDrawAlignment;
 
 extern NSString *const kTYTextRunAttributedName;

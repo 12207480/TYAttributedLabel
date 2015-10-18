@@ -79,10 +79,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     return [_attString copy];
 }
 
-- (NSMutableAttributedString *)createAttributedString
+- (NSAttributedString *)createAttributedString
 {
     [self addTextStoragesWithAtrributedString:_attString];
-    return _attString;
+    return [_attString copy];
 }
 
 #pragma mark - setter

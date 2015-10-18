@@ -58,8 +58,11 @@
     
     NSInteger index = 0;
     
-    // 追加图片
-    [label appendImageWithName:@"CYLoLi" size:CGSizeMake(CGRectGetWidth(label.frame), 180)];
+    // 追加 图片Url
+    TYImageStorage *imageUrlStorage = [[TYImageStorage alloc]init];
+    imageUrlStorage.imageURL = [NSURL URLWithString:@"http://imgbdb2.bendibao.com/beijing/201310/21/2013102114858726.jpg"];
+    imageUrlStorage.size = CGSizeMake(CGRectGetWidth(label.frame), 343*CGRectGetWidth(label.frame)/600);
+    [label appendTextStorage:imageUrlStorage];
     
     for (NSString *text in textArray) {
         NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc]initWithString:text];

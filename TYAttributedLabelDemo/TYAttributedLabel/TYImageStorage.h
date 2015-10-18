@@ -16,4 +16,7 @@
 
 @property (nonatomic, strong) NSURL     *imageURL;
 
+@property (nonatomic, strong) NSString  *placeholdImageName;
+
+@property (nonatomic, assign) BOOL cacheImageOnMemory; // default YES ,内存换时间
 @end

@@ -12,6 +12,7 @@
 		B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03135741BA05FCB00D17041 /* AttributedLabelCell.m */; };
 		B03407411B27049300DCEACB /* TextContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B03407401B27049300DCEACB /* TextContainerViewController.m */; };
 		B0E11A6D1BA05A3A0044523D /* TextTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */; };
+		B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */; settings = {ASSET_TAGS = (); }; };
 		D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextStorage.m */; };
 		D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */; };
 		D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */; };
@@ -60,6 +61,8 @@
 		B03407401B27049300DCEACB /* TextContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextContainerViewController.m; sourceTree = "<group>"; };
 		B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableViewController.h; sourceTree = "<group>"; };
 		B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableViewController.m; sourceTree = "<group>"; };
+		B0E7CF1C1BCE9510000341F4 /* TYImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYImageCache.h; sourceTree = "<group>"; };
+		B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYImageCache.m; sourceTree = "<group>"; };
 		D34A49851AD4D5510036B7EF /* TYTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYTextStorage.h; sourceTree = "<group>"; };
 		D34A49861AD4D5510036B7EF /* TYTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYTextStorage.m; sourceTree = "<group>"; };
 		D34A498C1AD4FA760036B7EF /* TYDrawStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYDrawStorage.h; sourceTree = "<group>"; };
@@ -226,6 +229,8 @@
 				D3C623FC1B20348400C15D94 /* TYTextContainer.h */,
 				D3C623FD1B20348400C15D94 /* TYTextContainer.m */,
 				B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */,
+				B0E7CF1C1BCE9510000341F4 /* TYImageCache.h */,
+				B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */,
 				D3709F411AD3C71900145EC6 /* NSMutableAttributedString+TY.h */,
 				D3709F421AD3C71900145EC6 /* NSMutableAttributedString+TY.m */,
 				D34A49921AD505150036B7EF /* TYTextStorageProtocol.h */,
@@ -360,6 +365,7 @@
 				D3709F101AD3A5C000145EC6 /* main.m in Sources */,
 				D3709F431AD3C71900145EC6 /* NSMutableAttributedString+TY.m in Sources */,
 				D3553BD21AE778DB005D8F31 /* TYTextStorageParser.m in Sources */,
+				B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */,
 				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,
 				D35F47D41AE0DBE30048B58A /* ParseTextViewController.m in Sources */,
 				D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */,

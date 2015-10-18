@@ -48,7 +48,7 @@
     // 设置frame 注意 转换rect  CoreText context coordinates are the opposite to UIKit so we flip the bounds
     CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _superView.bounds.size.height), 1.f, -1.f);
     rect = CGRectApplyAffineTransform(rect, transform);
-    [_view setFrame:CGRectMake(rect.origin.x,rect.origin.y, rect.size.width, rect.size.height)];
+    [_view setFrame:rect];
     [_superView addSubview:_view];
 }
 

@@ -88,7 +88,7 @@
             ascent = height / 2 + baseLine;
             break;
         }
-        case TYDrawAlignmentButtom:
+        case TYDrawAlignmentBottom:
             ascent = _fontAscent;
             break;
         default:
@@ -117,7 +117,7 @@
             descent = height / 2 - baseLine;
             break;
         }
-        case TYDrawAlignmentButtom:
+        case TYDrawAlignmentBottom:
             descent = height - _fontAscent;
             break;
         default:
