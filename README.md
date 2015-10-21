@@ -1,5 +1,5 @@
 # TYAttributedLabel v2.0
-TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持富文本，图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
+TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
 
 **更新:**
 <br>v2.2 新增TYImagecache类,新增 image URL 下载缓存，功能优化，改进
