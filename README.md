@@ -10,6 +10,10 @@ TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)�
 
 ![image][image-1]
 
+新-做题demo
+
+![image][image-3]
+
 weibo demo 使用TYAttributedLabel 截图
 
 ![image][image-2]
@@ -207,3 +211,4 @@ label.textContainer = textContainer;
 
 [image-1]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif
 [image-2]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/weibo.gif
+[image-3]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/DoExam.gif
