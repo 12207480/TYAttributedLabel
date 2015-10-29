@@ -6,6 +6,8 @@ TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)�
 <br>v2.2 新增 TYImagecache类,新增 image URL 下载缓存，功能优化，改进
 <br>v2.1 添加 tableViewCell demo, cell 滚动非常流畅
 <br>v2.0 重构优化代码，性能提升，稳定（已在项目中使用）, 分离出TYTextContainer ，可以提前生成，也可以生成attributedString，显著提升cell滑动场景流畅度，可以和微博一样流畅
+<br>v1.2  添加设置行数，修复bug，增强稳定性
+<br>v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优化代码
 
 ## ScreenShot
 
@@ -29,11 +31,6 @@ weibo demo 使用TYAttributedLabel 截图
 * 支持添加高度自定义文本属性 
 * 支持添加属性文本，自定义链接，新增高亮效果显示（文字和背景）
 * 支持添加UIImage和UIView控件
-
-## Update
-v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优化代码<br>
-v1.2  添加设置行数，修复bug，增强稳定性<br>
-v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升cell滑动流畅度
 
 ## Demo
 运行demo可以查看效果，而且在demo中，针对各种文本和图文的实现都有详细的用例，每个头文件中都有详细的用法注释，这里简单的介绍下用法
