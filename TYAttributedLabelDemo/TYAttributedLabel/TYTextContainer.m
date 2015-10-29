@@ -189,6 +189,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     if (_lineBreakMode != lineBreakMode) {
         _lineBreakMode = lineBreakMode;
+        if (_lineBreakMode == kCTLineBreakByTruncatingTail)
+        {
+            lineBreakMode = _numberOfLines == 1 ? kCTLineBreakByCharWrapping : kCTLineBreakByWordWrapping;
+        }
         
         [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:lineBreakMode];
         [self resetFrameRef];
