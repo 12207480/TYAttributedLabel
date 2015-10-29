@@ -154,7 +154,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self drawTextStorageWithFrame:_textContainer.frameRef context:context];
 }
 
-// this code quote TTTAttributedLabel
+// this code quote M80AttributedLabel
 - (void)drawText: (NSAttributedString *)attributedString
             frame:(CTFrameRef)frame
             rect: (CGRect)rect
@@ -168,7 +168,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         CGPoint lineOrigins[numberOfLines];
         CTFrameGetLineOrigins(frame, CFRangeMake(0, numberOfLines), lineOrigins);
         
-        BOOL truncateLastLine = (_textContainer.lineBreakMode == kCTLineBreakByTruncatingHead || _textContainer.lineBreakMode == kCTLineBreakByTruncatingMiddle || _textContainer.lineBreakMode == kCTLineBreakByTruncatingTail);
+        BOOL truncateLastLine = (_textContainer.lineBreakMode == kCTLineBreakByTruncatingTail);
         
         for (CFIndex lineIndex = 0; lineIndex < numberOfLines; lineIndex++)
         {

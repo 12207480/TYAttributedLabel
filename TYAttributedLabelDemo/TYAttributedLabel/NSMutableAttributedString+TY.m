@@ -115,7 +115,6 @@
     lineSpaceStyle.valueSize = sizeof(linesSpacing);
     lineSpaceStyle.value = &linesSpacing;
     
-    
     //换行模式
     CTParagraphStyleSetting lineBreakStyle;
     lineBreakStyle.spec = kCTParagraphStyleSpecifierLineBreakMode;

@@ -9,10 +9,6 @@
 #import "TextTableViewController.h"
 #import "AttributedLabelCell.h"
 #import "RegexKitLite.h"
-#import "TYTextStorage.h"
-#import "TYImageStorage.h"
-#import "TYLinkTextStorage.h"
-#import "TYViewStorage.h"
 
 @interface TextTableViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic, strong) NSArray *textContainers;
@@ -26,11 +22,6 @@ static NSString *cellId = @"AttributedLabelCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self.tableView registerClass:[AttributedLabelCell class] forCellReuseIdentifier:cellId];
     
     [self addTableViewItems];
@@ -48,8 +39,7 @@ static NSString *cellId = @"AttributedLabelCell";
 
 - (TYTextContainer *)creatTextContainer
 {
-    //NSString *text = [NSString stringWithFormat:@"[CYLoLi,%d,180]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。[avatar,60,60]",(int)CGRectGetWidth(self.view.frame)];
-    NSString *text = @"@青春励志: [haha,15,15]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15][avatar,15,15]能用自己的力量撑起身后的家人和自己爱的人。 [avatar,15,15]#青春励志#[button]";
+    NSString *text = @"@青春励志: [haha,15,15]其实所有漂泊的人，[haha,15,15]不过是为了有一天能够不再漂泊，[haha,15,15][haha,15,15]能用自己的力量撑起身后的家人和自己爱的人。 [haha,15,15]#青春励志#[button]";
     
     // 属性文本生成器
     TYTextContainer *textContainer = [[TYTextContainer alloc]init];

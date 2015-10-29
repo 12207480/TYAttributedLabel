@@ -9,6 +9,8 @@
 #import "TYTextStorageProtocol.h"
 
 @interface TYDrawStorage : NSObject<TYDrawStorageProtocol>
+
+@property (nonatomic, assign)   NSInteger       tag;            // 标识
 @property (nonatomic, assign)   NSRange         range;          // 文本范围
 @property (nonatomic, assign)   NSRange         realRange;
 @property (nonatomic, assign)   UIEdgeInsets    margin;         // 图片四周间距

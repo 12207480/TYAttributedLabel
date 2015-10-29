@@ -167,7 +167,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)setLinesSpacing:(CGFloat)linesSpacing
 {
-    if (linesSpacing >= 0 && _linesSpacing != linesSpacing) {
+    if (_linesSpacing != linesSpacing) {
         _linesSpacing = linesSpacing;
         
         [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:linesSpacing lineBreakStyle:_lineBreakMode];
@@ -182,6 +182,17 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         
         [_attString addAttributeAlignmentStyle:textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
         [self resetFrameRef];
+    }
+}
+
+- (void)setLineBreakMode:(CTLineBreakMode)lineBreakMode
+{
+    if (_lineBreakMode != lineBreakMode) {
+        _lineBreakMode = lineBreakMode;
+        
+        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:lineBreakMode];
+        [self resetFrameRef];
+
     }
 }
 

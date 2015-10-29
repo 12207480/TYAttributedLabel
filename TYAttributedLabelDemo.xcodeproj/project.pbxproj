@@ -11,8 +11,11 @@
 		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
 		B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03135741BA05FCB00D17041 /* AttributedLabelCell.m */; };
 		B03407411B27049300DCEACB /* TextContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B03407401B27049300DCEACB /* TextContainerViewController.m */; };
+		B034A2A01BE1060B0015130E /* TExamTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B034A29F1BE1060B0015130E /* TExamTextField.m */; };
+		B034A2A31BE115930015130E /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B034A2A21BE115930015130E /* TPKeyboardAvoidingScrollView.m */; };
+		B034A2A61BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B034A2A51BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
 		B0E11A6D1BA05A3A0044523D /* TextTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */; };
-		B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */; settings = {ASSET_TAGS = (); }; };
+		B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */; };
 		D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextStorage.m */; };
 		D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */; };
 		D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */; };
@@ -59,6 +62,12 @@
 		B03135741BA05FCB00D17041 /* AttributedLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttributedLabelCell.m; sourceTree = "<group>"; };
 		B034073F1B27049300DCEACB /* TextContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextContainerViewController.h; sourceTree = "<group>"; };
 		B03407401B27049300DCEACB /* TextContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextContainerViewController.m; sourceTree = "<group>"; };
+		B034A29E1BE1060A0015130E /* TExamTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TExamTextField.h; sourceTree = "<group>"; };
+		B034A29F1BE1060B0015130E /* TExamTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TExamTextField.m; sourceTree = "<group>"; };
+		B034A2A11BE115930015130E /* TPKeyboardAvoidingScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPKeyboardAvoidingScrollView.h; sourceTree = "<group>"; };
+		B034A2A21BE115930015130E /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
+		B034A2A41BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
+		B034A2A51BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
 		B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableViewController.h; sourceTree = "<group>"; };
 		B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableViewController.m; sourceTree = "<group>"; };
 		B0E7CF1C1BCE9510000341F4 /* TYImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYImageCache.h; sourceTree = "<group>"; };
@@ -134,6 +143,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B034A2A71BE115DC0015130E /* views */ = {
+			isa = PBXGroup;
+			children = (
+				B034A2A41BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.h */,
+				B034A2A51BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m */,
+				B034A2A11BE115930015130E /* TPKeyboardAvoidingScrollView.h */,
+				B034A2A21BE115930015130E /* TPKeyboardAvoidingScrollView.m */,
+				B034A29E1BE1060A0015130E /* TExamTextField.h */,
+				B034A29F1BE1060B0015130E /* TExamTextField.m */,
+				B03135731BA05FCB00D17041 /* AttributedLabelCell.h */,
+				B03135741BA05FCB00D17041 /* AttributedLabelCell.m */,
+			);
+			name = views;
+			sourceTree = "<group>";
+		};
 		D3709F011AD3A5C000145EC6 = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				D3709F331AD3A5D600145EC6 /* TYAttributedLabel */,
+				B034A2A71BE115DC0015130E /* views */,
 				D35F47D81AE101880048B58A /* RegexKitLite.h */,
 				D35F47D91AE101880048B58A /* RegexKitLite.m */,
 				D3709F111AD3A5C000145EC6 /* AppDelegate.h */,
@@ -177,8 +202,6 @@
 				B03407401B27049300DCEACB /* TextContainerViewController.m */,
 				B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */,
 				B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */,
-				B03135731BA05FCB00D17041 /* AttributedLabelCell.h */,
-				B03135741BA05FCB00D17041 /* AttributedLabelCell.m */,
 				D35F47D21AE0DBE30048B58A /* ParseTextViewController.h */,
 				D35F47D31AE0DBE30048B58A /* ParseTextViewController.m */,
 				D3553BD01AE778DB005D8F31 /* TYTextStorageParser.h */,
@@ -362,8 +385,11 @@
 				D3709F131AD3A5C000145EC6 /* AppDelegate.m in Sources */,
 				B00F2C6C1B24666500EECDCE /* TYTextContainer+Extended.m in Sources */,
 				D34BE7421AD669F000BECD40 /* TYViewStorage.m in Sources */,
+				B034A2A01BE1060B0015130E /* TExamTextField.m in Sources */,
 				D3709F101AD3A5C000145EC6 /* main.m in Sources */,
 				D3709F431AD3C71900145EC6 /* NSMutableAttributedString+TY.m in Sources */,
+				B034A2A61BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
+				B034A2A31BE115930015130E /* TPKeyboardAvoidingScrollView.m in Sources */,
 				D3553BD21AE778DB005D8F31 /* TYTextStorageParser.m in Sources */,
 				B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */,
 				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,

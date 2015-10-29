@@ -9,7 +9,6 @@
 #import "ParseTextViewController.h"
 #import "TYAttributedLabel.h"
 #import "TYTextStorageParser.h"
-#import "TYLinkTextStorage.h"
 
 @interface ParseTextViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic, weak) TYAttributedLabel *label;

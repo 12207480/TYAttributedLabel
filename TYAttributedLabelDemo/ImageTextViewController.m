@@ -8,8 +8,6 @@
 
 #import "ImageTextViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYImageStorage.h"
-#import "TYTextStorage.h"
 #import "RegexKitLite.h"
 
 @interface ImageTextViewController ()<TYAttributedLabelDelegate>

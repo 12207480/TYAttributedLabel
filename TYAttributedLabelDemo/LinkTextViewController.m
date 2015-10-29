@@ -8,7 +8,6 @@
 
 #import "LinkTextViewController.h"
 #import "TYAttributedLabel.h"
-#import "TYLinkTextStorage.h"
 
 @interface LinkTextViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic, weak) TYAttributedLabel *label1;

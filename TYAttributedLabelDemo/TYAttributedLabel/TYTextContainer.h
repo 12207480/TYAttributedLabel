@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "TYTextStorageProtocol.h"
 #import "NSMutableAttributedString+TY.h"
+#import "TYTextStorage.h"
+#import "TYLinkTextStorage.h"
+#import "TYDrawStorage.h"
+#import "TYImageStorage.h"
+#import "TYViewStorage.h"
 
 @interface TYTextContainer : NSObject
 
