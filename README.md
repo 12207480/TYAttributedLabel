@@ -48,7 +48,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 |NSMutableAttributedString (TY) |category提供便利color,font CharacterSpacing,UnderlineStyle,ParagraphStyle的属性添加，无需了解复杂的CoreText|
 |TYTextStorageProtocol|自定义文本属性 遵守最基本的协议 即可 addTextStorage 添加进去|
 |TYAppendTextStorageProtocol|自定义文本属性协议 遵守即可appendTextStorage 添加进去|
-|TYLinkStorageProtocol|自定义文本链接属性 |
+|TYLinkStorageProtocol|自定义文本链接属性 继承TYAppendTextStorageProtocol|
 |TYDrawStorageProtocol|自定义显示内容协议 如 UIImage UIView|
 
 下层协议继承上层的协议，如果觉得复杂，其实我已经实现了常用的自定义属性，拿来就可以用，或者继承，添加你想要的
@@ -64,6 +64,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 |TYDrawStorage|自定义显示内容属性，如UIImage，UIView，支持点击代理|
 |TYImageStorage|自定义图片显示，继承TYDrawStorage|
 |TYViewStorage|自定义UIView控件，继承TYDrawStorage|
+|TYImageCache|image缓存类，支持URL请求|
 
 如果需要更加详细的内容，请看各个头文件，有详细的注释
 
