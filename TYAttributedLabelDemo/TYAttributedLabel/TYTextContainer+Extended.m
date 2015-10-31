@@ -7,9 +7,6 @@
 //
 
 #import "TYTextContainer.h"
-#import "TYImageStorage.h"
-#import "TYViewStorage.h"
-#import "TYLinkTextStorage.h"
 
 @implementation TYTextContainer (Link)
 

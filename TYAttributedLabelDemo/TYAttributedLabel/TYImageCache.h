@@ -1,9 +1,9 @@
 //
-//  DBImageViewCache.h
-//  DBImageView
+//  TYImageCache.h
+//  TYImageCache
 //
-//  Created by iBo on 25/08/14.
-//  Copyright (c) 2014 Daniele Bogo. All rights reserved.
+//  Created by tanyang on 25/08/15.
+//  Copyright (c) 2015 tanyang. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
