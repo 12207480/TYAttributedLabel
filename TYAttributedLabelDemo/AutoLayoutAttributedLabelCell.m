@@ -37,9 +37,17 @@
     label.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:label];
     _label = label;
-    [NSLayoutConstraint activateConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[label]-15-|" options:0 metrics:nil views:@{@"label":_label}]];
-    [NSLayoutConstraint activateConstraints: [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[label]-5-|" options:0 metrics:nil views:@{@"label":_label}]];
-
+    
+    NSArray *verticalContrainsts = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[label]-15-|" options:0 metrics:nil views:@{@"label":_label}];
+    NSArray *horizontalCOntraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[label]-5-|" options:0 metrics:nil views:@{@"label":_label}];
+    
+    if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0) {
+        [NSLayoutConstraint activateConstraints:verticalContrainsts];
+        [NSLayoutConstraint activateConstraints:horizontalCOntraints];
+    } else {
+        [self.contentView addConstraints:verticalContrainsts];
+        [self.contentView addConstraints:horizontalCOntraints];
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
