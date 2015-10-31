@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5454E5721BE49FEC00722E25 /* AutoLayoutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */; settings = {ASSET_TAGS = (); }; };
 		5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */; settings = {ASSET_TAGS = (); }; };
+		5454E5791BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5781BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m */; settings = {ASSET_TAGS = (); }; };
 		B00F2C6C1B24666500EECDCE /* TYTextContainer+Extended.m in Sources */ = {isa = PBXBuildFile; fileRef = B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */; };
 		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
 		B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03135741BA05FCB00D17041 /* AttributedLabelCell.m */; };
@@ -62,6 +63,8 @@
 		5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLayoutTableViewController.m; sourceTree = "<group>"; };
 		5454E5731BE4A07800722E25 /* AutoLayoutAttributedLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutAttributedLabelCell.h; sourceTree = "<group>"; };
 		5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLayoutAttributedLabelCell.m; sourceTree = "<group>"; };
+		5454E5771BE503C400722E25 /* AutoLayoutLinkImageTextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutLinkImageTextViewController.h; sourceTree = "<group>"; };
+		5454E5781BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLayoutLinkImageTextViewController.m; sourceTree = "<group>"; };
 		B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TYTextContainer+Extended.m"; sourceTree = "<group>"; };
 		B0165EF71AE157FA0003D580 /* CYLoLi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CYLoLi.png; sourceTree = "<group>"; };
 		B03135731BA05FCB00D17041 /* AttributedLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributedLabelCell.h; sourceTree = "<group>"; };
@@ -202,6 +205,8 @@
 				D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */,
 				D35F47CF1AE0DB500048B58A /* ImageTextViewController.h */,
 				D35F47D01AE0DB500048B58A /* ImageTextViewController.m */,
+				5454E5771BE503C400722E25 /* AutoLayoutLinkImageTextViewController.h */,
+				5454E5781BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m */,
 				D3553BCA1AE732C8005D8F31 /* LinkTextViewController.h */,
 				D3553BCB1AE732C8005D8F31 /* LinkTextViewController.m */,
 				D3553BD31AE79106005D8F31 /* AddViewTextViewController.h */,
@@ -389,6 +394,7 @@
 				D3709F161AD3A5C000145EC6 /* ViewController.m in Sources */,
 				B03407411B27049300DCEACB /* TextContainerViewController.m in Sources */,
 				D3553BD51AE79106005D8F31 /* AddViewTextViewController.m in Sources */,
+				5454E5791BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m in Sources */,
 				D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */,
 				5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */,
 				D3C623FE1B20348400C15D94 /* TYTextContainer.m in Sources */,

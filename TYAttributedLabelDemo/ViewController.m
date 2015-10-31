@@ -11,6 +11,7 @@
 #import "AttributedTextViewController.h"
 #import "ImageTextViewController.h"
 #import "LinkTextViewController.h"
+#import "AutoLayoutLinkImageTextViewController.h"
 #import "ParseTextViewController.h"
 #import "AddViewTextViewController.h"
 #import "TextContainerViewController.h"
@@ -78,6 +79,8 @@
     [self addTableItemWithTitle:@"AttributedText" detailText:@"属性文本显示" destVcClass:[AttributedTextViewController class]];
     
     [self addTableItemWithTitle:@"LinkText" detailText:@"属性链接文本显示" destVcClass:[LinkTextViewController class]];
+    
+    [self addTableItemWithTitle:@"AutoLayoutLinkText" detailText:@"AutoLayout属性链接文本显示" destVcClass:[AutoLayoutLinkImageTextViewController class]];
     
     [self addTableItemWithTitle:@"ImageText" detailText:@"属性文本和Image(URL)混排显示" destVcClass:[ImageTextViewController class]];
     

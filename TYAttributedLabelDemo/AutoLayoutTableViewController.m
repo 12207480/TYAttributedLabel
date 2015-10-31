@@ -26,7 +26,6 @@ static NSString *cellId = @"AutoLayoutAttributedLabelCell";
     
     [self addTableViewItems];
     self.tableView.estimatedRowHeight = 40;
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
 }
 
 - (void)addTableViewItems
@@ -119,6 +118,15 @@ static NSString *cellId = @"AutoLayoutAttributedLabelCell";
     cell.label.preferredMaxLayoutWidth = CGRectGetWidth(tableView.frame);
 
     return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0) {
+        return UITableViewAutomaticDimension;
+    }
+    TYTextContainer *textContaner = _textContainers[indexPath.row];
+    return textContaner.textHeight+30;// after createTextContainer, have value
 }
 
 #pragma mark - TYAttributedLabelDelegate
