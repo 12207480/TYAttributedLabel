@@ -103,12 +103,14 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)addTextStorage:(id<TYTextStorageProtocol>)textStorage
 {
     [_textContainer addTextStorage:textStorage];
+    [self invalidateIntrinsicContentSize];
 }
 
 - (void)addTextStorageArray:(NSArray *)textStorageArray
 {
     if (textStorageArray) {
         [_textContainer addTextStorageArray:textStorageArray];
+        [self invalidateIntrinsicContentSize];
         [self setNeedsDisplay];
     }
 }
@@ -730,6 +732,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     [_textContainer setText:text];
     [self resetAllAttributed];
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
@@ -737,6 +740,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     [_textContainer setAttributedText:attributedText];
     [self resetAllAttributed];
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
@@ -795,12 +799,14 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)appendText:(NSString *)text
 {
     [_textContainer appendText:text];
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
 - (void)appendTextAttributedString:(NSAttributedString *)attributedText
 {
     [_textContainer appendTextAttributedString:attributedText];
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
@@ -808,6 +814,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     if (textStorage) {
         [_textContainer appendTextStorage:textStorage];
+        [self invalidateIntrinsicContentSize];
         [self setNeedsDisplay];
     }
 }
@@ -816,6 +823,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     if (textStorageArray) {
         [_textContainer appendTextStorageArray:textStorageArray];
+        [self invalidateIntrinsicContentSize];
         [self setNeedsDisplay];
     }
 }
