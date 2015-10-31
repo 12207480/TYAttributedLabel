@@ -7,9 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "TYAttributedLabel.h"
-#import "TYImageStorage.h"
-#import "TYViewStorage.h"
 #import "SimpleTextViewController.h"
 #import "AttributedTextViewController.h"
 #import "ImageTextViewController.h"
@@ -34,7 +31,6 @@
 @end
 
 @interface ViewController ()<UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic,strong) TYAttributedLabel *label;
 @property (nonatomic, weak) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *itemArray;
