@@ -1,14 +1,21 @@
-# TYAttributedLabel v2.0
+# TYAttributedLabel v2.3
 TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
 
 **更新:**
-<br>v2.2 新增TYImagecache类,新增 image URL 下载缓存，功能优化，改进
+<br>v2.3 新增 做题demo，代码优化（4s真机测试tableview列表非常流畅）
+<br>v2.2 新增 TYImagecache类,新增 image URL 下载缓存，功能优化，改进
 <br>v2.1 添加 tableViewCell demo, cell 滚动非常流畅
 <br>v2.0 重构优化代码，性能提升，稳定（已在项目中使用）, 分离出TYTextContainer ，可以提前生成，也可以生成attributedString，显著提升cell滑动场景流畅度，可以和微博一样流畅
+<br>v1.2  添加设置行数，修复bug，增强稳定性
+<br>v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优化代码
 
 ## ScreenShot
 
 ![image][image-1]
+
+新-做题demo
+
+![image][image-3]
 
 weibo demo 使用TYAttributedLabel 截图
 
@@ -25,11 +32,6 @@ weibo demo 使用TYAttributedLabel 截图
 * 支持添加属性文本，自定义链接，新增高亮效果显示（文字和背景）
 * 支持添加UIImage和UIView控件
 
-## Update
-v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优化代码<br>
-v1.2  添加设置行数，修复bug，增强稳定性<br>
-v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升cell滑动流畅度
-
 ## Demo
 运行demo可以查看效果，而且在demo中，针对各种文本和图文的实现都有详细的用例，每个头文件中都有详细的用法注释，这里简单的介绍下用法
  
@@ -43,7 +45,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 |NSMutableAttributedString (TY) |category提供便利color,font CharacterSpacing,UnderlineStyle,ParagraphStyle的属性添加，无需了解复杂的CoreText|
 |TYTextStorageProtocol|自定义文本属性 遵守最基本的协议 即可 addTextStorage 添加进去|
 |TYAppendTextStorageProtocol|自定义文本属性协议 遵守即可appendTextStorage 添加进去|
-|TYLinkStorageProtocol|自定义文本链接属性 |
+|TYLinkStorageProtocol|自定义文本链接属性 继承TYAppendTextStorageProtocol|
 |TYDrawStorageProtocol|自定义显示内容协议 如 UIImage UIView|
 
 下层协议继承上层的协议，如果觉得复杂，其实我已经实现了常用的自定义属性，拿来就可以用，或者继承，添加你想要的
@@ -59,6 +61,7 @@ v2.0  重构代码 分离出TYTextContainer ，可以提前生成，显著提升
 |TYDrawStorage|自定义显示内容属性，如UIImage，UIView，支持点击代理|
 |TYImageStorage|自定义图片显示，继承TYDrawStorage|
 |TYViewStorage|自定义UIView控件，继承TYDrawStorage|
+|TYImageCache|image缓存类，支持URL请求|
 
 如果需要更加详细的内容，请看各个头文件，有详细的注释
 
@@ -207,3 +210,4 @@ label.textContainer = textContainer;
 
 [image-1]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/TYAtrributedLabelDemo.gif
 [image-2]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/weibo.gif
+[image-3]:	https://raw.githubusercontent.com/12207480/TYAttributedLabel/master/screenshot/DoExam.gif
