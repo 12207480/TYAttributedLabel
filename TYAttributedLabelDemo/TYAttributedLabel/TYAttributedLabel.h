@@ -45,6 +45,11 @@
 @property (nonatomic, strong)   TYTextContainer *textContainer;
 
 /**
+ *  Autolayout
+ */
+@property(nonatomic) CGFloat preferredMaxLayoutWidth NS_AVAILABLE_IOS(6_0);
+
+/**
  *  获取普通文本内容
  */
 - (NSString *)text;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5454E5721BE49FEC00722E25 /* AutoLayoutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */; settings = {ASSET_TAGS = (); }; };
+		5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */; settings = {ASSET_TAGS = (); }; };
 		B00F2C6C1B24666500EECDCE /* TYTextContainer+Extended.m in Sources */ = {isa = PBXBuildFile; fileRef = B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */; };
 		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
 		B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03135741BA05FCB00D17041 /* AttributedLabelCell.m */; };
@@ -56,6 +58,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5454E5701BE49FEC00722E25 /* AutoLayoutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutTableViewController.h; sourceTree = "<group>"; };
+		5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLayoutTableViewController.m; sourceTree = "<group>"; };
+		5454E5731BE4A07800722E25 /* AutoLayoutAttributedLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutAttributedLabelCell.h; sourceTree = "<group>"; };
+		5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLayoutAttributedLabelCell.m; sourceTree = "<group>"; };
 		B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "TYTextContainer+Extended.m"; sourceTree = "<group>"; };
 		B0165EF71AE157FA0003D580 /* CYLoLi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CYLoLi.png; sourceTree = "<group>"; };
 		B03135731BA05FCB00D17041 /* AttributedLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributedLabelCell.h; sourceTree = "<group>"; };
@@ -154,6 +160,8 @@
 				B034A29F1BE1060B0015130E /* TExamTextField.m */,
 				B03135731BA05FCB00D17041 /* AttributedLabelCell.h */,
 				B03135741BA05FCB00D17041 /* AttributedLabelCell.m */,
+				5454E5731BE4A07800722E25 /* AutoLayoutAttributedLabelCell.h */,
+				5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */,
 			);
 			name = views;
 			sourceTree = "<group>";
@@ -202,6 +210,8 @@
 				B03407401B27049300DCEACB /* TextContainerViewController.m */,
 				B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */,
 				B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */,
+				5454E5701BE49FEC00722E25 /* AutoLayoutTableViewController.h */,
+				5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */,
 				D35F47D21AE0DBE30048B58A /* ParseTextViewController.h */,
 				D35F47D31AE0DBE30048B58A /* ParseTextViewController.m */,
 				D3553BD01AE778DB005D8F31 /* TYTextStorageParser.h */,
@@ -380,6 +390,7 @@
 				B03407411B27049300DCEACB /* TextContainerViewController.m in Sources */,
 				D3553BD51AE79106005D8F31 /* AddViewTextViewController.m in Sources */,
 				D35F47CE1AE0DB370048B58A /* AttributedTextViewController.m in Sources */,
+				5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */,
 				D3C623FE1B20348400C15D94 /* TYTextContainer.m in Sources */,
 				D34A49951AD50EB70036B7EF /* TYImageStorage.m in Sources */,
 				D3709F131AD3A5C000145EC6 /* AppDelegate.m in Sources */,
@@ -399,6 +410,7 @@
 				D34A498E1AD4FA760036B7EF /* TYDrawStorage.m in Sources */,
 				D34A49911AD4FF370036B7EF /* TYLinkTextStorage.m in Sources */,
 				D3709F361AD3A60800145EC6 /* TYAttributedLabel.m in Sources */,
+				5454E5721BE49FEC00722E25 /* AutoLayoutTableViewController.m in Sources */,
 				D35F47CB1AE0DAF20048B58A /* SimpleTextViewController.m in Sources */,
 				B0E11A6D1BA05A3A0044523D /* TextTableViewController.m in Sources */,
 				D3553BCC1AE732C8005D8F31 /* LinkTextViewController.m in Sources */,

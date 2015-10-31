@@ -641,6 +641,19 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return CGSizeMake(width, height);
 }
 
+- (void)setPreferredMaxLayoutWidth:(CGFloat)preferredMaxLayoutWidth
+{
+    if (_preferredMaxLayoutWidth != preferredMaxLayoutWidth) {
+        _preferredMaxLayoutWidth = preferredMaxLayoutWidth;
+        [self invalidateIntrinsicContentSize];
+    }
+}
+
+- (CGSize)intrinsicContentSize
+{
+    return CGSizeMake(self.preferredMaxLayoutWidth, [self getHeightWithWidth:self.preferredMaxLayoutWidth]);
+}
+
 #pragma mark - set right frame
 - (void)setFrameWithOrign:(CGPoint)orign Width:(CGFloat)width
 {
