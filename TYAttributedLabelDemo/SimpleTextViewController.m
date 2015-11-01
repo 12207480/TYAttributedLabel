@@ -32,9 +32,15 @@
     label1.numberOfLines = 3;
     // 文本字体
     label1.font = [UIFont systemFontOfSize:17];
+    // 设置文字竖直对齐方式
+    label1.verticalAlignment = VerticalAlignmentBottom;
     
     // 设置view的位置和宽，会自动计算高度
     [label1 setFrameWithOrign:CGPointMake(0, 64) Width:CGRectGetWidth(self.view.frame)];
+    label1.backgroundColor = [UIColor cyanColor];
+    CGRect frame = label1.frame;
+    frame.size.height += 100;
+    label1.frame = frame;
     [self.view addSubview:label1];
     
     
@@ -52,6 +58,12 @@
     
     // 自适应高度
     [label2 sizeToFit];
+    
+    label2.verticalAlignment = VerticalAlignmentMiddle;
+    label2.backgroundColor = [UIColor lightGrayColor];
+    frame = label2.frame;
+    frame.size.height += 100;
+    label2.frame = frame;
 }
 
 - (void)didReceiveMemoryWarning {
