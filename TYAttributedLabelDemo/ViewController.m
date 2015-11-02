@@ -11,10 +11,12 @@
 #import "AttributedTextViewController.h"
 #import "ImageTextViewController.h"
 #import "LinkTextViewController.h"
+#import "AutoLayoutLinkImageTextViewController.h"
 #import "ParseTextViewController.h"
 #import "AddViewTextViewController.h"
 #import "TextContainerViewController.h"
 #import "TextTableViewController.h"
+#import "AutoLayoutTableViewController.h"
 
 @interface tableViewItem : NSObject
 
@@ -78,6 +80,8 @@
     
     [self addTableItemWithTitle:@"LinkText" detailText:@"属性链接文本显示" destVcClass:[LinkTextViewController class]];
     
+    [self addTableItemWithTitle:@"AutoLayoutLinkText" detailText:@"AutoLayout属性链接文本显示" destVcClass:[AutoLayoutLinkImageTextViewController class]];
+    
     [self addTableItemWithTitle:@"ImageText" detailText:@"属性文本和Image(URL)混排显示" destVcClass:[ImageTextViewController class]];
     
     [self addTableItemWithTitle:@"AddViewText" detailText:@"属性文本和UIView混排显示" destVcClass:[AddViewTextViewController class]];
@@ -87,6 +91,7 @@
     [self addTableItemWithTitle:@"ParseText" detailText:@"自定义排版解析图文混排显示" destVcClass:[ParseTextViewController class]];
     
     [self addTableItemWithTitle:@"AttributedTextCell" detailText:@"tableViewCell显示图文混排" destVcClass:[TextTableViewController class]];
+    [self addTableItemWithTitle:@"AutoLayoutAttributedTextCell" detailText:@"Autolayout tableViewCell显示图文混排" destVcClass:[AutoLayoutTableViewController class]];
     
 }
 
