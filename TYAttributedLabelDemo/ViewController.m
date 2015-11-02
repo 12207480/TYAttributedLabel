@@ -65,11 +65,16 @@
 - (void)addTableView
 {
     // 添加tableView
-    UITableView *tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame))];
+    UITableView *tableView = [[UITableView alloc]init];
     tableView.delegate = self;
     tableView.dataSource = self;
     [self.view addSubview:tableView];
     self.tableView = tableView;
+}
+
+- (void)viewWillLayoutSubviews
+{
+    self.tableView.frame = self.view.bounds;
 }
 
 - (void)addTableItems

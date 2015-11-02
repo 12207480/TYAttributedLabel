@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5454E5721BE49FEC00722E25 /* AutoLayoutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */; settings = {ASSET_TAGS = (); }; };
-		5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */; settings = {ASSET_TAGS = (); }; };
-		5454E5791BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5781BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m */; settings = {ASSET_TAGS = (); }; };
+		5454E5721BE49FEC00722E25 /* AutoLayoutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */; };
+		5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */; };
+		5454E5791BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5781BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m */; };
 		B00F2C6C1B24666500EECDCE /* TYTextContainer+Extended.m in Sources */ = {isa = PBXBuildFile; fileRef = B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */; };
 		B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */ = {isa = PBXBuildFile; fileRef = B0165EF71AE157FA0003D580 /* CYLoLi.png */; };
 		B03135751BA05FCB00D17041 /* AttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03135741BA05FCB00D17041 /* AttributedLabelCell.m */; };
@@ -169,6 +169,23 @@
 			name = views;
 			sourceTree = "<group>";
 		};
+		B0E6E1FF1BE7816A00F6EE0A /* TextStorages */ = {
+			isa = PBXGroup;
+			children = (
+				D34A49851AD4D5510036B7EF /* TYTextStorage.h */,
+				D34A49861AD4D5510036B7EF /* TYTextStorage.m */,
+				D34A498F1AD4FF370036B7EF /* TYLinkTextStorage.h */,
+				D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */,
+				D34A498C1AD4FA760036B7EF /* TYDrawStorage.h */,
+				D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */,
+				D34A49931AD50EB70036B7EF /* TYImageStorage.h */,
+				D34A49941AD50EB70036B7EF /* TYImageStorage.m */,
+				D34BE7401AD669F000BECD40 /* TYViewStorage.h */,
+				D34BE7411AD669F000BECD40 /* TYViewStorage.m */,
+			);
+			name = TextStorages;
+			sourceTree = "<group>";
+		};
 		D3709F011AD3A5C000145EC6 = {
 			isa = PBXGroup;
 			children = (
@@ -262,26 +279,17 @@
 		D3709F331AD3A5D600145EC6 /* TYAttributedLabel */ = {
 			isa = PBXGroup;
 			children = (
+				B0E6E1FF1BE7816A00F6EE0A /* TextStorages */,
 				D3709F341AD3A60800145EC6 /* TYAttributedLabel.h */,
 				D3709F351AD3A60800145EC6 /* TYAttributedLabel.m */,
+				D34A49921AD505150036B7EF /* TYTextStorageProtocol.h */,
 				D3C623FC1B20348400C15D94 /* TYTextContainer.h */,
 				D3C623FD1B20348400C15D94 /* TYTextContainer.m */,
 				B00F2C6B1B24666500EECDCE /* TYTextContainer+Extended.m */,
 				D3709F411AD3C71900145EC6 /* NSMutableAttributedString+TY.h */,
 				D3709F421AD3C71900145EC6 /* NSMutableAttributedString+TY.m */,
-				D34A49921AD505150036B7EF /* TYTextStorageProtocol.h */,
 				B0E7CF1C1BCE9510000341F4 /* TYImageCache.h */,
 				B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */,
-				D34A49851AD4D5510036B7EF /* TYTextStorage.h */,
-				D34A49861AD4D5510036B7EF /* TYTextStorage.m */,
-				D34A498F1AD4FF370036B7EF /* TYLinkTextStorage.h */,
-				D34A49901AD4FF370036B7EF /* TYLinkTextStorage.m */,
-				D34A498C1AD4FA760036B7EF /* TYDrawStorage.h */,
-				D34A498D1AD4FA760036B7EF /* TYDrawStorage.m */,
-				D34A49931AD50EB70036B7EF /* TYImageStorage.h */,
-				D34A49941AD50EB70036B7EF /* TYImageStorage.m */,
-				D34BE7401AD669F000BECD40 /* TYViewStorage.h */,
-				D34BE7411AD669F000BECD40 /* TYViewStorage.m */,
 			);
 			path = TYAttributedLabel;
 			sourceTree = "<group>";
@@ -495,7 +503,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -531,7 +539,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

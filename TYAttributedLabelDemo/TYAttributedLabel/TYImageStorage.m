@@ -72,23 +72,38 @@
     }
     
     if (image) {
-        CGSize size = [self sizeFitOriginSize:image.size bySize:rect.size];
+        CGRect fitRect = [self rectFitOriginSize:image.size byRect:rect];
         CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextDrawImage(context, CGRectMake(rect.origin.x, rect.origin.y, size.width, size.height), image.CGImage);
+        CGContextDrawImage(context, fitRect, image.CGImage);
     }
 }
 
-- (CGSize)sizeFitOriginSize:(CGSize)size bySize:(CGSize)bySize{
-    if (size.width > bySize.width) {
-        CGFloat scale = bySize.width/size.width;
-        CGFloat height = size.height * scale;
-        return CGSizeMake(bySize.width, height);
-    }else if(size.height > bySize.height ) {
-        CGFloat scale = bySize.height/size.height;
-        CGFloat width = size.width * scale;
-        return CGSizeMake(width, bySize.height);
+- (CGRect)rectFitOriginSize:(CGSize)size byRect:(CGRect)byRect{
+    
+    CGRect scaleRect = byRect;
+    CGFloat targetWidth = byRect.size.width;
+    CGFloat targetHeight = byRect.size.height;
+    CGFloat widthFactor = targetWidth / size.width;
+    CGFloat heightFactor = targetHeight / size.height;
+    CGFloat scaleFactor = MIN(widthFactor, heightFactor);
+    CGFloat scaledWidth  = size.width * scaleFactor;
+    CGFloat scaledHeight = size.height * scaleFactor;
+    scaleRect.size = CGSizeMake(scaledWidth, scaledHeight);
+    // center the image
+    if (widthFactor < heightFactor) {
+        scaleRect.origin.y += (targetHeight - scaledHeight) * 0.5;
+    } else if (widthFactor > heightFactor) {
+        switch (_imageAlignment) {
+            case TYImageAlignmentCenter:
+                scaleRect.origin.x += (targetWidth - scaledWidth) * 0.5;
+                break;
+            case TYImageAlignmentRight:
+                scaleRect.origin.x += (targetWidth - scaledWidth);
+            default:
+                break;
+        }
     }
-    return size;
+    return scaleRect;
 }
 
 // override

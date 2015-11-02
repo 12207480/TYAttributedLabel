@@ -87,6 +87,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     _textContainer = attStringCreater;
     [self resetAllAttributed];
+    _preferredMaxLayoutWidth = attStringCreater.textWidth;
     [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
