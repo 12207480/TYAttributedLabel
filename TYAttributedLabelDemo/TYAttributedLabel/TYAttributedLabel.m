@@ -87,6 +87,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     _textContainer = attStringCreater;
     [self resetAllAttributed];
+    [self invalidateIntrinsicContentSize];
     [self setNeedsDisplay];
 }
 
