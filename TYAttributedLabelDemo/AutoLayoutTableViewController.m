@@ -115,8 +115,9 @@ static NSString *cellId = @"AutoLayoutAttributedLabelCell";
     // Configure the cell...
     cell.label.delegate = self;
     cell.label.textContainer = _textContainers[indexPath.row];
+    
+    // 如果是直接赋值textContainer ，可以不用设置preferredMaxLayoutWidth，因为创建textContainer时，必须传正确的textwidth，即 preferredMaxLayoutWidth
     cell.label.preferredMaxLayoutWidth = CGRectGetWidth(tableView.frame);
-
     return cell;
 }
 

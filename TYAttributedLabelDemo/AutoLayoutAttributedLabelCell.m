@@ -39,7 +39,7 @@
     _label = label;
     
     NSArray *verticalContrainsts = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|-15-[label]-15-|" options:0 metrics:nil views:@{@"label":_label}];
-    NSArray *horizontalCOntraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-5-[label]-5-|" options:0 metrics:nil views:@{@"label":_label}];
+    NSArray *horizontalCOntraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[label]-0-|" options:0 metrics:nil views:@{@"label":_label}];
     
     if ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0) {
         [NSLayoutConstraint activateConstraints:verticalContrainsts];

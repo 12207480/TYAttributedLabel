@@ -78,7 +78,9 @@
 {
     TYImageStorage *imageStorage = [[TYImageStorage alloc]init];
     imageStorage.imageName = dic[@"name"];
-    imageStorage.size = CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
+    imageStorage.imageAlignment = TYImageAlignmentRight;
+    imageStorage.size = CGSizeMake([UIScreen mainScreen].bounds.size.width, [dic[@"height"] doubleValue]);
+    //CGSizeMake([dic[@"width"] doubleValue], [dic[@"height"] doubleValue]);
     
     return imageStorage;
 }

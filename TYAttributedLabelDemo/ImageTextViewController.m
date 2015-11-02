@@ -86,6 +86,27 @@
     imageStorage.size = CGSizeMake(15, 15);
     [label appendTextStorage:imageStorage];
     
+    [label appendText:@"image左对齐"];
+    TYImageStorage *imageStorageAlignLeft = [[TYImageStorage alloc]init];
+    imageStorageAlignLeft.imageName = @"CYLoLi";
+    imageStorageAlignLeft.imageAlignment = TYImageAlignmentLeft;
+    imageStorageAlignLeft.size = CGSizeMake(CGRectGetWidth(self.view.frame), 100);
+    [label appendTextStorage:imageStorageAlignLeft];
+    
+    [label appendText:@"image居中对齐"];
+    TYImageStorage *imageStorageAlignCenter = [[TYImageStorage alloc]init];
+    imageStorageAlignCenter.imageName = @"CYLoLi";
+    imageStorageAlignCenter.imageAlignment = TYImageAlignmentCenter;
+    imageStorageAlignCenter.size = CGSizeMake(CGRectGetWidth(self.view.frame), 100);
+    [label appendTextStorage:imageStorageAlignCenter];
+    
+    [label appendText:@"image右对齐"];
+    TYImageStorage *imageStorageAlignRight = [[TYImageStorage alloc]init];
+    imageStorageAlignRight.imageName = @"CYLoLi";
+    imageStorageAlignRight.imageAlignment = TYImageAlignmentRight;
+    imageStorageAlignRight.size = CGSizeMake(CGRectGetWidth(self.view.frame), 100);
+    [label appendTextStorage:imageStorageAlignRight];
+    
     [label sizeToFit];
 }
 
