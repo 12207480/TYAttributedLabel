@@ -2,6 +2,7 @@
 TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
 
 **更新:**
+<br> 今晚更新内容 fix scale image bug ,add autoLayout support，thank xinzhengzhang, nonstriater
 <br>v2.3 新增 做题demo，代码优化（4s真机测试tableview列表非常流畅）
 <br>v2.2 新增 TYImagecache类,新增 image URL 下载缓存，功能优化，改进
 <br>v2.1 添加 tableViewCell demo, cell 滚动非常流畅
