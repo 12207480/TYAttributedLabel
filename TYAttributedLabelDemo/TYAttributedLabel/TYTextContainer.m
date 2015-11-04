@@ -525,11 +525,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     return find;
 }
 
-
-
 - (void)dealloc{
     [self resetFrameRef];
-    NSLog(@"TYTextContainer dealloc");
 }
 
 @end
@@ -607,6 +604,5 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         }
     }
 }
-
 
 @end

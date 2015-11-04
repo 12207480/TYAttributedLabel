@@ -559,7 +559,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)dealloc
 {
     _textContainer = nil;
-    NSLog(@"TYAttributedLabel dealloc");
 }
 
 #pragma mark - getter
