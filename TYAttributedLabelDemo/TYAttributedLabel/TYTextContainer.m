@@ -464,9 +464,43 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 #pragma mark - enumerate runRect
 
-- (BOOL)enumerateRunRectContainPosition:(CGPoint)position viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+- (BOOL)existRunRectDictionary
 {
-    if (_runRectDictionary.count == 0) {
+    return _runRectDictionary.count != 0;
+}
+
+- (BOOL)existLinkRectDictionary
+{
+    return _linkRectDictionary.count != 0;
+}
+
+- (BOOL)existDrawRectDictionary
+{
+    return _drawRectDictionary.count != 0;
+}
+
+- (void)enumerateDrawRectDictionaryUsingBlock:(void (^)(id<TYDrawStorageProtocol> drawStorage, CGRect rect))block
+{
+    [_drawRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *rectValue, id<TYDrawStorageProtocol> drawStorage, BOOL * stop) {
+        if (block) {
+            block(drawStorage,[rectValue CGRectValue]);
+        }
+    }];
+}
+
+- (BOOL)enumerateRunRectContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+{
+    return [self enumerateRunRect:_runRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
+}
+
+- (BOOL)enumerateLinkRectContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYLinkStorageProtocol> textStorage))successBlock
+{
+    return [self enumerateRunRect:_linkRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
+}
+
+- (BOOL)enumerateRunRect:(NSDictionary *)runRectDic ContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+{
+    if (runRectDic.count == 0) {
         return NO;
     }
     // CoreText context coordinates are the opposite to UIKit so we flip the bounds
@@ -474,13 +508,13 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     
     __block BOOL find = NO;
     // 遍历run位置字典
-    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> textStorage, BOOL *stop) {
+    [runRectDic enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> textStorage, BOOL *stop) {
         
         CGRect imgRect = [keyRectValue CGRectValue];
         CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
         
         // point 是否在rect里
-        if(CGRectContainsPoint(rect, position)){
+        if(CGRectContainsPoint(rect, point)){
             find = YES;
             *stop = YES;
             if (successBlock) {
@@ -490,6 +524,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }];
     return find;
 }
+
+
 
 - (void)dealloc{
     [self resetFrameRef];
