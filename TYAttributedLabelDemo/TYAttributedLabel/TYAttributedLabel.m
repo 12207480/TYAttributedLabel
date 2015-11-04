@@ -123,6 +123,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     _linkRectDictionary = nil;
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self removeSingleTapGesture];
+    [self removeLongPressGesture];
 }
 
 #pragma mark reset framesetter
