@@ -120,7 +120,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)resetAllAttributed
 {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    [self removeSingleTapGesture];
+    //[self removeSingleTapGesture];
+    //[self removeLongPressGesture];
 }
 
 #pragma mark reset framesetter
@@ -245,10 +246,17 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if (_textContainer.runRectDictionary.count > 0) {
         if (_delegateFlags.textStorageClickedAtPoint) {
             [self addSingleTapGesture];
+        }else {
+            [self removeSingleTapGesture];
         }
         if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
             [self addLongPressGesture];
+        }else {
+            [self removeLongPressGesture];
         }
+    }else {
+        [self removeSingleTapGesture];
+        [self removeLongPressGesture];
     }
 }
 
