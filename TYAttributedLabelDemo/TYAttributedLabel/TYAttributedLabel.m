@@ -24,6 +24,9 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @property (nonatomic, strong,readonly) NSDictionary  *linkRectDictionary; //linkRect字典
 
 - (void)resetFrameRef;
+
+- (BOOL)enumerateRunRectContainPosition:(CGPoint)position viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock;
+
 @end
 
 @interface TYAttributedLabel ()<UIGestureRecognizerDelegate>
@@ -303,47 +306,17 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     CGPoint point = [touch locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
-    __block BOOL find = NO;
-    // 遍历run位置字典
-    [_textContainer.runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
-        
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            find = YES;
-            *stop = YES;
-        }
-    }];
-    return find;
+    return [_textContainer enumerateRunRectContainPosition:point viewHeight:CGRectGetHeight(self.frame) successBlock:nil];
 }
 
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
     __typeof (self) __weak weakSelf = self;
-    // 遍历run位置字典
-    [_textContainer.runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
-        
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            //NSLog(@"点击了 textStorage ");
-            // 调用代理
-            if (_delegateFlags.textStorageClickedAtPoint) {
-                [_delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
-                *stop = YES;
-            }
+    [_textContainer enumerateRunRectContainPosition:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
+        if (_delegateFlags.textStorageClickedAtPoint) {
+            [_delegate attributedLabel:weakSelf textStorageClicked:textStorage atPoint:point];
         }
     }];
 }
@@ -352,25 +325,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     CGPoint point = [sender locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
     __typeof (self) __weak weakSelf = self;
-    
-    // 遍历run位置字典
-    [_textContainer.runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
-        
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            //NSLog(@"长按了 textStorage ");
-            // 调用代理
-            if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
-                [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:obj onState:sender.state atPoint:point];
-                *stop = YES;
-            }
+    [_textContainer enumerateRunRectContainPosition:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
+        if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
+                [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:textStorage onState:sender.state atPoint:point];
         }
     }];
 }
@@ -610,6 +568,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)dealloc
 {
     _textContainer = nil;
+    NSLog(@"TYAttributedLabel dealloc");
 }
 
 #pragma mark - getter
@@ -907,5 +866,3 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 
 @end
-
-

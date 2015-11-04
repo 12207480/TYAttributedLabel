@@ -462,8 +462,38 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     return self;
 }
 
+#pragma mark - enumerate runRect
+
+- (BOOL)enumerateRunRectContainPosition:(CGPoint)position viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+{
+    if (_runRectDictionary.count == 0) {
+        return NO;
+    }
+    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
+    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, viewHeight), 1.f, -1.f);
+    
+    __block BOOL find = NO;
+    // 遍历run位置字典
+    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> textStorage, BOOL *stop) {
+        
+        CGRect imgRect = [keyRectValue CGRectValue];
+        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
+        
+        // point 是否在rect里
+        if(CGRectContainsPoint(rect, position)){
+            find = YES;
+            *stop = YES;
+            if (successBlock) {
+                successBlock(textStorage);
+            }
+        }
+    }];
+    return find;
+}
+
 - (void)dealloc{
     [self resetFrameRef];
+    NSLog(@"TYTextContainer dealloc");
 }
 
 @end
