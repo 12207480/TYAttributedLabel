@@ -106,12 +106,17 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)resetAllAttributed
 {
-    _drawRectDictionary = nil;
-    _linkRectDictionary = nil;
-    _runRectDictionary = nil;
+    [self resetRectDictionary];
     _textStorageArray = nil;
     _textStorages = nil;
     _replaceStringNum = 0;
+}
+
+- (void)resetRectDictionary
+{
+    _drawRectDictionary = nil;
+    _linkRectDictionary = nil;
+    _runRectDictionary = nil;
 }
 
 - (void)resetFrameRef

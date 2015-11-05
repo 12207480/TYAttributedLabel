@@ -22,6 +22,8 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (void)resetFrameRef;
 
+- (void)resetRectDictionary;
+
 - (BOOL)existRunRectDictionary;
 - (BOOL)existLinkRectDictionary;
 - (BOOL)existDrawRectDictionary;
@@ -103,6 +105,14 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self setNeedsDisplay];
 }
 
+- (void)updateLabelWithEnumerateTextStorageUsingBlock:(void (^)(id<TYTextStorageProtocol> textStorage, NSUInteger idx, BOOL *stop))block
+{
+    [_textContainer.textStorages enumerateObjectsUsingBlock:block];
+    [self resetFramesetter];
+    [self invalidateIntrinsicContentSize];
+    [self setNeedsDisplay];
+}
+
 - (void)setDelegate:(id<TYAttributedLabelDelegate>)delegate
 {
     if (delegate == _delegate)  return;
@@ -138,6 +148,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 #pragma mark reset framesetter
 - (void)resetFramesetter
 {
+    [_textContainer resetRectDictionary];
     [_textContainer resetFrameRef];
     [self setNeedsDisplay];
 }
