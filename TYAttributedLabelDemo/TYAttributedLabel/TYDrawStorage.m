@@ -42,6 +42,7 @@
         [attributedString replaceCharactersInRange:range withString:[self spaceReplaceString]];
         // 修正range
         range = NSMakeRange(range.location, 1);
+        _realRange = range;
     }
     
     // 设置合适的对齐
