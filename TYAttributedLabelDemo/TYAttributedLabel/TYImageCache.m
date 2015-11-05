@@ -144,7 +144,9 @@ static TYImageCache *_instance;
 {
     // 从网络上加载图片
     NSData * data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageName]];
-    
+    if (!data) {
+        return NO;
+    }
     // 缓存图片
     return [self saveImageFromURL:imageName thumbImageSize:thumbImageSize data:data];
 }
