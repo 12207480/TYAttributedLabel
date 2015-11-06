@@ -5,9 +5,9 @@ TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)�
 <br>微博demo 下载地址：链接: http://pan.baidu.com/s/1sjnBWRj 密码: t7qn
 <br>v2.5 把label的一些操作移动textContainer,label只负责draw了。
 <br>v2.4 修复imge放大bug，新增imageAlignment 和 autolayout支持，以及相应的demo，感谢xinzhengzhang，nonstriater
-<br>v2.3 新增 做题demo，代码优化（4s真机测试tableview列表非常流畅）
+<br>v2.3 新增 做题demo，代码优化
 <br>v2.2 新增 TYImagecache类,新增 image URL 下载缓存，功能优化，改进
-<br>v2.1 添加 tableViewCell demo, cell 滚动非常流畅
+<br>v2.1 添加 tableViewCell demo
 <br>v2.0 重构优化代码，性能提升，稳定（已在项目中使用）, 分离出TYTextContainer ，可以提前生成，也可以生成attributedString，显著提升cell滑动场景流畅度，可以和微博一样流畅
 <br>v1.2  添加设置行数，修复bug，增强稳定性
 <br>v1.1  添加链接高亮效果，链接便利方法，长按手势代理，优化代码
