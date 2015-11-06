@@ -105,14 +105,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self setNeedsDisplay];
 }
 
-- (void)updateLabelWithEnumerateTextStorageUsingBlock:(void (^)(id<TYTextStorageProtocol> textStorage, NSUInteger idx, BOOL *stop))block
-{
-    [_textContainer.textStorages enumerateObjectsUsingBlock:block];
-    [self resetFramesetter];
-    [self invalidateIntrinsicContentSize];
-    [self setNeedsDisplay];
-}
-
 - (void)setDelegate:(id<TYAttributedLabelDelegate>)delegate
 {
     if (delegate == _delegate)  return;
@@ -141,8 +133,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)resetAllAttributed
 {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    //[self removeSingleTapGesture];
-    //[self removeLongPressGesture];
 }
 
 #pragma mark reset framesetter
