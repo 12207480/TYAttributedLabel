@@ -123,6 +123,11 @@ static NSString *cellId = @"AttributedLabelCell";
     return textContaner.textHeight+30;// after createTextContainer, have value
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"点击了cell index:%ld",indexPath.row);
+}
+
 #pragma mark - TYAttributedLabelDelegate
 
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageClicked:(id<TYTextStorageProtocol>)TextRun atPoint:(CGPoint)point

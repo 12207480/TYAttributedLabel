@@ -12,6 +12,7 @@
 
 @interface ImageTextViewController ()<TYAttributedLabelDelegate>
 @property (nonatomic,weak) TYAttributedLabel *label1;
+@property (nonatomic,weak) TYAttributedLabel *label2;
 @property (nonatomic, weak) UIScrollView *scrollView;
 @end
 
@@ -22,6 +23,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"刷新" style:UIBarButtonItemStyleDone target:self action:@selector(updateLabel)];
     
     [self addScrollView];
     
@@ -160,7 +163,22 @@
     
     [label sizeToFit];
     
+    _label2 = label;
+    
     [_scrollView setContentSize:CGSizeMake(0, CGRectGetMaxY(label.frame)+10)];
+}
+
+- (void)updateLabel
+{
+//    [_label2 updateLayoutWithEnumerateTextStorageUsingBlock:^(id<TYTextStorageProtocol> textStorage, NSUInteger idx, BOOL *stop) {
+//        if ([textStorage isKindOfClass:[TYImageStorage class]]) {
+//            TYImageStorage *imageStorage = textStorage;
+//            
+//            if (imageStorage.size.width > 100) {
+//                imageStorage.size = CGSizeMake(imageStorage.size.width/2, imageStorage.size.height/2);
+//            }
+//        }
+//    }];
 }
 
 #pragma mark - deleagte

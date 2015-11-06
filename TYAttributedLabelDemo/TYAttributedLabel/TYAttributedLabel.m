@@ -21,6 +21,23 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @property (nonatomic, assign,readonly) CGFloat     textWidth;
 
 - (void)resetFrameRef;
+
+- (void)resetRectDictionary;
+
+- (BOOL)existRunRectDictionary;
+- (BOOL)existLinkRectDictionary;
+- (BOOL)existDrawRectDictionary;
+
+- (void)enumerateDrawRectDictionaryUsingBlock:(void (^)(id<TYDrawStorageProtocol> drawStorage, CGRect rect))block;
+
+- (BOOL)enumerateRunRectContainPoint:(CGPoint)point
+                          viewHeight:(CGFloat)viewHeight
+                        successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock;
+
+- (BOOL)enumerateLinkRectContainPoint:(CGPoint)point
+                           viewHeight:(CGFloat)viewHeight
+                         successBlock:(void (^)(id<TYLinkStorageProtocol> linkStorage))successBlock;
+
 @end
 
 @interface TYAttributedLabel ()<UIGestureRecognizerDelegate>
@@ -33,13 +50,9 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     NSRange                     _clickLinkRange;     // 点击的link的范围
 }
 
-@property (nonatomic, strong)   NSDictionary                *runRectDictionary; // runRect字典
-@property (nonatomic, strong)   NSDictionary                *linkRectDictionary;
-
-@property (nonatomic, strong)   UITapGestureRecognizer      *singleTapGuesture;         // 点击手势
-@property (nonatomic, strong)   UILongPressGestureRecognizer *longPressGuesture;// 长按手势
-
-@property (nonatomic, strong)   UIColor                     *saveLinkColor;
+@property (nonatomic, strong) UITapGestureRecognizer  *singleTapGuesture; // 点击手势
+@property (nonatomic, strong) UILongPressGestureRecognizer *longPressGuesture;// 长按手势
+@property (nonatomic, strong) UIColor *saveLinkColor;
 @end
 
 @implementation TYAttributedLabel
@@ -119,8 +132,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (void)resetAllAttributed
 {
-    _runRectDictionary = nil;
-    _linkRectDictionary = nil;
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     [self removeSingleTapGesture];
     [self removeLongPressGesture];
@@ -129,6 +140,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 #pragma mark reset framesetter
 - (void)resetFramesetter
 {
+    [_textContainer resetRectDictionary];
     [_textContainer resetFrameRef];
     [self setNeedsDisplay];
 }
@@ -148,7 +160,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
     [_textContainer createTextContainerWithContentSize:self.bounds.size];
     
-    if (_highlightedLinkBackgroundColor && _linkRectDictionary.count > 0) {
+    if (_highlightedLinkBackgroundColor && [_textContainer existLinkRectDictionary]) {
         [self drawSelectionAreaFrame:_textContainer.frameRef InRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
     }
     
@@ -156,7 +168,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self drawText:_textContainer.attString frame:_textContainer.frameRef rect:rect context:context];
     
     // 画其他元素
-    [self drawTextStorageWithFrame:_textContainer.frameRef context:context];
+    [self drawTextStorage];
 }
 
 // this code quote M80AttributedLabel
@@ -233,92 +245,31 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 }
 
 #pragma mark - drawTextStorage
-- (void)drawTextStorageWithFrame:(CTFrameRef)frame context:(CGContextRef)context
-{
-    // 获取每行
-    CFArrayRef lines = CTFrameGetLines(frame);
-    CGPoint lineOrigins[CFArrayGetCount(lines)];
-    CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
-    CGFloat viewWidth = CGRectGetWidth(self.frame);
-    
-    NSInteger numberOfLines = _textContainer.numberOfLines > 0 ? MIN(_textContainer.numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
-    
-    NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
-    NSMutableDictionary *linkRectDictionary = [NSMutableDictionary dictionary];
-    // 获取每行有多少run
-    for (int i = 0; i < numberOfLines; i++) {
-        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
-        CGFloat lineAscent;
-        CGFloat lineDescent;
-        CGFloat lineLeading;
-        CTLineGetTypographicBounds(line, &lineAscent, &lineDescent, &lineLeading);
-        
-        CFArrayRef runs = CTLineGetGlyphRuns(line);
-        // 获得每行的run
-        for (int j = 0; j < CFArrayGetCount(runs); j++) {
-            CGFloat runAscent;
-            CGFloat runDescent;
-            CGPoint lineOrigin = lineOrigins[i];
-            CTRunRef run = CFArrayGetValueAtIndex(runs, j);
-            // run的属性字典
-            NSDictionary* attributes = (NSDictionary*)CTRunGetAttributes(run);
-            id<TYTextStorageProtocol> textStorage = [attributes objectForKey:kTYTextRunAttributedName];
-            
-            if (textStorage) {
-                CGFloat runWidth  = CTRunGetTypographicBounds(run, CFRangeMake(0,0), &runAscent, &runDescent, NULL);
-                
-                if (viewWidth > 0 && runWidth > viewWidth) {
-                    runWidth  = viewWidth;
-                }
-                CGRect runRect = CGRectMake(lineOrigin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL), lineOrigin.y - runDescent, runWidth, runAscent + runDescent);
-                
-                if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
-                    if ([textStorage conformsToProtocol:@protocol(TYViewStorageProtocol) ]) {
-                        [(id<TYViewStorageProtocol>)textStorage setOwnerView:self];
-                    }
-                    [(id<TYDrawStorageProtocol>)textStorage drawStorageWithRect:runRect];
-                } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
-                    [linkRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
-                }
-                
-                [runRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
-            }
-        }
-    }
-    
-    if (runRectDictionary.count > 0) {
-        // 添加响应点击rect
-        [self addRunRectDictionary:[runRectDictionary copy]];
-    }
-    if (linkRectDictionary.count > 0) {
-        _linkRectDictionary = [linkRectDictionary copy];
-    }else {
-        _linkRectDictionary = nil;
-    }
-}
 
-// 添加响应点击rect
-- (void)addRunRectDictionary:(NSDictionary *)runRectDictionary
+- (void)drawTextStorage
 {
-    if (runRectDictionary.count < _runRectDictionary.count) {
-        NSMutableArray *drawStorageArray = [[_runRectDictionary allValues]mutableCopy];
-        // 剔除已经画出来的
-        [drawStorageArray removeObjectsInArray:[runRectDictionary allValues]];
-        
-        // 遍历不会画出来的
-        for (id<TYTextStorageProtocol>drawStorage in drawStorageArray) {
-            if ([drawStorage conformsToProtocol:@protocol(TYViewStorageProtocol)]) {
-                [(id<TYViewStorageProtocol>)drawStorage didNotDrawRun];
-            }
+    // draw storage
+    [_textContainer enumerateDrawRectDictionaryUsingBlock:^(id<TYDrawStorageProtocol> drawStorage, CGRect rect) {
+        if ([drawStorage conformsToProtocol:@protocol(TYViewStorageProtocol) ]) {
+            [(id<TYViewStorageProtocol>)drawStorage setOwnerView:self];
         }
-    }
-    _runRectDictionary = runRectDictionary;
+        [drawStorage drawStorageWithRect:rect];
+    }];
     
-    if (_delegateFlags.textStorageClickedAtPoint) {
-        [self addSingleTapGesture];
-    }
-    if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
-        [self addLongPressGesture];
+    if ([_textContainer existRunRectDictionary]) {
+        if (_delegateFlags.textStorageClickedAtPoint) {
+            [self addSingleTapGesture];
+        }else {
+            [self removeSingleTapGesture];
+        }
+        if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
+            [self addLongPressGesture];
+        }else {
+            [self removeLongPressGesture];
+        }
+    }else {
+        [self removeSingleTapGesture];
+        [self removeLongPressGesture];
     }
 }
 
@@ -365,47 +316,17 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     CGPoint point = [touch locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
-    __block BOOL find = NO;
-    // 遍历run位置字典
-    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
-        
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            find = YES;
-            *stop = YES;
-        }
-    }];
-    return find;
+    return [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:nil];
 }
 
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
     __typeof (self) __weak weakSelf = self;
-    // 遍历run位置字典
-    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
-        
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            //NSLog(@"点击了 textStorage ");
-            // 调用代理
-            if (_delegateFlags.textStorageClickedAtPoint) {
-                [_delegate attributedLabel:weakSelf textStorageClicked:obj atPoint:point];
-                *stop = YES;
-            }
+    [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
+        if (_delegateFlags.textStorageClickedAtPoint) {
+            [_delegate attributedLabel:weakSelf textStorageClicked:textStorage atPoint:point];
         }
     }];
 }
@@ -414,25 +335,10 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 {
     CGPoint point = [sender locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
     __typeof (self) __weak weakSelf = self;
-    
-    // 遍历run位置字典
-    [_runRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> obj, BOOL *stop) {
-        
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            //NSLog(@"长按了 textStorage ");
-            // 调用代理
-            if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
-                [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:obj onState:sender.state atPoint:point];
-                *stop = YES;
-            }
+    [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
+        if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
+                [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:textStorage onState:sender.state atPoint:point];
         }
     }];
 }
@@ -441,59 +347,43 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if (_linkRectDictionary) {
+    __block BOOL found = NO;
+    if ([_textContainer existLinkRectDictionary]) {
         UITouch *touch = [touches anyObject];
         CGPoint point = [touch locationInView:self];
         
-        // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-        CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-        
         __typeof (self) __weak weakSelf = self;
-        [_linkRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYLinkStorageProtocol> obj, BOOL *stop) {
-            CGRect imgRect = [keyRectValue CGRectValue];
-            CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-            
-            // point 是否在rect里
-            if(CGRectContainsPoint(rect, point)){
-                NSRange curClickLinkRange = obj.realRange;
-            [weakSelf setHighlightLinkWithSaveLinkColor:(obj.textColor ? obj.textColor:weakSelf.textContainer.linkColor) linkRange:curClickLinkRange];
-                return ;
-            }
+        [_textContainer enumerateLinkRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYLinkStorageProtocol> linkStorage) {
+            NSRange curClickLinkRange = linkStorage.realRange;
+            [weakSelf setHighlightLinkWithSaveLinkColor:(linkStorage.textColor ? linkStorage.textColor:weakSelf.textContainer.linkColor) linkRange:curClickLinkRange];
+            found = YES;
         }];
     }
 
-    [super touchesBegan:touches withEvent:event];
+    if (!found) {
+        [super touchesBegan:touches withEvent:event];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesMoved:touches withEvent:event];
-    if (!_linkRectDictionary) {
+    if (![_textContainer existLinkRectDictionary]) {
         return;
     }
     
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     
-    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
-    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, self.bounds.size.height), 1.f, -1.f);
-    
     __block BOOL isUnderClickLink = NO;
     __block NSRange curClickLinkRange;
     __block UIColor *saveLinkColor = nil;
     
     __typeof (self) __weak weakSelf = self;
-    [_linkRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYLinkStorageProtocol> obj, BOOL *stop) {
-        CGRect imgRect = [keyRectValue CGRectValue];
-        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
-        
-        // point 是否在rect里
-        if(CGRectContainsPoint(rect, point)){
-            curClickLinkRange = obj.realRange;;
-            isUnderClickLink = YES;
-            saveLinkColor = obj.textColor ? obj.textColor:weakSelf.textContainer.linkColor;
-            *stop = YES;
-        }
+    [_textContainer enumerateLinkRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYLinkStorageProtocol> linkStorage) {
+        curClickLinkRange = linkStorage.realRange;;
+        isUnderClickLink = YES;
+        saveLinkColor = linkStorage.textColor ? linkStorage.textColor:weakSelf.textContainer.linkColor;
     }];
     
     if (isUnderClickLink) {
@@ -511,7 +401,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesCancelled:touches withEvent:event];
-    if (_linkRectDictionary && _clickLinkRange.length > 0) {
+    if ([_textContainer existLinkRectDictionary] && _clickLinkRange.length > 0) {
         [self resetHighLightLink];
     }
 }
@@ -519,7 +409,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesEnded:touches withEvent:event];
-    if (_linkRectDictionary && _clickLinkRange.length > 0) {
+    if ([_textContainer existLinkRectDictionary] && _clickLinkRange.length > 0) {
         [self resetHighLightLink];
     }
 }
@@ -969,5 +859,3 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 
 @end
-
-

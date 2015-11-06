@@ -118,7 +118,7 @@
         
         if (captureCount > 0) {
             TExamTextField *textField = [[TExamTextField alloc]initWithFrame:CGRectMake(0, 0, kExamTextFieldWidth, kExamTextFieldHeight)];
-            textField.tintColor = textField.textColor = [UIColor colorWithRed:255.0/255 green:155.0/255 blue:26.0/255 alpha:1];
+            textField.textColor = [UIColor colorWithRed:255.0/255 green:155.0/255 blue:26.0/255 alpha:1];
             textField.textAlignment = NSTextAlignmentCenter;
             textField.font = [UIFont systemFontOfSize:16];
             TYViewStorage *viewStorage = [[TYViewStorage alloc]init];

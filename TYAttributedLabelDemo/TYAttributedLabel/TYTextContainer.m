@@ -43,6 +43,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 @interface TYTextContainer()
 @property (nonatomic, strong) NSMutableArray    *textStorageArray;  // run数组
 @property (nonatomic, strong) NSArray *textStorages; // run array copy
+
+@property (nonatomic, strong) NSDictionary  *drawRectDictionary;
+@property (nonatomic, strong) NSDictionary  *runRectDictionary;  // runRect字典
+@property (nonatomic, strong) NSDictionary  *linkRectDictionary; // linkRect字典
+
 @property (nonatomic, assign) NSInteger         replaceStringNum;   // 图片替换字符数
 @property (nonatomic, strong) NSMutableAttributedString *attString;
 @property (nonatomic, assign) CTFrameRef  frameRef;
@@ -101,9 +106,17 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)resetAllAttributed
 {
+    [self resetRectDictionary];
     _textStorageArray = nil;
     _textStorages = nil;
     _replaceStringNum = 0;
+}
+
+- (void)resetRectDictionary
+{
+    _drawRectDictionary = nil;
+    _linkRectDictionary = nil;
+    _runRectDictionary = nil;
 }
 
 - (void)resetFrameRef
@@ -299,6 +312,93 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }];
 }
 
+- (void)saveTextStorageRectWithFrame:(CTFrameRef)frame
+{
+    // 获取每行
+    CFArrayRef lines = CTFrameGetLines(frame);
+    CGPoint lineOrigins[CFArrayGetCount(lines)];
+    CTFrameGetLineOrigins(frame, CFRangeMake(0, 0), lineOrigins);
+    CGFloat viewWidth = _textWidth;
+    
+    NSInteger numberOfLines = _numberOfLines > 0 ? MIN(_numberOfLines, CFArrayGetCount(lines)) : CFArrayGetCount(lines);
+    
+    NSMutableDictionary *runRectDictionary = [NSMutableDictionary dictionary];
+    NSMutableDictionary *linkRectDictionary = [NSMutableDictionary dictionary];
+    NSMutableDictionary *drawRectDictionary = [NSMutableDictionary dictionary];
+    // 获取每行有多少run
+    for (int i = 0; i < numberOfLines; i++) {
+        CTLineRef line = CFArrayGetValueAtIndex(lines, i);
+        CGFloat lineAscent;
+        CGFloat lineDescent;
+        CGFloat lineLeading;
+        CTLineGetTypographicBounds(line, &lineAscent, &lineDescent, &lineLeading);
+        
+        CFArrayRef runs = CTLineGetGlyphRuns(line);
+        // 获得每行的run
+        for (int j = 0; j < CFArrayGetCount(runs); j++) {
+            CGFloat runAscent;
+            CGFloat runDescent;
+            CGPoint lineOrigin = lineOrigins[i];
+            CTRunRef run = CFArrayGetValueAtIndex(runs, j);
+            // run的属性字典
+            NSDictionary* attributes = (NSDictionary*)CTRunGetAttributes(run);
+            id<TYTextStorageProtocol> textStorage = [attributes objectForKey:kTYTextRunAttributedName];
+            
+            if (textStorage) {
+                CGFloat runWidth  = CTRunGetTypographicBounds(run, CFRangeMake(0,0), &runAscent, &runDescent, NULL);
+                
+                if (viewWidth > 0 && runWidth > viewWidth) {
+                    runWidth  = viewWidth;
+                }
+                CGRect runRect = CGRectMake(lineOrigin.x + CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, NULL), lineOrigin.y - runDescent, runWidth, runAscent + runDescent);
+                
+                if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol)]) {
+                    [drawRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
+                } else if ([textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)]) {
+                    [linkRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
+                }
+                
+                [runRectDictionary setObject:textStorage forKey:[NSValue valueWithCGRect:runRect]];
+            }
+        }
+    }
+    
+    if (drawRectDictionary.count > 0) {
+        _drawRectDictionary = [drawRectDictionary copy];
+    }else {
+        _drawRectDictionary = nil;
+    }
+    
+    if (runRectDictionary.count > 0) {
+        // 添加响应点击rect
+        [self addRunRectDictionary:[runRectDictionary copy]];
+    }
+    
+    if (linkRectDictionary.count > 0) {
+        _linkRectDictionary = [linkRectDictionary copy];
+    }else {
+        _linkRectDictionary = nil;
+    }
+}
+
+// 添加响应点击rect
+- (void)addRunRectDictionary:(NSDictionary *)runRectDictionary
+{
+    if (runRectDictionary.count < _runRectDictionary.count) {
+        NSMutableArray *drawStorageArray = [[_runRectDictionary allValues]mutableCopy];
+        // 剔除已经画出来的
+        [drawStorageArray removeObjectsInArray:[runRectDictionary allValues]];
+        
+        // 遍历不会画出来的
+        for (id<TYTextStorageProtocol>drawStorage in drawStorageArray) {
+            if ([drawStorage conformsToProtocol:@protocol(TYViewStorageProtocol)]) {
+                [(id<TYViewStorageProtocol>)drawStorage didNotDrawRun];
+            }
+        }
+    }
+    _runRectDictionary = runRectDictionary;
+}
+
 - (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
 {
     if (_attString == nil || width <= 0) {
@@ -357,9 +457,77 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     // 创建CTFrameRef
     _frameRef = [self createFrameRefWithFramesetter:framesetter textHeight: contentSize.height > 0 ?contentSize.height : textHeight];
     _textHeight = textHeight;
+    
     // 释放内存
     CFRelease(framesetter);
+    
+    // 保存run rect
+    [self saveTextStorageRectWithFrame:_frameRef];
+    
     return self;
+}
+
+#pragma mark - enumerate runRect
+
+- (BOOL)existRunRectDictionary
+{
+    return _runRectDictionary.count != 0;
+}
+
+- (BOOL)existLinkRectDictionary
+{
+    return _linkRectDictionary.count != 0;
+}
+
+- (BOOL)existDrawRectDictionary
+{
+    return _drawRectDictionary.count != 0;
+}
+
+- (void)enumerateDrawRectDictionaryUsingBlock:(void (^)(id<TYDrawStorageProtocol> drawStorage, CGRect rect))block
+{
+    [_drawRectDictionary enumerateKeysAndObjectsUsingBlock:^(NSValue *rectValue, id<TYDrawStorageProtocol> drawStorage, BOOL * stop) {
+        if (block) {
+            block(drawStorage,[rectValue CGRectValue]);
+        }
+    }];
+}
+
+- (BOOL)enumerateRunRectContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+{
+    return [self enumerateRunRect:_runRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
+}
+
+- (BOOL)enumerateLinkRectContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYLinkStorageProtocol> textStorage))successBlock
+{
+    return [self enumerateRunRect:_linkRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
+}
+
+- (BOOL)enumerateRunRect:(NSDictionary *)runRectDic ContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+{
+    if (runRectDic.count == 0) {
+        return NO;
+    }
+    // CoreText context coordinates are the opposite to UIKit so we flip the bounds
+    CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, viewHeight), 1.f, -1.f);
+    
+    __block BOOL find = NO;
+    // 遍历run位置字典
+    [runRectDic enumerateKeysAndObjectsUsingBlock:^(NSValue *keyRectValue, id<TYTextStorageProtocol> textStorage, BOOL *stop) {
+        
+        CGRect imgRect = [keyRectValue CGRectValue];
+        CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
+        
+        // point 是否在rect里
+        if(CGRectContainsPoint(rect, point)){
+            find = YES;
+            *stop = YES;
+            if (successBlock) {
+                successBlock(textStorage);
+            }
+        }
+    }];
+    return find;
 }
 
 - (void)dealloc{
@@ -441,6 +609,5 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         }
     }
 }
-
 
 @end

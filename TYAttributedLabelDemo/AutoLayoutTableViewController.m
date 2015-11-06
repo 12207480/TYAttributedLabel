@@ -25,7 +25,10 @@ static NSString *cellId = @"AutoLayoutAttributedLabelCell";
     [self.tableView registerClass:[AutoLayoutAttributedLabelCell class] forCellReuseIdentifier:cellId];
     
     [self addTableViewItems];
-    self.tableView.estimatedRowHeight = 40;
+    
+    if ([self.tableView respondsToSelector:@selector(setEstimatedRowHeight:)]) {
+        self.tableView.estimatedRowHeight = 40;
+    }
 }
 
 - (void)addTableViewItems

@@ -34,6 +34,7 @@
 - (void)addAtrribuedLabel
 {
     TYAttributedLabel *label = [[TYAttributedLabel alloc]init];
+    label.highlightedLinkColor = [UIColor redColor];
     [self addSubview:label];
     _label = label;
 }
