@@ -8,7 +8,7 @@ s.summary = "Easy, powerful attributedLabel，support mixed with image and text,
 # 主页
 s.homepage = "https://github.com/12207480/TYAttributedLabel"
 # 许可证书类型，要和仓库的LICENSE 的类型一致
-s.license = "MIT"
+s.license = { :type => 'MIT', :file => 'LICENSE' }
 # 作者名称 和 邮箱
 s.author = { "tany" => "122074809@qq.com" }
 # 作者主页 s.social_media_url =""
