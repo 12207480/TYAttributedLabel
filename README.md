@@ -15,7 +15,6 @@ TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)�
 
 ## CocoaPods
 ```
-platform :ios, '6.0'
 pod 'TYAttributedLabel', '~> 2.5.0'
 ```
 
