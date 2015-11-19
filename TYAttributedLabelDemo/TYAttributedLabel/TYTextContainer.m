@@ -577,6 +577,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (_attString == nil) {
         _attString = [[NSMutableAttributedString alloc]init];
     }
+    
+    if ([attributedText isKindOfClass:[NSMutableAttributedString class]]) {
+        [self addTextParaphStyleWithAtrributedString:(NSMutableAttributedString *)attributedText];
+    }
+    
     [_attString appendAttributedString:attributedText];
     [self resetFrameRef];
 }

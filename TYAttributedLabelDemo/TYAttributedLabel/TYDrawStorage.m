@@ -64,7 +64,7 @@
     
     // 添加文本属性和runDelegate
     [self addRunDelegateWithAttributedString:attributedString range:_range];
-    return [attributedString copy];
+    return attributedString;
 }
 
 - (void)drawStorageWithRect:(CGRect)rect
