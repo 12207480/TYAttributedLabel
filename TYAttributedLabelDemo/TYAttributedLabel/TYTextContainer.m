@@ -401,28 +401,34 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
 {
+    return [self getSuggestedSizeWithFramesetter:framesetter width:width].height;
+}
+
+- (CGSize)getSuggestedSizeWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
+{
     if (_attString == nil || width <= 0) {
-        return 0;
+        return CGSizeZero;
     }
     
     if (_textHeight > 0) {
-        return _textHeight;
+        return CGSizeMake(_textWidth, _textHeight);
     }
     
     // 是否需要更新frame
     if (framesetter == nil) {
-        
         framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)[self createAttributedString]);
     }else {
         CFRetain(framesetter);
     }
     
     // 获得建议的size
-    CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(framesetter, _attString, CGSizeMake(width,MAXFLOAT), _numberOfLines);
-    
+    CGSize suggestedSize = CTFramesetterSuggestFrameSizeForAttributedStringWithConstraints(framesetter,
+                                                                                           _attString,
+                                                                                           CGSizeMake(width,MAXFLOAT),
+                                                                                           _numberOfLines);
     CFRelease(framesetter);
-    
-    return suggestedSize.height+1;
+    suggestedSize.height += 1;
+    return suggestedSize;
 }
 
 -  (CTFrameRef)createFrameRefWithFramesetter:(CTFramesetterRef)framesetter textHeight:(CGFloat)textHeight
