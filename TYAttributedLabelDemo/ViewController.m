@@ -17,6 +17,7 @@
 #import "TextContainerViewController.h"
 #import "TextTableViewController.h"
 #import "AutoLayoutTableViewController.h"
+#import "LabelXibViewController.h"
 
 @interface tableViewItem : NSObject
 
@@ -82,6 +83,8 @@
 - (void)addTableItems
 {
     [self addTableItemWithTitle:@"SimpleText" detailText:@"简单文本显示" destVcClass:[SimpleTextViewController class]];
+    
+    [self addTableItemWithTitle:@"XibLabelText" detailText:@"简单文本显示(xib)" destVcClass:[LabelXibViewController class]];
     
     [self addTableItemWithTitle:@"AttributedText" detailText:@"属性文本显示" destVcClass:[AttributedTextViewController class]];
     
