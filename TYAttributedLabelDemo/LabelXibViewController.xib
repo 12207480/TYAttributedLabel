@@ -26,12 +26,12 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z2J-ay-i0R" customClass="TYAttributedLabel">
-                    <rect key="frame" x="10" y="146" width="580" height="120"/>
+                    <rect key="frame" x="10" y="146" width="580" height="200"/>
                     <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="66" id="6WM-d9-cR2"/>
-                        <constraint firstAttribute="height" constant="120" id="vDm-gq-NQl"/>
+                        <constraint firstAttribute="height" constant="200" id="vDm-gq-NQl"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">

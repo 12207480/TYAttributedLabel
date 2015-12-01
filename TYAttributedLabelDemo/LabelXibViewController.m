@@ -22,7 +22,7 @@
     // Do any additional setup after loading the view from its nib.
     
     
-    _label.preferredMaxLayoutWidth = CGRectGetWidth([UIScreen mainScreen].bounds)-2*10;
+    //_label.preferredMaxLayoutWidth = CGRectGetWidth([UIScreen mainScreen].bounds)-2*10;
     _label.numberOfLines = 1;
     _label.lineBreakMode = kCTLineBreakByTruncatingTail;
     _label.font = [UIFont systemFontOfSize:14];
@@ -30,9 +30,11 @@
     _label.text = @"总有一天你将破蛹而出，成长得比人们期待的还要美丽。但这个过程会很痛，会很辛苦，有时候还会觉得灰心。面对着汹涌而来的现实，觉得自己渺小无力。但这，也是生命的一部分。做好现在你能做的，然后，一切都会好的。我们都将孤独地长大，不要害怕";
     
     
-    _label2.preferredMaxLayoutWidth = CGRectGetWidth([UIScreen mainScreen].bounds)-2*10;
-    _label2.font = [UIFont systemFontOfSize:14];
+    //_label2.preferredMaxLayoutWidth = CGRectGetWidth([UIScreen mainScreen].bounds)-2*10;
+    _label2.font = [UIFont systemFontOfSize:15];
     _label2.textColor = [UIColor darkTextColor];
+    _label2.linesSpacing = 2;
+    _label2.characterSpacing = 2;
     _label2.text = _label.text;
     
 }
