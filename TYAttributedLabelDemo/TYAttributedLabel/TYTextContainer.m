@@ -88,6 +88,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (NSAttributedString *)createAttributedString
 {
     [self addTextStoragesWithAtrributedString:_attString];
+    if (_attString == nil) {
+        _attString = [[NSMutableAttributedString alloc]init];
+    }
     return [_attString copy];
 }
 
