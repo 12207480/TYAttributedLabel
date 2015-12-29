@@ -44,7 +44,6 @@
 - (void)drawStorageWithRect:(CGRect)rect
 {
     if (_view == nil || _superView == nil) return;
-    
     // 设置frame 注意 转换rect  CoreText context coordinates are the opposite to UIKit so we flip the bounds
     CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _superView.bounds.size.height), 1.f, -1.f);
     rect = CGRectApplyAffineTransform(rect, transform);

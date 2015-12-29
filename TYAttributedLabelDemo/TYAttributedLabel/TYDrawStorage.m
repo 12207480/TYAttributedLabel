@@ -77,7 +77,7 @@
 - (CGFloat)getDrawRunAscentHeight
 {
     CGFloat ascent = 0;
-    CGFloat height = self.size.height;
+    CGFloat height = self.size.height+_margin.bottom+_margin.top;
     switch (_drawAlignment)
     {
         case TYDrawAlignmentTop:
@@ -100,13 +100,13 @@
 
 - (CGFloat)getDrawRunWidth
 {
-    return self.size.width;
+    return self.size.width+_margin.left+_margin.right;
 }
 
 - (CGFloat)getDrawRunDescentHeight
 {
     CGFloat descent = 0;
-    CGFloat height = self.size.height;
+    CGFloat height = self.size.height+_margin.bottom+_margin.top;
     switch (_drawAlignment)
     {
         case TYDrawAlignmentTop:

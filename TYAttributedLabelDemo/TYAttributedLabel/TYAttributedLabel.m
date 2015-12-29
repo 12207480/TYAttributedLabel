@@ -253,6 +253,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         if ([drawStorage conformsToProtocol:@protocol(TYViewStorageProtocol) ]) {
             [(id<TYViewStorageProtocol>)drawStorage setOwnerView:self];
         }
+        rect = UIEdgeInsetsInsetRect(rect,drawStorage.margin);
         [drawStorage drawStorageWithRect:rect];
     }];
     

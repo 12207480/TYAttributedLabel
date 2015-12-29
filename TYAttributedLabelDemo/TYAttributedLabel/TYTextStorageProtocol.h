@@ -59,6 +59,8 @@ extern NSString *const kTYTextRunAttributedName;
 
 @protocol TYDrawStorageProtocol <TYAppendTextStorageProtocol>
 
+@property (nonatomic, assign)   UIEdgeInsets    margin; // 四周间距
+
 /**
  *  添加View 或 绘画 到该区域
  *

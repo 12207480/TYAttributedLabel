@@ -521,6 +521,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         CGRect imgRect = [keyRectValue CGRectValue];
         CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
         
+        if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol) ]) {
+            rect = UIEdgeInsetsInsetRect(rect,((id<TYDrawStorageProtocol>)textStorage).margin);
+        }
+        
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
             find = YES;
