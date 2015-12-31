@@ -153,9 +153,19 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
 
     //	跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
+    CGFloat verticalOffset = 0;
+    switch (self.verticalAlignment) {
+        case VerticalAlignmentMiddle:
+            verticalOffset = MAX(0, (CGRectGetHeight(rect) - [self getHeightWithWidth:CGRectGetWidth(rect)])/2);
+            break;
+        case VerticalAlignmentBottom:
+            verticalOffset = MAX(0, (CGRectGetHeight(rect) - [self getHeightWithWidth:CGRectGetWidth(rect)]));
+        default:
+            break;
+    }
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextTranslateCTM(context, 0, self.bounds.size.height + verticalOffset);
     CGContextScaleCTM(context, 1.0, -1.0);
 
     [_textContainer createTextContainerWithContentSize:self.bounds.size];

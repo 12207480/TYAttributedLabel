@@ -20,6 +20,13 @@
 - (void)attributedLabel:(TYAttributedLabel *)attributedLabel textStorageLongPressed:(id<TYTextStorageProtocol>)textStorage onState:(UIGestureRecognizerState)state atPoint:(CGPoint)point;
 @end
 
+typedef enum
+{
+    VerticalAlignmentTop = 0,
+    VerticalAlignmentMiddle,
+    VerticalAlignmentBottom,
+} VerticalAlignment;
+
 /**
  *  TYAttributedLabel 属性文本 支持图文混排显示，支持添加image和UIView，支持自定义排版
  */
@@ -41,6 +48,8 @@
 
 @property (nonatomic, assign)   CTTextAlignment textAlignment;      // 文本对齐方式
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
+
+@property (nonatomic) VerticalAlignment verticalAlignment; // 垂直对齐方式 默认是向上对齐
 
 @property (nonatomic, strong)   TYTextContainer *textContainer;
 
