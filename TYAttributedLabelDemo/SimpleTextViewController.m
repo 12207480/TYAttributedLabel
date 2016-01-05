@@ -29,7 +29,7 @@
     label1.linesSpacing = 2;
     
     label1.lineBreakMode = kCTLineBreakByTruncatingTail;
-    label1.numberOfLines = 3;
+    label1.numberOfLines = 2;
     // 文本字体
     label1.font = [UIFont systemFontOfSize:17];
     
@@ -40,7 +40,8 @@
     
     // appendAttributedText
     TYAttributedLabel *label2 = [[TYAttributedLabel alloc]init];
-    label2.frame = CGRectMake(0, CGRectGetMaxY(label1.frame)+10, CGRectGetWidth(self.view.frame), 200);
+    label2.backgroundColor = [UIColor lightGrayColor];
+    label2.frame = CGRectMake(0, CGRectGetMaxY(label1.frame)+10, CGRectGetWidth(self.view.frame), 0);
     [self.view addSubview:label2];
     
     // 追加(添加到最后)文本
@@ -49,9 +50,49 @@
     [label2 appendText:@"\t任何值得追逐的梦想，都必须在一路艰辛中备受嘲笑。\n"];
     [label2 appendText:@"\t所以，不要怕，不要担心你所追逐的有可能是错的。\n"];
     [label2 appendText:@"\t因为，不被嘲笑的梦想不是梦想。\n"];
-    
     // 自适应高度
     [label2 sizeToFit];
+    
+    
+    // label 垂直对齐方式
+    // top text(default)
+    TYAttributedLabel *label3 = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(label2.frame)+10, CGRectGetWidth(self.view.frame), 80)];
+    label3.text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。(default text)";
+    label3.backgroundColor = [UIColor lightGrayColor];
+    // 垂直对齐方式
+    //label3.verticalAlignment = TYVerticalAlignmentTop; // default top
+    // 文字间隙
+    label3.characterSpacing = 2;
+    // 文本行间隙
+    label3.linesSpacing = 2;
+    
+    [self.view addSubview:label3];
+    
+    // center text
+    TYAttributedLabel *label4 = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(label3.frame)+10, CGRectGetWidth(self.view.frame), 80)];
+    label4.text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。(center text)";
+    label4.backgroundColor = [UIColor lightGrayColor];
+    // 垂直对齐方式
+    label4.verticalAlignment = TYVerticalAlignmentCenter;
+    // 文字间隙
+    label4.characterSpacing = 2;
+    // 文本行间隙
+    label4.linesSpacing = 2;
+    
+    [self.view addSubview:label4];
+    
+    // bottom text
+    TYAttributedLabel *label5 = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(label4.frame)+10, CGRectGetWidth(self.view.frame), 80)];
+    label5.text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。(bottom text)";
+    label5.backgroundColor = [UIColor lightGrayColor];
+    // 垂直对齐方式
+    label5.verticalAlignment = TYVerticalAlignmentBottom;
+    // 文字间隙
+    label5.characterSpacing = 2;
+    // 文本行间隙
+    label5.linesSpacing = 2;
+    
+    [self.view addSubview:label5];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -9,6 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "TYTextContainer.h"
 
+typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
+    TYVerticalAlignmentTop,
+    TYVerticalAlignmentCenter,
+    TYVerticalAlignmentBottom,
+};
+
 @class TYAttributedLabel;
 @protocol TYAttributedLabelDelegate <NSObject>
 @optional
@@ -41,6 +47,7 @@
 
 @property (nonatomic, assign)   CTTextAlignment textAlignment;      // 文本对齐方式
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;      // 换行模式
+@property (nonatomic, assign)   TYVerticalAlignment verticalAlignment; // 垂直对齐方式 默认是向上对齐
 
 @property (nonatomic, strong)   TYTextContainer *textContainer;
 

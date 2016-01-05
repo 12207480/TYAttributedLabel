@@ -151,14 +151,26 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if (_textContainer == nil ||  _textContainer.attString == nil) {
         return;
     }
+    
+    [_textContainer createTextContainerWithContentSize:self.bounds.size];
+    
+    CGFloat verticalOffset = 0;
+    switch (_verticalAlignment) {
+        case TYVerticalAlignmentCenter:
+            verticalOffset = MAX(0, (CGRectGetHeight(rect) - _textContainer.textHeight)/2);
+            break;
+        case TYVerticalAlignmentBottom:
+            verticalOffset = MAX(0, (CGRectGetHeight(rect) - _textContainer.textHeight));
+            break;
+        default:
+            break;
+    }
 
     //	跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-    CGContextTranslateCTM(context, 0, self.bounds.size.height);
+    CGContextTranslateCTM(context, 0, self.bounds.size.height + verticalOffset);
     CGContextScaleCTM(context, 1.0, -1.0);
-
-    [_textContainer createTextContainerWithContentSize:self.bounds.size];
     
     if (_highlightedLinkBackgroundColor && [_textContainer existLinkRectDictionary]) {
         [self drawSelectionAreaFrame:_textContainer.frameRef InRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
