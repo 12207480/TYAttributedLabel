@@ -17,6 +17,8 @@
 		B034A2A01BE1060B0015130E /* TExamTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = B034A29F1BE1060B0015130E /* TExamTextField.m */; };
 		B034A2A31BE115930015130E /* TPKeyboardAvoidingScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B034A2A21BE115930015130E /* TPKeyboardAvoidingScrollView.m */; };
 		B034A2A61BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B034A2A51BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m */; };
+		B04C45D41C0DC2B70076B8CC /* LabelXibViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B04C45D21C0DC2B70076B8CC /* LabelXibViewController.m */; };
+		B04C45D51C0DC2B70076B8CC /* LabelXibViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B04C45D31C0DC2B70076B8CC /* LabelXibViewController.xib */; };
 		B0E11A6D1BA05A3A0044523D /* TextTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */; };
 		B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E7CF1D1BCE9510000341F4 /* TYImageCache.m */; };
 		D34A49871AD4D5510036B7EF /* TYTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D34A49861AD4D5510036B7EF /* TYTextStorage.m */; };
@@ -77,6 +79,9 @@
 		B034A2A21BE115930015130E /* TPKeyboardAvoidingScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPKeyboardAvoidingScrollView.m; sourceTree = "<group>"; };
 		B034A2A41BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScrollView+TPKeyboardAvoidingAdditions.h"; sourceTree = "<group>"; };
 		B034A2A51BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+TPKeyboardAvoidingAdditions.m"; sourceTree = "<group>"; };
+		B04C45D11C0DC2B70076B8CC /* LabelXibViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelXibViewController.h; sourceTree = "<group>"; };
+		B04C45D21C0DC2B70076B8CC /* LabelXibViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelXibViewController.m; sourceTree = "<group>"; };
+		B04C45D31C0DC2B70076B8CC /* LabelXibViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LabelXibViewController.xib; sourceTree = "<group>"; };
 		B0E11A6B1BA05A3A0044523D /* TextTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextTableViewController.h; sourceTree = "<group>"; };
 		B0E11A6C1BA05A3A0044523D /* TextTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextTableViewController.m; sourceTree = "<group>"; };
 		B0E7CF1C1BCE9510000341F4 /* TYImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYImageCache.h; sourceTree = "<group>"; };
@@ -218,6 +223,9 @@
 				D3709F151AD3A5C000145EC6 /* ViewController.m */,
 				D35F47C91AE0DAF20048B58A /* SimpleTextViewController.h */,
 				D35F47CA1AE0DAF20048B58A /* SimpleTextViewController.m */,
+				B04C45D11C0DC2B70076B8CC /* LabelXibViewController.h */,
+				B04C45D21C0DC2B70076B8CC /* LabelXibViewController.m */,
+				B04C45D31C0DC2B70076B8CC /* LabelXibViewController.xib */,
 				D35F47CC1AE0DB370048B58A /* AttributedTextViewController.h */,
 				D35F47CD1AE0DB370048B58A /* AttributedTextViewController.m */,
 				D35F47CF1AE0DB500048B58A /* ImageTextViewController.h */,
@@ -379,6 +387,7 @@
 				B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */,
 				D34A49991AD52D9E0036B7EF /* avatar.png in Resources */,
 				D34A49971AD52D980036B7EF /* haha.png in Resources */,
+				B04C45D51C0DC2B70076B8CC /* LabelXibViewController.xib in Resources */,
 				D3709F1E1AD3A5C000145EC6 /* LaunchScreen.xib in Resources */,
 				D3709F1B1AD3A5C000145EC6 /* Images.xcassets in Resources */,
 			);
@@ -399,6 +408,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D35F47DA1AE101880048B58A /* RegexKitLite.m in Sources */,
+				B04C45D41C0DC2B70076B8CC /* LabelXibViewController.m in Sources */,
 				D3709F161AD3A5C000145EC6 /* ViewController.m in Sources */,
 				B03407411B27049300DCEACB /* TextContainerViewController.m in Sources */,
 				D3553BD51AE79106005D8F31 /* AddViewTextViewController.m in Sources */,

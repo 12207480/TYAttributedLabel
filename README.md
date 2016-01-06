@@ -2,6 +2,7 @@
 TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
 
 **更新:**
+<br>使用autolayout 如果需要自动推断高度，必须设置preferredMaxLayoutWidth
 <br>添加到CocoaPods
 <br>微博demo（建议真机调试） 下载地址：链接: http://pan.baidu.com/s/1sjnBWRj 密码: t7qn
 <br>v2.5 把label的一些操作移动textContainer,label只负责draw了。
@@ -15,7 +16,7 @@ TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)�
 
 ## CocoaPods
 ```
-pod 'TYAttributedLabel', '~> 2.5.1'
+pod 'TYAttributedLabel', '~> 2.5.3'
 ```
 
 ## ScreenShot

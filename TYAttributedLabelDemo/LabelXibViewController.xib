@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9060"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LabelXibViewController">
+            <connections>
+                <outlet property="label" destination="bhU-Qa-eID" id="uH3-3e-oGh"/>
+                <outlet property="label2" destination="Z2J-ay-i0R" id="qxo-Ch-CXW"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhU-Qa-eID" customClass="TYAttributedLabel">
+                    <rect key="frame" x="10" y="70" width="580" height="66"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="66" id="7vt-Xu-2uM"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z2J-ay-i0R" customClass="TYAttributedLabel">
+                    <rect key="frame" x="10" y="146" width="580" height="200"/>
+                    <animations/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="66" id="6WM-d9-cR2"/>
+                        <constraint firstAttribute="height" constant="200" id="vDm-gq-NQl"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="6WM-d9-cR2"/>
+                        </mask>
+                    </variation>
+                </view>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Z2J-ay-i0R" firstAttribute="top" secondItem="bhU-Qa-eID" secondAttribute="bottom" constant="10" id="HNz-51-yv5"/>
+                <constraint firstAttribute="trailing" secondItem="bhU-Qa-eID" secondAttribute="trailing" constant="10" id="cDv-hy-E1v"/>
+                <constraint firstItem="bhU-Qa-eID" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="lZ8-m1-mUC"/>
+                <constraint firstAttribute="trailing" secondItem="Z2J-ay-i0R" secondAttribute="trailing" constant="10" id="oXX-uQ-XY3"/>
+                <constraint firstItem="Z2J-ay-i0R" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="vUv-MF-xpc"/>
+                <constraint firstItem="bhU-Qa-eID" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="yLs-kK-GvO"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

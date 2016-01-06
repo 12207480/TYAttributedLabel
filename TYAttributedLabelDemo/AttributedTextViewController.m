@@ -86,7 +86,7 @@
     TYAttributedLabel *label2 = [[TYAttributedLabel alloc]init];
     [label2 setAttributedText:totalAttributedString];
     
-    label2.linesSpacing = 8;
+    label2.linesSpacing = 5;
     label2.characterSpacing = 2;
     [label2 setFrameWithOrign:CGPointMake(0, CGRectGetMaxY(_label1.frame)) Width:CGRectGetWidth(self.view.frame)];
     [self.view addSubview:label2];

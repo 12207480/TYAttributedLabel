@@ -88,6 +88,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 - (NSAttributedString *)createAttributedString
 {
     [self addTextStoragesWithAtrributedString:_attString];
+    if (_attString == nil) {
+        _attString = [[NSMutableAttributedString alloc]init];
+    }
     return [_attString copy];
 }
 
@@ -524,6 +527,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         CGRect imgRect = [keyRectValue CGRectValue];
         CGRect rect = CGRectApplyAffineTransform(imgRect, transform);
         
+        if ([textStorage conformsToProtocol:@protocol(TYDrawStorageProtocol) ]) {
+            rect = UIEdgeInsetsInsetRect(rect,((id<TYDrawStorageProtocol>)textStorage).margin);
+        }
+        
         // point 是否在rect里
         if(CGRectContainsPoint(rect, point)){
             find = YES;
@@ -583,6 +590,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (_attString == nil) {
         _attString = [[NSMutableAttributedString alloc]init];
     }
+    
+    if ([attributedText isKindOfClass:[NSMutableAttributedString class]]) {
+        [self addTextParaphStyleWithAtrributedString:(NSMutableAttributedString *)attributedText];
+    }
+    
     [_attString appendAttributedString:attributedText];
     [self resetFrameRef];
 }

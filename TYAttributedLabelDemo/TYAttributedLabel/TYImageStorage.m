@@ -48,7 +48,6 @@
 - (void)drawStorageWithRect:(CGRect)rect
 {
     __block UIImage *image = nil;
-    
     if (_image) {
         // 本地图片名
         image = _image;
