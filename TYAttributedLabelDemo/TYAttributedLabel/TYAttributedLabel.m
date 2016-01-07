@@ -154,6 +154,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     
     [_textContainer createTextContainerWithContentSize:self.bounds.size];
     
+    // 文本垂直对齐方式位移
     CGFloat verticalOffset = 0;
     switch (_verticalAlignment) {
         case TYVerticalAlignmentCenter:
