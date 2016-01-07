@@ -28,8 +28,8 @@
 @property (nonatomic, assign)   unichar     characterSpacing;   // 字距
 @property (nonatomic, assign)   CGFloat     linesSpacing;       // 行距
 
-@property (nonatomic, assign)   CTTextAlignment textAlignment;  // 文本对齐方式
-@property (nonatomic, assign)   CTLineBreakMode lineBreakMode;  // 换行模式
+@property (nonatomic, assign)   CTTextAlignment textAlignment;  // 文本对齐方式 kCTTextAlignmentLeft
+@property (nonatomic, assign)   CTLineBreakMode lineBreakMode;  // 换行模式 kCTLineBreakByCharWrapping
 
 // after createTextContainer, have value
 @property (nonatomic, assign, readonly) CGFloat     textHeight;
