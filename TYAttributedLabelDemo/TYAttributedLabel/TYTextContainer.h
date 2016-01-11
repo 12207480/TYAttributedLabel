@@ -53,6 +53,8 @@
  */
 - (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;
 
+- (CGSize)getSuggestedSizeWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;
+
 @end
 
 @interface TYTextContainer (Add)

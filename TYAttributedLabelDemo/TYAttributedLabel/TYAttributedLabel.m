@@ -560,7 +560,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(self.preferredMaxLayoutWidth, [self getHeightWithWidth:self.preferredMaxLayoutWidth]);
+    return [_textContainer getSuggestedSizeWithFramesetter:nil width:self.preferredMaxLayoutWidth];
 }
 
 #pragma mark - set right frame
