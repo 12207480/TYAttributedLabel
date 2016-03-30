@@ -49,6 +49,11 @@
 - (NSAttributedString *)createAttributedString;
 
 /**
+ *  获取文本的size
+ */
+- (CGSize)getSuggestedSizeWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;
+
+/**
  *  获取文本高度
  */
 - (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;

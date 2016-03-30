@@ -538,6 +538,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return [_textContainer getHeightWithFramesetter:nil width:width];
 }
 
+- (CGSize)getSizeWithWidth:(CGFloat)width
+{
+    return [_textContainer getSuggestedSizeWithFramesetter:nil width:width];
+}
+
 - (void)sizeToFit
 {
     [super sizeToFit];
@@ -545,9 +550,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (CGSize)sizeThatFits:(CGSize)size
 {
-    CGFloat width = CGRectGetWidth(self.frame);
-    CGFloat height = [self getHeightWithWidth:width];
-    return CGSizeMake(width, height);
+    return [self getSizeWithWidth:CGRectGetWidth(self.frame)];
 }
 
 - (void)setPreferredMaxLayoutWidth:(CGFloat)preferredMaxLayoutWidth
@@ -560,7 +563,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (CGSize)intrinsicContentSize
 {
-    return CGSizeMake(self.preferredMaxLayoutWidth, [self getHeightWithWidth:self.preferredMaxLayoutWidth]);
+    return [self getSizeWithWidth:self.preferredMaxLayoutWidth];
 }
 
 #pragma mark - set right frame

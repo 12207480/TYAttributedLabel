@@ -105,6 +105,11 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 - (int)getHeightWithWidth:(CGFloat)width;
 
 /**
+ *  获取文本真正的size
+ */
+- (CGSize)getSizeWithWidth:(CGFloat)width;
+
+/**
  *  设置文本位置大小 （自动计算高度，根据宽度）
  */
 - (void)setFrameWithOrign:(CGPoint)orign Width:(CGFloat)width;
