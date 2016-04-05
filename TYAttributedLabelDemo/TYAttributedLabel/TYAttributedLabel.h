@@ -51,10 +51,7 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 
 @property (nonatomic, strong)   TYTextContainer *textContainer;
 
-/**
- *  Autolayout
- */
-@property(nonatomic) CGFloat preferredMaxLayoutWidth NS_AVAILABLE_IOS(6_0);
+@property (nonatomic, assign)   CGFloat preferredMaxLayoutWidth; // Autolayout
 
 /**
  *  获取普通文本内容

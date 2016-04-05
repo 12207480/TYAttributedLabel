@@ -409,7 +409,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }
     
     if (_textHeight > 0) {
-        return CGSizeMake(width, _textHeight);
+        return CGSizeMake(_textWidth > 0 ? _textWidth : width, _textHeight);
     }
     
     // 是否需要更新frame

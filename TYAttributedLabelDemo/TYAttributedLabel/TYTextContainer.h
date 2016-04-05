@@ -33,6 +33,7 @@
 
 // after createTextContainer, have value
 @property (nonatomic, assign, readonly) CGFloat     textHeight;
+@property (nonatomic, assign, readonly) CGFloat     textWidth;
 // after createTextContainer, have value
 @property (nonatomic, strong, readonly) NSArray *textStorages;
 

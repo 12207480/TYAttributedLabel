@@ -18,7 +18,6 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @interface TYTextContainer ()
 @property (nonatomic, strong) NSMutableAttributedString *attString;
 @property (nonatomic, assign,readonly) CTFrameRef  frameRef;
-@property (nonatomic, assign,readonly) CGFloat     textWidth;
 
 - (void)resetFrameRef;
 
@@ -563,7 +562,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (CGSize)intrinsicContentSize
 {
-    return [self getSizeWithWidth:self.preferredMaxLayoutWidth];
+    return [self getSizeWithWidth:_preferredMaxLayoutWidth];
 }
 
 #pragma mark - set right frame
