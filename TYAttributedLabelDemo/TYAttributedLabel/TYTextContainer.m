@@ -171,9 +171,27 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }
 }
 
+- (void)setStrokeWidth:(unichar)strokeWidth
+{
+    if (_strokeWidth != strokeWidth) {
+        _strokeWidth = strokeWidth;
+        [_attString addAttributeStrokeWidth:strokeWidth strokeColor:_strokeColor];
+        [self resetFrameRef];
+    }
+}
+
+- (void)setStrokeColor:(UIColor *)strokeColor
+{
+    if (strokeColor && _strokeColor != strokeColor) {
+        _strokeColor = strokeColor;
+        [_attString addAttributeStrokeWidth:_strokeWidth strokeColor:strokeColor];
+        [self resetFrameRef];
+    }
+}
+
 - (void)setCharacterSpacing:(unichar)characterSpacing
 {
-    if (characterSpacing >= 0 && _characterSpacing != characterSpacing) {
+    if (_characterSpacing != characterSpacing) {
         _characterSpacing = characterSpacing;
         
         [_attString addAttributeCharacterSpacing:characterSpacing];
@@ -242,6 +260,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     
     // 添加文本颜色
     [attString addAttributeTextColor:_textColor];
+    
+    // 添加空心字体
+    if (_strokeWidth > 0) {
+        [attString addAttributeStrokeWidth:_strokeWidth strokeColor:_strokeColor];
+    }
     
 }
 
@@ -425,7 +448,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     
     CFRelease(framesetter);
 
-    return CGSizeMake(suggestedSize.width, suggestedSize.height+1);
+    return CGSizeMake(_isWidthToFit ? suggestedSize.width : width, suggestedSize.height+1);
 }
 - (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
 {

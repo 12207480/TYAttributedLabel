@@ -33,6 +33,7 @@
 - (void)addTextAttributedLabel1
 {
     TYAttributedLabel *label1 = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 0)];
+    
     [self.view addSubview:label1];
     NSString *text = @"\t总有一天你将破蛹而出，成长得比人们期待的还要美丽。\n\t但这个过程会很痛，会很辛苦，有时候还会觉得灰心。\n\t面对着汹涌而来的现实，觉得自己渺小无力。\n\t但这，也是生命的一部分，做好现在你能做的，然后，一切都会好的。\n\t我们都将孤独地长大，不要害怕。";
     
@@ -58,6 +59,8 @@
         [label1 appendText:@"\n\t"];
         index++;
     }
+    // 设置空心字
+    label1.strokeWidth = 2;
     
     [label1 sizeToFit];
     //[label1 setFrameWithOrign:CGPointMake(0, 64) Width:CGRectGetWidth(self.view.frame)];

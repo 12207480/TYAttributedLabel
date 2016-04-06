@@ -42,6 +42,9 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 @property (nonatomic, strong)   UIColor     *highlightedLinkColor;//默认nil高亮链接颜色
 @property (nonatomic, strong)   UIColor     *highlightedLinkBackgroundColor;//链接高亮背景颜色
 
+@property (nonatomic, assign)   unichar     strokeWidth;    // 空心字边框宽
+@property (nonatomic, strong)   UIColor     *strokeColor;   // 空心字边框颜色
+
 @property (nonatomic, assign)   unichar     characterSpacing;   // 字距
 @property (nonatomic, assign)   CGFloat     linesSpacing;       // 行距
 
@@ -52,6 +55,10 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 @property (nonatomic, strong)   TYTextContainer *textContainer;
 
 @property (nonatomic, assign)   CGFloat preferredMaxLayoutWidth; // Autolayout
+
+@property (nonatomic, assign)   BOOL isWidthToFit;    // 宽度自适应
+
+
 
 /**
  *  获取普通文本内容

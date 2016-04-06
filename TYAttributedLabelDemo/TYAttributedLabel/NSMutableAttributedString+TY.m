@@ -88,6 +88,32 @@
     
 }
 
+#pragma mark - 文本空心字及颜色
+
+- (void)addAttributeStrokeWidth:(unichar)strokeWidth
+                    strokeColor:(UIColor *)strokeColor
+{
+    [self addAttributeStrokeWidth:strokeWidth strokeColor:strokeColor range:NSMakeRange(0, self.length)];
+}
+
+- (void)addAttributeStrokeWidth:(unichar)strokeWidth
+                    strokeColor:(UIColor *)strokeColor
+                          range:(NSRange)range
+{
+    [self removeAttribute:(id)kCTStrokeWidthAttributeName range:range];
+    if (strokeWidth > 0) {
+        CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&strokeWidth);
+        
+        [self addAttribute:(id)kCTStrokeWidthAttributeName value:(__bridge id)num range:range];
+    }
+    
+    [self removeAttribute:(id)kCTStrokeColorAttributeName range:range];
+    if (strokeColor) {
+        [self addAttribute:(id)kCTStrokeColorAttributeName value:(id)strokeColor.CGColor range:range];
+    }
+    
+}
+
 #pragma mark - 文本段落样式属性
 - (void)addAttributeAlignmentStyle:(CTTextAlignment)textAlignment
                     lineSpaceStyle:(CGFloat)linesSpacing

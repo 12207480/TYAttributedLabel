@@ -53,6 +53,8 @@
 //    [label2 appendText:@"\t任何值得追逐的梦想，都必须在一路艰辛中备受嘲笑。\n"];
 //    [label2 appendText:@"\t所以，不要怕，不要担心你所追逐的有可能是错的。\n"];
 //    [label2 appendText:@"\t因为，不被嘲笑的梦想不是梦想。\n"];
+    // 宽度自适应
+    label2.isWidthToFit = YES;
     // 自适应高度
     [label2 sizeToFit];
     

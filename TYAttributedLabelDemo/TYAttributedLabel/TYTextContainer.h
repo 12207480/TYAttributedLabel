@@ -25,11 +25,16 @@
 @property (nonatomic, strong)   UIColor     *linkColor;         //链接颜色
 @property (nonatomic, strong)   UIFont      *font;              // 文字大小
 
+@property (nonatomic, assign)   unichar     strokeWidth;    // 空心字边框宽
+@property (nonatomic, strong)   UIColor     *strokeColor;   // 空心字边框颜色
+
 @property (nonatomic, assign)   unichar     characterSpacing;   // 字距
 @property (nonatomic, assign)   CGFloat     linesSpacing;       // 行距
 
 @property (nonatomic, assign)   CTTextAlignment textAlignment;  // 文本对齐方式 kCTTextAlignmentLeft
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;  // 换行模式 kCTLineBreakByCharWrapping
+
+@property (nonatomic, assign)   BOOL        isWidthToFit;    // 宽度自适应
 
 // after createTextContainer, have value
 @property (nonatomic, assign, readonly) CGFloat     textHeight;

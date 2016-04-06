@@ -606,6 +606,16 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return _textContainer.font;
 }
 
+- (UIColor *)strokeColor
+{
+    return _textContainer.strokeColor;
+}
+
+- (unichar)strokeWidth
+{
+    return _textContainer.strokeWidth;
+}
+
 - (unichar)characterSpacing
 {
     return _textContainer.characterSpacing;
@@ -633,6 +643,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (UIColor *)linkColor
 {
     return _textContainer.linkColor;
+}
+
+- (BOOL)isWidthToFit
+{
+    return _textContainer.isWidthToFit;
 }
 
 #pragma mark - setter
@@ -670,6 +685,18 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     [self setNeedsDisplay];
 }
 
+- (void)setStrokeWidth:(unichar)strokeWidth
+{
+    [_textContainer setStrokeWidth:strokeWidth];
+    [self setNeedsDisplay];
+}
+
+- (void)setStrokeColor:(UIColor *)strokeColor
+{
+    [_textContainer setStrokeColor:strokeColor];
+    [self setNeedsDisplay];
+}
+
 - (void)setCharacterSpacing:(unichar)characterSpacing
 {
     [_textContainer setCharacterSpacing:characterSpacing];
@@ -697,6 +724,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)setLinkColor:(UIColor *)linkColor
 {
     [_textContainer setLinkColor:linkColor];
+}
+
+- (void)setIsWidthToFit:(BOOL)isWidthToFit
+{
+    [_textContainer setIsWidthToFit:isWidthToFit];
 }
 
 @end
