@@ -5,7 +5,6 @@ TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)�
 <br>使用autolayout 如果需要自动推断高度，必须设置preferredMaxLayoutWidth
 <br>添加到CocoaPods
 <br>微博demo（建议真机调试） 下载地址：链接: http://pan.baidu.com/s/1sjnBWRj 密码: t7qn
-
 <br>v2.6 新增宽度自适应，空心字设置
 <br>v2.5 把label的一些操作移动textContainer,label只负责draw了。
 <br>v2.4 修复imge放大bug，新增imageAlignment 和 autolayout支持，以及相应的demo，感谢xinzhengzhang，nonstriater
