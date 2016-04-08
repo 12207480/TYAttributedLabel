@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 
 @property (nonatomic, assign)   CGFloat preferredMaxLayoutWidth; // Autolayout
 
-@property (nonatomic, assign)   BOOL isWidthToFit;    // 宽度自适应
+@property (nonatomic, assign)   BOOL isWidthToFit;    // 宽度自适应 默认NO
 
 
 

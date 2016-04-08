@@ -58,7 +58,6 @@
     // 自适应高度
     [label2 sizeToFit];
     
-    
     // label 垂直对齐方式
     // top text(default)
     TYAttributedLabel *label3 = [[TYAttributedLabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(label2.frame)+10, CGRectGetWidth(self.view.frame), 80)];
