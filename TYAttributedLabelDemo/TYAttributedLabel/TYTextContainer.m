@@ -100,6 +100,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     _font = [UIFont systemFontOfSize:15];
     _characterSpacing = 1;
     _linesSpacing = 2;
+    _paragraphSpacing = 2;
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
     _textColor = kTextColor;
@@ -204,7 +205,16 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (_linesSpacing != linesSpacing) {
         _linesSpacing = linesSpacing;
         
-        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:linesSpacing lineBreakStyle:_lineBreakMode];
+        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:linesSpacing paragraphSpaceStyle:_paragraphSpacing lineBreakStyle:_lineBreakMode];
+        [self resetFrameRef];
+    }
+}
+
+- (void)setParagraphSpacing:(CGFloat)paragraphSpacing
+{
+    if (_paragraphSpacing != paragraphSpacing) {
+        _paragraphSpacing = paragraphSpacing;
+        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing paragraphSpaceStyle:_paragraphSpacing lineBreakStyle:_lineBreakMode];
         [self resetFrameRef];
     }
 }
@@ -214,7 +224,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (_textAlignment != textAlignment) {
         _textAlignment = textAlignment;
         
-        [_attString addAttributeAlignmentStyle:textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
+        [_attString addAttributeAlignmentStyle:textAlignment lineSpaceStyle:_linesSpacing paragraphSpaceStyle:_paragraphSpacing lineBreakStyle:_lineBreakMode];
         [self resetFrameRef];
     }
 }
@@ -228,7 +238,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
             lineBreakMode = _numberOfLines == 1 ? kCTLineBreakByCharWrapping : kCTLineBreakByWordWrapping;
         }
         
-        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:lineBreakMode];
+        [_attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing paragraphSpaceStyle:_paragraphSpacing lineBreakStyle:lineBreakMode];
         [self resetFrameRef];
 
     }
@@ -278,7 +288,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     }
     
     // 添加文本段落样式
-    [attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing lineBreakStyle:_lineBreakMode];
+    [attString addAttributeAlignmentStyle:_textAlignment lineSpaceStyle:_linesSpacing paragraphSpaceStyle:_paragraphSpacing lineBreakStyle:_lineBreakMode];
 }
 
 #pragma mark -  add text storage atrributed

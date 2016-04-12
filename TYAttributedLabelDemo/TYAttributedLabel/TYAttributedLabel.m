@@ -626,6 +626,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return _textContainer.linesSpacing;
 }
 
+- (CGFloat)paragraphSpacing
+{
+    return _textContainer.paragraphSpacing;
+}
+
 - (CTLineBreakMode)lineBreakMode
 {
     return _textContainer.lineBreakMode;
@@ -706,6 +711,12 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)setLinesSpacing:(CGFloat)linesSpacing
 {
     [_textContainer setLinesSpacing:linesSpacing];
+    [self setNeedsDisplay];
+}
+
+- (void)setParagraphSpacing:(CGFloat)paragraphSpacing
+{
+    [_textContainer setParagraphSpacing:paragraphSpacing];
     [self setNeedsDisplay];
 }
 

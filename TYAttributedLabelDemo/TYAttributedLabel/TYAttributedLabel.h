@@ -47,6 +47,7 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 
 @property (nonatomic, assign)   unichar     characterSpacing;   // 字距
 @property (nonatomic, assign)   CGFloat     linesSpacing;       // 行距
+@property (nonatomic, assign)   CGFloat     paragraphSpacing;   // 段落间距
 
 @property (nonatomic, assign)   CTTextAlignment textAlignment;  // 文本对齐方式 kCTTextAlignmentLeft
 @property (nonatomic, assign)   CTLineBreakMode lineBreakMode;  // 换行模式 kCTLineBreakByCharWrapping

@@ -68,16 +68,19 @@
 /**
  *  添加文本段落样式
  *
- *  @param textAlignment 文本对齐样式
- *  @param linesSpacing  文本行间距
- *  @param lineBreakMode 文本换行样式
+ *  @param textAlignment    文本对齐样式
+ *  @param linesSpacing     文本行间距
+ *  @param paragraphSpacing 段落间距
+ *  @param lineBreakMode    文本换行样式
  */
 - (void)addAttributeAlignmentStyle:(CTTextAlignment)textAlignment
                     lineSpaceStyle:(CGFloat)linesSpacing
+               paragraphSpaceStyle:(CGFloat)paragraphSpacing
                     lineBreakStyle:(CTLineBreakMode)lineBreakMode;
 
 - (void)addAttributeAlignmentStyle:(CTTextAlignment)textAlignment
                     lineSpaceStyle:(CGFloat)linesSpacing
+               paragraphSpaceStyle:(CGFloat)paragraphSpacing
                     lineBreakStyle:(CTLineBreakMode)lineBreakMode
                              range:(NSRange)range;
 
