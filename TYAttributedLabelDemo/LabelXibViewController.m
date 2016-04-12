@@ -35,6 +35,7 @@
     _label2.textColor = [UIColor darkTextColor];
     _label2.linesSpacing = 2;
     _label2.characterSpacing = 2;
+    // 段落间距
     _label2.paragraphSpacing = 20;
     _label2.text = _label.text;
     
