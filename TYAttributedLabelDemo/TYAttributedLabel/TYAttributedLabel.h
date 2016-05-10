@@ -41,6 +41,7 @@ typedef NS_ENUM(NSUInteger, TYVerticalAlignment) {
 @property (nonatomic, strong)   UIColor     *linkColor;           //链接颜色
 @property (nonatomic, strong)   UIColor     *highlightedLinkColor;//默认nil高亮链接颜色
 @property (nonatomic, strong)   UIColor     *highlightedLinkBackgroundColor;//链接高亮背景颜色
+@property (nonatomic, assign)   CGFloat     highlightedLinkBackgroundRadius; // 高亮背景圆角
 
 @property (nonatomic, assign)   unichar     strokeWidth;    // 空心字边框宽
 @property (nonatomic, strong)   UIColor     *strokeColor;   // 空心字边框颜色

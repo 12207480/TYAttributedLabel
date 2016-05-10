@@ -92,6 +92,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
     self.userInteractionEnabled = YES;
     _highlightedLinkColor = nil;
+    _highlightedLinkBackgroundRadius = 2;
     _highlightedLinkBackgroundColor = kSelectAreaColor;
 }
 
@@ -173,7 +174,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     CGContextScaleCTM(context, 1.0, -1.0);
     
     if (_highlightedLinkBackgroundColor && [_textContainer existLinkRectDictionary]) {
-        [self drawSelectionAreaFrame:_textContainer.frameRef InRange:_clickLinkRange bgColor:_highlightedLinkBackgroundColor];
+        [self drawSelectionAreaFrame:_textContainer.frameRef InRange:_clickLinkRange radius:_highlightedLinkBackgroundRadius bgColor:_highlightedLinkBackgroundColor];
     }
     
     // CTFrameDraw 将 frame 描述到设备上下文
@@ -463,7 +464,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 #pragma mark - draw Rect
 // 绘画选择区域
-- (void)drawSelectionAreaFrame:(CTFrameRef)frameRef InRange:(NSRange)selectRange bgColor:(UIColor *)bgColor{
+- (void)drawSelectionAreaFrame:(CTFrameRef)frameRef InRange:(NSRange)selectRange radius:(CGFloat)radius bgColor:(UIColor *)bgColor{
     
     NSInteger selectionStartPosition = selectRange.location;
     NSInteger selectionEndPosition = NSMaxRange(selectRange);
@@ -491,7 +492,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             offset2 = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
             CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, offset2 - offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
+            [self fillSelectionAreaInRect:lineRect radius:radius bgColor:bgColor];
             break;
         }
         
@@ -502,20 +503,20 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             offset = CTLineGetOffsetForStringIndex(line, selectionStartPosition, NULL);
             width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x + offset, linePoint.y - descent, width - offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
+            [self fillSelectionAreaInRect:lineRect radius:radius bgColor:bgColor];
         } // 2.2 如果 start在line前，end在line后，则填充整个区域
         else if (selectionStartPosition < range.location && selectionEndPosition >= range.location + range.length) {
             CGFloat ascent, descent, leading, width;
             width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x, linePoint.y - descent, width, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
+            [self fillSelectionAreaInRect:lineRect radius:radius bgColor:bgColor];
         } // 2.3 如果start在line前，end在line中，则填充end前面的区域,break
         else if (selectionStartPosition < range.location && [self isPosition:selectionEndPosition inRange:range]) {
             CGFloat ascent, descent, leading, width, offset;
             offset = CTLineGetOffsetForStringIndex(line, selectionEndPosition, NULL);
             width = CTLineGetTypographicBounds(line, &ascent, &descent, &leading);
             CGRect lineRect = CGRectMake(linePoint.x, linePoint.y - descent, offset, ascent + descent);
-            [self fillSelectionAreaInRect:lineRect bgColor:bgColor];
+            [self fillSelectionAreaInRect:lineRect radius:radius bgColor:bgColor];
         }
     }
 }
@@ -524,10 +525,43 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     return (position >= range.location && position < range.location + range.length);
 }
 
-- (void)fillSelectionAreaInRect:(CGRect)rect bgColor:(UIColor *)bgColor {
+- (void)fillSelectionAreaInRect:(CGRect)rect radius:(CGFloat)radius bgColor:(UIColor *)bgColor {
+    
+    CGFloat x = rect.origin.x;
+    CGFloat y  = rect.origin.y;
+    CGFloat width = rect.size.width;
+    CGFloat height = rect.size.height;
+    
+    // 获取CGContext
     CGContextRef context = UIGraphicsGetCurrentContext();
+    // 移动到初始点
+    CGContextMoveToPoint(context, x + radius, y);
+    
+    // 绘制第1条线和第1个1/4圆弧
+    CGContextAddLineToPoint(context, x + width - radius, y);
+    CGContextAddArc(context,x+ width - radius,y+ radius, radius, -0.5 * M_PI, 0.0, 0);
+    
+    // 绘制第2条线和第2个1/4圆弧
+    CGContextAddLineToPoint(context, x + width,y + height - radius);
+    CGContextAddArc(context,x+ width - radius,y+ height - radius, radius, 0.0, 0.5 * M_PI, 0);
+    
+    // 绘制第3条线和第3个1/4圆弧
+    CGContextAddLineToPoint(context, x+radius, y+height);
+    CGContextAddArc(context, x+radius,y+ height - radius, radius, 0.5 * M_PI, M_PI, 0);
+    
+    // 绘制第4条线和第4个1/4圆弧
+    CGContextAddLineToPoint(context, x,y+ radius);
+    CGContextAddArc(context,x+ radius,y+ radius, radius, M_PI, 1.5 * M_PI, 0);
+    
+    // 闭合路径
+    CGContextClosePath(context);
+    // 填充颜色
     CGContextSetFillColorWithColor(context, bgColor.CGColor);
-    CGContextFillRect(context, rect);
+    CGContextDrawPath(context, kCGPathFill);
+    
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    CGContextSetFillColorWithColor(context, bgColor.CGColor);
+//    CGContextFillRect(context, rect);
 }
 
 #pragma mark - get Right Height
