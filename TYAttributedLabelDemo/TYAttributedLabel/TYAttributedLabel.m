@@ -167,10 +167,11 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             break;
     }
 
+    CGFloat contextHeight = MAX(CGRectGetHeight(self.bounds) , _textContainer.textHeight);
     //	跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
-    CGContextTranslateCTM(context, 0, self.bounds.size.height + verticalOffset);
+    CGContextTranslateCTM(context, 0, contextHeight + verticalOffset);
     CGContextScaleCTM(context, 1.0, -1.0);
     
     if (_highlightedLinkBackgroundColor && [_textContainer existLinkRectDictionary]) {

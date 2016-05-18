@@ -63,7 +63,7 @@
 /**
  *  获取文本高度
  */
-- (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;
+- (CGFloat)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width;
 
 @end
 

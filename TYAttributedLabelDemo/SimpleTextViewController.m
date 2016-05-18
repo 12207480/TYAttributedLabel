@@ -41,7 +41,7 @@
     // appendAttributedText
     TYAttributedLabel *label2 = [[TYAttributedLabel alloc]init];
     label2.backgroundColor = [UIColor lightGrayColor];
-    label2.frame = CGRectMake(0, CGRectGetMaxY(label1.frame)+10, CGRectGetWidth(self.view.frame), 0);
+    label2.frame = CGRectMake(0, CGRectGetMaxY(label1.frame)+10, CGRectGetWidth(self.view.frame), 20);
     [self.view addSubview:label2];
     
     // 追加(添加到最后)文本
@@ -56,7 +56,7 @@
     // 宽度自适应
     label2.isWidthToFit = YES;
     // 自适应高度
-    [label2 sizeToFit];
+    //[label2 sizeToFit];
     
     // label 垂直对齐方式
     // top text(default)

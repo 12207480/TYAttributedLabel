@@ -460,7 +460,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
     return CGSizeMake(_isWidthToFit ? suggestedSize.width : width, suggestedSize.height+1);
 }
-- (int)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
+- (CGFloat)getHeightWithFramesetter:(CTFramesetterRef)framesetter width:(CGFloat)width
 {
     return [self getSuggestedSizeWithFramesetter:framesetter width:width].height;
 }
@@ -469,7 +469,8 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 {
     // 这里你需要创建一个用于绘制文本的路径区域,通过 self.bounds 使用整个视图矩形区域创建 CGPath 引用。
     CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, CGRectMake(0, 0, textSize.width, textSize.height));
+    CGFloat textHeight = [self getHeightWithFramesetter:framesetter width:textSize.width];
+    CGPathAddRect(path, NULL, CGRectMake(0, 0, textSize.width, MAX(textHeight, textSize.height)));
     
     CTFrameRef frameRef = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, [_attString length]), path, NULL);
     CFRelease(path);
