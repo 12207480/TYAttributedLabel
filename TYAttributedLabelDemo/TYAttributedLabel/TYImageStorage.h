@@ -12,6 +12,7 @@ typedef enum : NSUInteger {
     TYImageAlignmentCenter,  // 图片居中
     TYImageAlignmentLeft,    // 图片左对齐
     TYImageAlignmentRight,   // 图片右对齐
+    TYImageAlignmentFill     // 图片拉伸填充
 } TYImageAlignment;
 
 @interface TYImageStorage : TYDrawStorage<TYViewStorageProtocol>

@@ -78,7 +78,9 @@
 }
 
 - (CGRect)rectFitOriginSize:(CGSize)size byRect:(CGRect)byRect{
-    
+    if (_imageAlignment == TYImageAlignmentFill) {
+        return byRect;
+    }
     CGRect scaleRect = byRect;
     CGFloat targetWidth = byRect.size.width;
     CGFloat targetHeight = byRect.size.height;

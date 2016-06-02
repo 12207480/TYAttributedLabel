@@ -108,6 +108,13 @@
     imageStorageAlignRight.size = CGSizeMake(CGRectGetWidth(self.view.frame), 100);
     [label appendTextStorage:imageStorageAlignRight];
     
+    [label appendText:@"image铺满"];
+    TYImageStorage *imageStorageAlignFill = [[TYImageStorage alloc]init];
+    imageStorageAlignFill.imageName = @"CYLoLi";
+    imageStorageAlignFill.imageAlignment = TYImageAlignmentFill;
+    imageStorageAlignFill.size = CGSizeMake(CGRectGetWidth(self.view.frame), 100);
+    [label appendTextStorage:imageStorageAlignFill];
+    
     [label sizeToFit];
 }
 
