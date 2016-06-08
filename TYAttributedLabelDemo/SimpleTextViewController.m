@@ -56,7 +56,7 @@
     // 宽度自适应
     label2.isWidthToFit = YES;
     // 自适应高度
-    //[label2 sizeToFit];
+    [label2 sizeToFit];
     
     // label 垂直对齐方式
     // top text(default)
