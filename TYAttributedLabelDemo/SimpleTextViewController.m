@@ -29,7 +29,7 @@
     label1.linesSpacing = 2;
     
     label1.lineBreakMode = kCTLineBreakByTruncatingTail;
-    label1.numberOfLines = 2;
+    label1.numberOfLines = 1;
     // 文本字体
     label1.font = [UIFont systemFontOfSize:17];
     

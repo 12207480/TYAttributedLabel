@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 # 名称 使用的时候pod search [name]
 s.name = "TYAttributedLabel"
 # 代码库的版本
-s.version = "2.6.0"
+s.version = "2.6.1"
 # 简介
 s.summary = "Easy, powerful attributedLabel，support mixed with image and text, link text,image, and UIView."
 # 主页
