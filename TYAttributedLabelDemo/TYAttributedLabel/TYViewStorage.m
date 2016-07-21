@@ -31,9 +31,7 @@
         [_view removeFromSuperview];
     }
     
-    if (ownerView) {
-        _superView = ownerView;
-    }
+    _superView = ownerView;
 }
 
 - (void)didNotDrawRun
