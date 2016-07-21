@@ -30,6 +30,10 @@
 {
     _ownerView = ownerView;
     
+    if (!ownerView || !_imageURL) {
+        return;
+    }
+    
     if ([_imageURL isKindOfClass:[NSURL class]]
         && ![[TYImageCache cache] imageIsCacheForURL:_imageURL.absoluteString]) {
         
