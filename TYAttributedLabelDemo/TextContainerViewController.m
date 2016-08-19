@@ -59,6 +59,10 @@
     TYTextContainer *textContainer = [[TYTextContainer alloc]init];
     textContainer.text = text;
     
+    // 整体设置属性
+    textContainer.linesSpacing = 2;
+    textContainer.paragraphSpacing = 5;
+    
     // 文字样式
     TYTextStorage *textStorage = [[TYTextStorage alloc]init];
     textStorage.range = [text rangeOfString:@"蒹葭"];
