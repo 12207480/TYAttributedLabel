@@ -294,7 +294,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 #pragma mark -  add text storage atrributed
 - (void)addTextStoragesWithAtrributedString:(NSMutableAttributedString *)attString
 {
-    
+    // lineBreakMode设置为CTLineBreakByTruncatingTail之后，不换行
     if (attString) {
         
         // 字体大小
