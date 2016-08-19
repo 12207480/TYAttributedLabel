@@ -294,6 +294,27 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 #pragma mark -  add text storage atrributed
 - (void)addTextStoragesWithAtrributedString:(NSMutableAttributedString *)attString
 {
+    // lineBreakMode设置为CTLineBreakByTruncatingTail之后，不换行
+    if (attString) {
+        
+        // 字体大小
+        [self setAttributeWithAttributeString:attString name:NSFontAttributeName value:_font];
+        // 字体颜色
+        [self setAttributeWithAttributeString:attString name:NSForegroundColorAttributeName value:_textColor];
+        // 字体段落
+        NSMutableParagraphStyle *para = [[NSMutableParagraphStyle alloc] init];
+        para.lineSpacing = _linesSpacing;
+        para.paragraphSpacing = _paragraphSpacing;
+        
+        [self setAttributeWithAttributeString:attString name:NSParagraphStyleAttributeName value:para];
+        
+        // 空心字边框颜色
+        [self setAttributeWithAttributeString:attString name:NSStrokeColorAttributeName value:_strokeColor];
+        // 空心字边框宽
+        [self setAttributeWithAttributeString:attString name:NSStrokeWidthAttributeName value:@(_strokeWidth)];
+        
+    }
+    
     if (attString && _textStorageArray.count > 0) {
         
         // 排序range
@@ -332,6 +353,16 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         }
         _textStorages = [_textStorageArray copy];
         [_textStorageArray removeAllObjects];
+    }
+}
+
+- (void)setAttributeWithAttributeString:(NSMutableAttributedString *)mutableAttString
+                                   name:(NSString *)attributeName
+                                  value:(id)value
+{
+    if (value) {
+        
+        [mutableAttString addAttribute:attributeName value:value range:NSMakeRange(0, mutableAttString.length)];
     }
 }
 
