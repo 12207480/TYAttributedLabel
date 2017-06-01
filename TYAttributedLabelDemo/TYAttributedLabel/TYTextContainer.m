@@ -358,6 +358,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (void)saveTextStorageRectWithFrame:(CTFrameRef)frame
 {
+    if (!frame) {
+        return;
+    }
     // 获取每行
     CFArrayRef lines = CTFrameGetLines(frame);
     CGPoint lineOrigins[CFArrayGetCount(lines)];
@@ -495,9 +498,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     if (_frameRef) {
         return self;
     }
-    
+    NSAttributedString *attStr = [self createAttributedString];
     // 创建CTFramesetter
-    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)[self createAttributedString]);
+    CTFramesetterRef framesetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attStr);
     
     // 获得建议的size
     CGSize size = [self getSuggestedSizeWithFramesetter:framesetter width:contentSize.width];
