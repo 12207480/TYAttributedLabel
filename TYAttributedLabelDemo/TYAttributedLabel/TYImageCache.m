@@ -122,11 +122,11 @@ static TYImageCache *_instance;
     if (!image) {
         return NO;
     }
-    if ([imageName hasSuffix:@".png"] || [imageName hasSuffix:@".bmp"]) {
+    if ([[imageName lowercaseString] hasSuffix:@".png"] || [[imageName lowercaseString] hasSuffix:@".bmp"]) {
         // png图片
         [UIImagePNGRepresentation(image) writeToFile:[self pathOnDiskForName:imageName] options:NSAtomicWrite error:nil];
         return YES;
-    } else if ([imageName hasSuffix:@".jpg"] || [imageName hasSuffix:@".jpeg"] || [imageName hasSuffix:@".gif"])
+    } else if ([[imageName lowercaseString] hasSuffix:@".jpg"] || [[imageName lowercaseString] hasSuffix:@".jpeg"] || [[imageName lowercaseString] hasSuffix:@".gif"])
     {
         //jpg图片
         [UIImageJPEGRepresentation(image, 1.0) writeToFile:[self pathOnDiskForName:imageName] options:NSAtomicWrite error:nil];

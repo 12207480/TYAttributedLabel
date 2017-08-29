@@ -44,21 +44,10 @@
 		D3709F191AD3A5C000145EC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3709F171AD3A5C000145EC6 /* Main.storyboard */; };
 		D3709F1B1AD3A5C000145EC6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3709F1A1AD3A5C000145EC6 /* Images.xcassets */; };
 		D3709F1E1AD3A5C000145EC6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D3709F1C1AD3A5C000145EC6 /* LaunchScreen.xib */; };
-		D3709F2A1AD3A5C000145EC6 /* TYAttributedLabelDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D3709F291AD3A5C000145EC6 /* TYAttributedLabelDemoTests.m */; };
 		D3709F361AD3A60800145EC6 /* TYAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = D3709F351AD3A60800145EC6 /* TYAttributedLabel.m */; };
 		D3709F431AD3C71900145EC6 /* NSMutableAttributedString+TY.m in Sources */ = {isa = PBXBuildFile; fileRef = D3709F421AD3C71900145EC6 /* NSMutableAttributedString+TY.m */; };
 		D3C623FE1B20348400C15D94 /* TYTextContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D3C623FD1B20348400C15D94 /* TYTextContainer.m */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		D3709F241AD3A5C000145EC6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D3709F021AD3A5C000145EC6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = D3709F091AD3A5C000145EC6;
-			remoteInfo = TYAttributedLabelDemo;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		5454E5701BE49FEC00722E25 /* AutoLayoutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutTableViewController.h; sourceTree = "<group>"; };
@@ -127,7 +116,6 @@
 		D3709F181AD3A5C000145EC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D3709F1A1AD3A5C000145EC6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D3709F1D1AD3A5C000145EC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		D3709F231AD3A5C000145EC6 /* TYAttributedLabelDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TYAttributedLabelDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3709F281AD3A5C000145EC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D3709F291AD3A5C000145EC6 /* TYAttributedLabelDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYAttributedLabelDemoTests.m; sourceTree = "<group>"; };
 		D3709F341AD3A60800145EC6 /* TYAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYAttributedLabel.h; sourceTree = "<group>"; };
@@ -144,13 +132,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D35F47E01AE102B30048B58A /* libicucore.dylib in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D3709F201AD3A5C000145EC6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,7 +186,6 @@
 			isa = PBXGroup;
 			children = (
 				D3709F0A1AD3A5C000145EC6 /* TYAttributedLabelDemo.app */,
-				D3709F231AD3A5C000145EC6 /* TYAttributedLabelDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -322,24 +302,6 @@
 			productReference = D3709F0A1AD3A5C000145EC6 /* TYAttributedLabelDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D3709F221AD3A5C000145EC6 /* TYAttributedLabelDemoTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D3709F301AD3A5C000145EC6 /* Build configuration list for PBXNativeTarget "TYAttributedLabelDemoTests" */;
-			buildPhases = (
-				D3709F1F1AD3A5C000145EC6 /* Sources */,
-				D3709F201AD3A5C000145EC6 /* Frameworks */,
-				D3709F211AD3A5C000145EC6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D3709F251AD3A5C000145EC6 /* PBXTargetDependency */,
-			);
-			name = TYAttributedLabelDemoTests;
-			productName = TYAttributedLabelDemoTests;
-			productReference = D3709F231AD3A5C000145EC6 /* TYAttributedLabelDemoTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -352,10 +314,6 @@
 					D3709F091AD3A5C000145EC6 = {
 						CreatedOnToolsVersion = 6.2;
 						DevelopmentTeam = ZW52Q3KXX4;
-					};
-					D3709F221AD3A5C000145EC6 = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = D3709F091AD3A5C000145EC6;
 					};
 				};
 			};
@@ -373,7 +331,6 @@
 			projectRoot = "";
 			targets = (
 				D3709F091AD3A5C000145EC6 /* TYAttributedLabelDemo */,
-				D3709F221AD3A5C000145EC6 /* TYAttributedLabelDemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -391,13 +348,6 @@
 				B04C45D51C0DC2B70076B8CC /* LabelXibViewController.xib in Resources */,
 				D3709F1E1AD3A5C000145EC6 /* LaunchScreen.xib in Resources */,
 				D3709F1B1AD3A5C000145EC6 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D3709F211AD3A5C000145EC6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -442,23 +392,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D3709F1F1AD3A5C000145EC6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D3709F2A1AD3A5C000145EC6 /* TYAttributedLabelDemoTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D3709F251AD3A5C000145EC6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = D3709F091AD3A5C000145EC6 /* TYAttributedLabelDemo */;
-			targetProxy = D3709F241AD3A5C000145EC6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D3709F171AD3A5C000145EC6 /* Main.storyboard */ = {
@@ -588,40 +522,6 @@
 			};
 			name = Release;
 		};
-		D3709F311AD3A5C000145EC6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = TYAttributedLabelDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TYAttributedLabelDemo.app/TYAttributedLabelDemo";
-			};
-			name = Debug;
-		};
-		D3709F321AD3A5C000145EC6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = TYAttributedLabelDemoTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TYAttributedLabelDemo.app/TYAttributedLabelDemo";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -639,15 +539,6 @@
 			buildConfigurations = (
 				D3709F2E1AD3A5C000145EC6 /* Debug */,
 				D3709F2F1AD3A5C000145EC6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D3709F301AD3A5C000145EC6 /* Build configuration list for PBXNativeTarget "TYAttributedLabelDemoTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D3709F311AD3A5C000145EC6 /* Debug */,
-				D3709F321AD3A5C000145EC6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
