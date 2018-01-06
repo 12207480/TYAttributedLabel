@@ -60,7 +60,7 @@
 {
     [self removeAttribute:(id)kCTKernAttributeName range:range];
     
-    CFNumberRef num =  CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&characterSpacing);
+    CFNumberRef num =  CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt16Type,&characterSpacing);
     [self addAttribute:(id)kCTKernAttributeName value:(__bridge id)num range:range];
     CFRelease(num);
 }
@@ -102,7 +102,7 @@
 {
     [self removeAttribute:(id)kCTStrokeWidthAttributeName range:range];
     if (strokeWidth > 0) {
-        CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&strokeWidth);
+        CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt16Type,&strokeWidth);
         [self addAttribute:(id)kCTStrokeWidthAttributeName value:(__bridge id)num range:range];
         CFRelease(num);
     }
