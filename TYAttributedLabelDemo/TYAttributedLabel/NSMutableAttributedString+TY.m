@@ -103,8 +103,8 @@
     [self removeAttribute:(id)kCTStrokeWidthAttributeName range:range];
     if (strokeWidth > 0) {
         CFNumberRef num = CFNumberCreate(kCFAllocatorDefault,kCFNumberSInt8Type,&strokeWidth);
-        
         [self addAttribute:(id)kCTStrokeWidthAttributeName value:(__bridge id)num range:range];
+        CFRelease(num);
     }
     
     [self removeAttribute:(id)kCTStrokeColorAttributeName range:range];
