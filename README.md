@@ -1,8 +1,8 @@
 # TYAttributedLabel v2.6
 TYAttributedLabel 简单，强大的属性文本的控件(无需了解CoreText)，支持图文混排显示，支持添加链接，image和UIView控件，支持自定义排版显示<br>
 
-**新增异步渲染**
-text asynchronous rendering by TextKit,[TYText](https://github.com/12207480/TYText)
+**更新异步渲染TYText**
+<br>text asynchronous rendering by TextKit,[TYText](https://github.com/12207480/TYText)
 
 **更新:**
 <br>详细的使用请看[LovePlayNews](https://github.com/12207480/LovePlayNews)项目
