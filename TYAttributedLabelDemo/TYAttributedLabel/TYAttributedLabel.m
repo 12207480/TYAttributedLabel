@@ -325,19 +325,35 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     }
 }
 
+- (CGPoint)covertTapPiont:(CGPoint)piont {
+    // 文本垂直对齐方式位移
+    CGFloat verticalOffset = 0;
+    switch (_verticalAlignment) {
+        case TYVerticalAlignmentCenter:
+            verticalOffset = MAX(0, (CGRectGetHeight(self.frame) - _textContainer.textHeight)/2);
+            break;
+        case TYVerticalAlignmentBottom:
+            verticalOffset = MAX(0, (CGRectGetHeight(self.frame) - _textContainer.textHeight));
+            break;
+        default:
+            break;
+    }
+    return CGPointMake(piont.x, piont.y-verticalOffset);
+}
+
 #pragma mark - Gesture action
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
     CGPoint point = [touch locationInView:self];
-    
+    point = [self covertTapPiont:point];
     return [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:nil];
 }
 
 - (void)singleTap:(UITapGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
-    
+    point = [self covertTapPiont:point];
     __typeof (self) __weak weakSelf = self;
     [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
         if (_delegateFlags.textStorageClickedAtPoint) {
@@ -349,7 +365,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)longPress:(UILongPressGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self];
-    
+    point = [self covertTapPiont:point];
     __typeof (self) __weak weakSelf = self;
     [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
         if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
@@ -366,7 +382,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     if ([_textContainer existLinkRectDictionary]) {
         UITouch *touch = [touches anyObject];
         CGPoint point = [touch locationInView:self];
-        
+        point = [self covertTapPiont:point];
         __typeof (self) __weak weakSelf = self;
         [_textContainer enumerateLinkRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYLinkStorageProtocol> linkStorage) {
             NSRange curClickLinkRange = linkStorage.realRange;
@@ -389,7 +405,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
-    
+    point = [self covertTapPiont:point];
     __block BOOL isUnderClickLink = NO;
     __block NSRange curClickLinkRange;
     __block UIColor *saveLinkColor = nil;
