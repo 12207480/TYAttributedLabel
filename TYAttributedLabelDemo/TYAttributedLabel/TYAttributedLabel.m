@@ -367,11 +367,16 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     CGPoint point = [sender locationInView:self];
     point = [self covertTapPiont:point];
     __typeof (self) __weak weakSelf = self;
-    [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
+    bool didPressContainer = [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
         if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
                 [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:textStorage onState:sender.state atPoint:point];
         }
     }];
+    // 非响应容器区域响应长按事件
+    if (didPressContainer == NO && [weakSelf respondsToSelector:@selector(attributedLabel:lableLongPressOnState:atPoint:)]) {
+        [weakSelf.delegate attributedLabel:weakSelf lableLongPressOnState:sender.state atPoint:point];
+    }
+
 }
 
 #pragma mark - touches action
