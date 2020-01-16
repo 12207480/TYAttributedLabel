@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TextViewController">
+            <connections>
+                <outlet property="label1" destination="eOk-Z0-VN8" id="Hxw-yu-Ec4"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kuX-RC-HPl">
+                    <rect key="frame" x="87" y="100" width="240" height="696"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eOk-Z0-VN8" customClass="TYAttributedLabel">
+                            <rect key="frame" x="0.0" y="0.0" width="240" height="1000"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1000" id="a32-qH-Y7z"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="eOk-Z0-VN8" firstAttribute="leading" secondItem="kuX-RC-HPl" secondAttribute="leading" id="gFM-mf-Esd"/>
+                        <constraint firstItem="eOk-Z0-VN8" firstAttribute="width" secondItem="kuX-RC-HPl" secondAttribute="width" id="hp3-hi-48m"/>
+                        <constraint firstAttribute="trailing" secondItem="eOk-Z0-VN8" secondAttribute="trailing" id="jbc-3N-njT"/>
+                        <constraint firstAttribute="bottom" secondItem="eOk-Z0-VN8" secondAttribute="bottom" constant="20" symbolic="YES" id="jed-c1-cMM"/>
+                        <constraint firstItem="eOk-Z0-VN8" firstAttribute="top" secondItem="kuX-RC-HPl" secondAttribute="top" id="lQn-fK-q0N"/>
+                    </constraints>
+                </scrollView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="kuX-RC-HPl" secondAttribute="trailing" constant="87" id="niR-Af-mNx"/>
+                <constraint firstAttribute="bottom" secondItem="kuX-RC-HPl" secondAttribute="bottom" constant="100" id="vtW-Pw-X1T"/>
+                <constraint firstItem="kuX-RC-HPl" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="100" id="wJl-iM-lwD"/>
+                <constraint firstItem="kuX-RC-HPl" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="87" id="xwo-Mb-3GC"/>
+            </constraints>
+            <point key="canvasLocation" x="137.68115942028987" y="130.58035714285714"/>
+        </view>
+    </objects>
+</document>

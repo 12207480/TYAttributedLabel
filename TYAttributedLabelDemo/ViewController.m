@@ -18,7 +18,7 @@
 #import "TextTableViewController.h"
 #import "AutoLayoutTableViewController.h"
 #import "LabelXibViewController.h"
-
+#import "TextViewController.h"
 @interface tableViewItem : NSObject
 
 @property (nonatomic, strong) NSString *title;
@@ -103,6 +103,8 @@
     [self addTableItemWithTitle:@"AttributedTextCell" detailText:@"tableViewCell显示图文混排" destVcClass:[TextTableViewController class]];
     [self addTableItemWithTitle:@"AutoLayoutAttributedTextCell" detailText:@"Autolayout tableViewCell显示图文混排" destVcClass:[AutoLayoutTableViewController class]];
     
+    [self addTableItemWithTitle:@"TextViewController" detailText:@"TextViewController_My" destVcClass:[TextViewController class]];
+    
 }
 
 - (void)addTableItemWithTitle:(NSString *)title detailText:(NSString *)detailText destVcClass:(Class)destVcClass
@@ -139,6 +141,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.row == self.itemArray.count -1) {
+        [self.navigationController pushViewController:[[TextViewController alloc] initWithNibName:@"TextViewController" bundle:nil] animated:YES];
+        return;
+    }
     tableViewItem *item = self.itemArray[indexPath.row];
     
     if (item.destVcClass ) {

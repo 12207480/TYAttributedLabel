@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3CB1450223D0554C0061EF5B /* TextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB1450023D0554C0061EF5B /* TextViewController.m */; };
+		3CB1450323D0554C0061EF5B /* TextViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3CB1450123D0554C0061EF5B /* TextViewController.xib */; };
 		5454E5721BE49FEC00722E25 /* AutoLayoutTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */; };
 		5454E5751BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5741BE4A07800722E25 /* AutoLayoutAttributedLabelCell.m */; };
 		5454E5791BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5454E5781BE503C400722E25 /* AutoLayoutLinkImageTextViewController.m */; };
@@ -50,6 +52,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3CB144FF23D0554C0061EF5B /* TextViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextViewController.h; sourceTree = "<group>"; };
+		3CB1450023D0554C0061EF5B /* TextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextViewController.m; sourceTree = "<group>"; };
+		3CB1450123D0554C0061EF5B /* TextViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextViewController.xib; sourceTree = "<group>"; };
 		5454E5701BE49FEC00722E25 /* AutoLayoutTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutTableViewController.h; sourceTree = "<group>"; };
 		5454E5711BE49FEC00722E25 /* AutoLayoutTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoLayoutTableViewController.m; sourceTree = "<group>"; };
 		5454E5731BE4A07800722E25 /* AutoLayoutAttributedLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoLayoutAttributedLabelCell.h; sourceTree = "<group>"; };
@@ -226,6 +231,9 @@
 				D35F47D31AE0DBE30048B58A /* ParseTextViewController.m */,
 				D3553BD01AE778DB005D8F31 /* TYTextStorageParser.h */,
 				D3553BD11AE778DB005D8F31 /* TYTextStorageParser.m */,
+				3CB144FF23D0554C0061EF5B /* TextViewController.h */,
+				3CB1450023D0554C0061EF5B /* TextViewController.m */,
+				3CB1450123D0554C0061EF5B /* TextViewController.xib */,
 				D3709F171AD3A5C000145EC6 /* Main.storyboard */,
 				D3709F1A1AD3A5C000145EC6 /* Images.xcassets */,
 				D3709F1C1AD3A5C000145EC6 /* LaunchScreen.xib */,
@@ -322,6 +330,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -340,6 +349,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CB1450323D0554C0061EF5B /* TextViewController.xib in Resources */,
 				D3553BCF1AE7746A005D8F31 /* content.json in Resources */,
 				D3709F191AD3A5C000145EC6 /* Main.storyboard in Resources */,
 				B0165EF81AE157FA0003D580 /* CYLoLi.png in Resources */,
@@ -377,6 +387,7 @@
 				B034A2A61BE115AC0015130E /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				B034A2A31BE115930015130E /* TPKeyboardAvoidingScrollView.m in Sources */,
 				D3553BD21AE778DB005D8F31 /* TYTextStorageParser.m in Sources */,
+				3CB1450223D0554C0061EF5B /* TextViewController.m in Sources */,
 				B0E7CF1E1BCE9510000341F4 /* TYImageCache.m in Sources */,
 				D35F47D11AE0DB500048B58A /* ImageTextViewController.m in Sources */,
 				D35F47D41AE0DBE30048B58A /* ParseTextViewController.m in Sources */,
