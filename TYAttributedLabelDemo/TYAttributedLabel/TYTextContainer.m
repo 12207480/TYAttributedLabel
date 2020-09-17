@@ -552,7 +552,15 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 
 - (BOOL)enumerateLinkRectContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYLinkStorageProtocol> textStorage))successBlock
 {
-    return [self enumerateRunRect:_linkRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
+    void (^callBack)(id<TYTextStorageProtocol>) = ^(id<TYTextStorageProtocol> textStorage) {
+        BOOL isLinkStorage = [textStorage conformsToProtocol:@protocol(TYLinkStorageProtocol)];
+        if(isLinkStorage) {
+            id<TYLinkStorageProtocol> obj = (id<TYLinkStorageProtocol>) textStorage;
+            successBlock(obj);
+        }
+    };
+    return [self enumerateRunRect:_linkRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:callBack];
+    //return [self enumerateRunRect:_linkRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
 }
 
 - (BOOL)enumerateRunRect:(NSDictionary *)runRectDic ContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
