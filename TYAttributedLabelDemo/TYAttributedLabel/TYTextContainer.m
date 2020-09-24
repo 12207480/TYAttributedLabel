@@ -555,7 +555,7 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     return [self enumerateRunRect:_linkRectDictionary ContainPoint:point viewHeight:viewHeight successBlock:successBlock];
 }
 
-- (BOOL)enumerateRunRect:(NSDictionary *)runRectDic ContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id<TYTextStorageProtocol> textStorage))successBlock
+- (BOOL)enumerateRunRect:(NSDictionary *)runRectDic ContainPoint:(CGPoint)point viewHeight:(CGFloat)viewHeight successBlock:(void (^)(id textStorage))successBlock
 {
     if (runRectDic.count == 0) {
         return NO;
