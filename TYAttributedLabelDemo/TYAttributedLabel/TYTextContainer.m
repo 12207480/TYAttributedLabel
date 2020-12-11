@@ -249,11 +249,11 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     // 创建属性文本
     NSMutableAttributedString *attString = [[NSMutableAttributedString alloc]initWithString:text];
     
-    // 添加文本颜色 字体属性
-    [self addTextColorAndFontWithAtrributedString:attString];
-    
-    // 添加文本段落样式
-    [self addTextParaphStyleWithAtrributedString:attString];
+//    // 添加文本颜色 字体属性
+//    [self addTextColorAndFontWithAtrributedString:attString];
+//    
+//    // 添加文本段落样式
+//    [self addTextParaphStyleWithAtrributedString:attString];
     
     return attString;
 }
@@ -634,9 +634,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
         _attString = [[NSMutableAttributedString alloc]init];
     }
     
-    if ([attributedText isKindOfClass:[NSMutableAttributedString class]]) {
-        [self addTextParaphStyleWithAtrributedString:(NSMutableAttributedString *)attributedText];
-    }
+//    if ([attributedText isKindOfClass:[NSMutableAttributedString class]]) {
+//        [self addTextParaphStyleWithAtrributedString:(NSMutableAttributedString *)attributedText];
+//    }
     
     [_attString appendAttributedString:attributedText];
     [self resetFrameRef];
