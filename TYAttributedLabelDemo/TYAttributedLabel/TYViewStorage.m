@@ -45,6 +45,14 @@
     // 设置frame 注意 转换rect  CoreText context coordinates are the opposite to UIKit so we flip the bounds
     CGAffineTransform transform =  CGAffineTransformScale(CGAffineTransformMakeTranslation(0, _superView.bounds.size.height), 1.f, -1.f);
     rect = CGRectApplyAffineTransform(rect, transform);
+    
+    //iOS 9 以上系统兼容 RTL 排版方向
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 9.0) {
+        if (UIUserInterfaceLayoutDirectionRightToLeft == [UIView userInterfaceLayoutDirectionForSemanticContentAttribute:_superView.semanticContentAttribute]) {
+            rect.origin.x = rect.origin.x - rect.size.width;
+        }
+    }
+    
     [_view setFrame:rect];
     [_superView addSubview:_view];
 }
