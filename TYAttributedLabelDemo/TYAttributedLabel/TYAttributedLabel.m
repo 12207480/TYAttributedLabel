@@ -54,7 +54,9 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 @property (nonatomic, strong) UIColor *saveLinkColor;
 @end
 
-@implementation TYAttributedLabel
+@implementation TYAttributedLabel {
+    CGFloat _autoLayoutWidth;
+}
 
 #pragma mark - init
 
@@ -166,9 +168,9 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
         default:
             break;
     }
-
+    
     CGFloat contextHeight = MAX(CGRectGetHeight(self.bounds) , _textContainer.textHeight);
-    //	跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
+    //    跟很多底层 API 一样，Core Text 使用 Y翻转坐标系统，而且内容的呈现也是上下翻转的，所以需要通过转换内容将其翻转
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetTextMatrix(context, CGAffineTransformIdentity);
     CGContextTranslateCTM(context, 0, contextHeight + verticalOffset);
@@ -187,7 +189,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 // this code quote M80AttributedLabel
 - (void)drawText: (NSAttributedString *)attributedString
-            frame:(CTFrameRef)frame
+           frame:(CTFrameRef)frame
             rect: (CGRect)rect
          context: (CGContextRef)context
 {
@@ -369,14 +371,14 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     __typeof (self) __weak weakSelf = self;
     bool didPressContainer = [_textContainer enumerateRunRectContainPoint:point viewHeight:CGRectGetHeight(self.frame) successBlock:^(id<TYTextStorageProtocol> textStorage){
         if (_delegateFlags.textStorageLongPressedOnStateAtPoint) {
-                [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:textStorage onState:sender.state atPoint:point];
+            [weakSelf.delegate attributedLabel:weakSelf textStorageLongPressed:textStorage onState:sender.state atPoint:point];
         }
     }];
     // 非响应容器区域响应长按事件
     if (didPressContainer == NO && [weakSelf respondsToSelector:@selector(attributedLabel:lableLongPressOnState:atPoint:)]) {
         [weakSelf.delegate attributedLabel:weakSelf lableLongPressOnState:sender.state atPoint:point];
     }
-
+    
 }
 
 #pragma mark - touches action
@@ -395,7 +397,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
             found = YES;
         }];
     }
-
+    
     if (!found) {
         [super touchesBegan:touches withEvent:event];
     }
@@ -581,9 +583,9 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
     CGContextSetFillColorWithColor(context, bgColor.CGColor);
     CGContextDrawPath(context, kCGPathFill);
     
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGContextSetFillColorWithColor(context, bgColor.CGColor);
-//    CGContextFillRect(context, rect);
+    //    CGContextRef context = UIGraphicsGetCurrentContext();
+    //    CGContextSetFillColorWithColor(context, bgColor.CGColor);
+    //    CGContextFillRect(context, rect);
 }
 
 #pragma mark - get Right Height
@@ -618,7 +620,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 
 - (CGSize)intrinsicContentSize
 {
-    return [self getSizeWithWidth:_preferredMaxLayoutWidth];
+    return [self getSizeWithWidth:(_preferredMaxLayoutWidth == 0 ? _autoLayoutWidth : _preferredMaxLayoutWidth)];
 }
 
 #pragma mark - set right frame
@@ -796,6 +798,15 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)setIsWidthToFit:(BOOL)isWidthToFit
 {
     [_textContainer setIsWidthToFit:isWidthToFit];
+}
+
+- (void)layoutSubviews {
+    if (_preferredMaxLayoutWidth == 0 &&
+        _autoLayoutWidth != CGRectGetWidth(self.frame)) {
+        _autoLayoutWidth = CGRectGetWidth(self.frame);
+        [self invalidateIntrinsicContentSize];
+    }
+    [super layoutSubviews];
 }
 
 @end
