@@ -88,7 +88,7 @@ NSString *const kTYTextRunAttributedName = @"TYTextRunAttributedName";
 - (void)setupProperty
 {
     if (self.backgroundColor == nil) {
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
     }
     self.userInteractionEnabled = YES;
     _highlightedLinkColor = nil;

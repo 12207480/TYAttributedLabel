@@ -97,9 +97,9 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
 #pragma mark - setter
 - (void)setupProperty
 {
-    _font = [UIFont systemFontOfSize:15];
-    _characterSpacing = 1;
-    _linesSpacing = 2;
+    _font = [UIFont systemFontOfSize:17];
+    _characterSpacing = 0;
+    _linesSpacing = 0;
     _paragraphSpacing = 0;
     _textAlignment = kCTLeftTextAlignment;
     _lineBreakMode = kCTLineBreakByCharWrapping;
